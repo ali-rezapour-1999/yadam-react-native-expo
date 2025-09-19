@@ -1,29 +1,32 @@
 {
   "expo": {
-    "name": "Cocheck",
-    "slug": "COcheck",
+    "name": "cocheck",
+    "slug": "cocheck",
+    "owner": "alirg1999",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
-    "scheme": "starterkitexpo",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
+    "scheme": "cocheck",
+    "userInterfaceStyle": "dark",
+    "androidStatusBar": {
+      "backgroundColor": "#121212"
     },
+
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alirg1999.cocheck"
     },
     "android": {
-      "package": "com.yourname.cocheck",
       "adaptiveIcon": {
-        "backgroundColor": "#000000"
+        "backgroundColor": "#121212"
       },
-      "edgeToEdgeEnabled": true
+      "package": "com.alirg1999.cocheck"
     },
-    "plugins": ["expo-router", "expo-font", "expo-sqlite"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-sqlite"
+    ],
     "experiments": {
       "typedRoutes": true
     },
