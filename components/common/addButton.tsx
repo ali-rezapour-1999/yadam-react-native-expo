@@ -10,6 +10,7 @@ import React from 'react';
 import { Text } from '../Themed';
 import { Box } from '../ui/box';
 import { Plus } from 'lucide-react-native';
+import { useAppStore } from '@/store/appState';
 
 const BUTTON_SIZE = 64;
 interface MenuItemProps {
@@ -22,6 +23,7 @@ interface MenuItemProps {
     transition: { type: 'spring'; damping: number; stiffness: number };
   };
   style?: ViewStyle;
+  isRTL?: boolean;
 }
 interface ShadowStyles {
   shadow: ViewStyle;
@@ -35,8 +37,18 @@ const shadowStyles = StyleSheet.create<ShadowStyles>({
   }),
 });
 
-const MenuItem: React.FC<MenuItemProps> = memo(({ onPress, icon, text, animationProps, style }) => (
-  <MotiView {...animationProps} style={[styles.menuItem, shadowStyles.shadow, style]}>
+const MenuItem: React.FC<MenuItemProps> = memo(({ onPress, icon, text, animationProps, style, isRTL }) => (
+  <MotiView
+    {...animationProps}
+    style={[
+      styles.menuItem,
+      shadowStyles.shadow,
+      style,
+      isRTL
+        ? { left: 0, right: undefined, flexDirection: 'row-reverse' }
+        : { right: 0, left: undefined, flexDirection: 'row' },
+    ]}
+  >
     <Pressable onPress={onPress} style={styles.menuItemPressable}>
       <Icon as={icon} size="md" color={Colors.main.info} style={styles.iconMargin} />
       <Text style={styles.menuItemText}>{text}</Text>
@@ -44,12 +56,14 @@ const MenuItem: React.FC<MenuItemProps> = memo(({ onPress, icon, text, animation
   </MotiView>
 ));
 
+
 MenuItem.displayName = 'MenuItem';
 
 const AddButton: React.FC = memo(() => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const path = usePathname();
+  const language = useAppStore.getState().language
 
   const isHidden = useMemo(() => path === '/tabs/(profile)', [path]);
 
@@ -99,6 +113,7 @@ const AddButton: React.FC = memo(() => {
     return null;
   }
 
+
   return (
     <Box style={containerStyle}>
       {isOpen && (
@@ -125,8 +140,8 @@ const AddButton: React.FC = memo(() => {
 
       {isOpen && (
         <>
-          <MenuItem onPress={handleAddTask} icon={AddIcon} text={addTaskText} animationProps={firstMenuAnimation} style={styles.menuItemStyle} />
-          <MenuItem onPress={handleAddByAi} icon={GlobeIcon} text={addByAiText} animationProps={secondMenuAnimation} style={styles.menuItemStyle} />
+          <MenuItem onPress={handleAddTask} icon={AddIcon} text={addTaskText} animationProps={firstMenuAnimation} style={styles.menuItemStyle} isRTL={language == 'fa' ? true : false} />
+          <MenuItem onPress={handleAddByAi} icon={GlobeIcon} text={addByAiText} animationProps={secondMenuAnimation} style={styles.menuItemStyle} isRTL={language == 'fa' ? true : false} />
         </>
       )}
     </Box>
@@ -165,7 +180,7 @@ const styles = StyleSheet.create({
   gradientButton: {
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
-    borderRadius: BUTTON_SIZE / 2,
+    borderRadius: BUTTON_SIZE / 3,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1002,
@@ -174,7 +189,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1002,
     flexDirection: 'row',
-    right: 0,
   },
   menuItemPressable: {
     flexDirection: 'row',

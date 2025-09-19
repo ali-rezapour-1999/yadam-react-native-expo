@@ -98,12 +98,6 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
     [insets.bottom],
   );
 
-  const addButtonStyle = useMemo(
-    () => ({
-      zIndex: 1000,
-    }),
-    [insets.bottom],
-  );
 
   return (
     <Box className="relative" style={{ backgroundColor: Colors.main.background, direction: 'ltr' }}>
@@ -123,11 +117,11 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
           })}
         </View>
 
-        <Box style={[addButtonStyle, { display: hideTabBar ? 'none' : 'flex', marginRight: -10 }]}>
+        <Box style={{ display: hideTabBar ? 'none' : 'flex', marginRight: -14 }}>
           <AddButton />
         </Box>
-      </MotiView>
-    </Box>
+      </MotiView >
+    </Box >
   );
 };
 

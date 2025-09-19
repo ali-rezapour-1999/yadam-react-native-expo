@@ -40,7 +40,7 @@ const HeaderComponent = React.memo(
 
           {shouldShowTodayButton && (
             <Box className="items-center mt-3">
-              <Button variant="link" onPress={goToToday}>
+              <Button onPress={goToToday} style={{ backgroundColor: Colors.main.cardBackground }} className='rounded-lg'>
                 <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 16 }}>{t('todos.go_to_today')}</ButtonText>
               </Button>
             </Box>

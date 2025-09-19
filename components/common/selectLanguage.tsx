@@ -60,7 +60,7 @@ const SelectLanguage = () => {
               onPress={() => selectLanguage('fa')}
               className="rounded-lg mt-1 h-14"
             >
-              <ButtonText className="text-lg">فارسی</ButtonText>
+              <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg font-danaRegular">فارسی</ButtonText>
             </Button>
 
             <Button
@@ -69,7 +69,7 @@ const SelectLanguage = () => {
               onPress={() => selectLanguage('en')}
               className="rounded-lg mt-3 h-14"
             >
-              <ButtonText className="text-lg">English</ButtonText>
+              <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg">English</ButtonText>
             </Button>
           </DrawerBody>
         </DrawerContent>

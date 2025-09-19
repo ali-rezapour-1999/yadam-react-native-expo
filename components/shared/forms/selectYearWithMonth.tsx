@@ -107,8 +107,8 @@ const SelectYearWithMonth: React.FC<SelectYearWithMonthProps> = ({ selectedYear,
   }, [selectedYear, selectedMonth, selectedMonthLabel, displayYear, language]);
 
   return (
-    <Box>
-      <Button onPress={() => setShowDrawer(true)} className="rounded-xl bg-transparent">
+    <>
+      <Button onPress={() => setShowDrawer(true)} className="rounded-xl" style={{ backgroundColor: Colors.main.cardBackground }}>
         <HStack className="items-center" space="sm">
           <CalenderIcon />
           <ButtonText
@@ -181,7 +181,7 @@ const SelectYearWithMonth: React.FC<SelectYearWithMonthProps> = ({ selectedYear,
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </Box>
+    </>
   );
 };
 

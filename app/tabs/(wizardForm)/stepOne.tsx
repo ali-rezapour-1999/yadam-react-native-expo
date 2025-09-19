@@ -3,7 +3,6 @@ import { StepForm } from '@/components/shared/forms/auth/stepForm';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
-import { Text } from '@/components/ui/text';
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
@@ -19,6 +18,8 @@ import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
 import { useAppStore } from '@/store/appState';
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text } from '@/components/Themed';
 
 const stepOneSchema = z.object({
   firstname: z.string().min(1),
@@ -75,10 +76,10 @@ const StepOne = () => {
   };
 
   return (
-    <KeyboardAvoidingView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <SafeAreaView className="flex-1 px-4" style={{ backgroundColor: Colors.main.background }} >
       <WizardStepper />
       <HeaderTitle title={t('profile.base_information')} />
-      <Box>
+      <KeyboardAvoidingView className="flex-1" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Controller
           render={({ field, fieldState }) => (
             <StepForm title={t('profile.first_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('profile.first_name_placeholder')} />
@@ -161,17 +162,17 @@ const StepOne = () => {
             </VStack>
           )}
         />
-      </Box>
+      </KeyboardAvoidingView>
       <Button
-        className="rounded-xl h-[50px] mt-3"
+        className="rounded-xl h-[50px] my-5"
         style={{
           backgroundColor: Colors.main.button,
         }}
         onPress={handleSubmit(onSubmit)}
       >
-        <ButtonText>{t('profile.continue_step')}</ButtonText>
+        <ButtonText style={{ color: Colors.main.textPrimary }}>{t('profile.continue_step')}</ButtonText>
       </Button>
-    </KeyboardAvoidingView>
+    </SafeAreaView >
   );
 };
 
