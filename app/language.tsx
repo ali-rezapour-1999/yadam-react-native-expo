@@ -5,8 +5,7 @@ import { Colors } from '@/constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { MotiView } from 'moti';
-import { I18nManager, Image, TouchableOpacity } from 'react-native';
-import * as Updates from 'expo-updates';
+import { Image, TouchableOpacity } from 'react-native';
 import getStartImage from '@/assets/images/getStart.png';
 import { useAppStore } from '@/store/appState';
 import { VStack } from '@/components/ui/vstack';
@@ -21,13 +20,9 @@ const Language = () => {
   const id = new Date().toTimeString();
 
   const selectLanguage = async (withEmail: boolean) => {
-    const isRTL = selectedLang === 'fa';
     await AsyncStorage.setItem('lang', selectedLang);
     await i18n.changeLanguage(selectedLang);
     if (!user?.id) setUserAndLanguage(id, selectedLang);
-    if (Updates.reloadAsync) {
-      await Updates.reloadAsync();
-    }
     if (withEmail && user?.id && user?.language) {
       router.push('/');
     } else {

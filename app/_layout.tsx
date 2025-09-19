@@ -1,5 +1,6 @@
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import '@/global.css';
+import '../i18n';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
   DarkTheme,
@@ -11,7 +12,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { Slot } from 'expo-router';
 import { LanguageGate } from '@/constants/LanguageGate';
-import '../i18n';
 
 export {
   ErrorBoundary,
@@ -47,7 +47,7 @@ function RootLayoutNav() {
     <GluestackUIProvider mode={colorMode}>
       <ThemeProvider value={colorMode === 'dark' ? DarkTheme : DefaultTheme}>
         <LanguageGate>
-        <Slot />
+          <Slot />
         </LanguageGate>
       </ThemeProvider>
     </GluestackUIProvider>

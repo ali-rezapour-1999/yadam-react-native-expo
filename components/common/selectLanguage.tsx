@@ -5,7 +5,6 @@ import { Colors } from '@/constants/Colors';
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader } from '@/components/ui/drawer';
 import { t } from 'i18next';
 import { Text } from '../Themed';
-import * as Updates from 'expo-updates';
 import { I18nManager } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,20 +12,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SelectLanguage = () => {
   const [showDrawer, setShowDrawer] = React.useState(false);
   const { i18n } = useTranslation();
-  const { isLoading, setLanguage, user, language } = useAppStore();
+  const { isLoading, setLanguage, language } = useAppStore();
 
   const selectLanguage = async (selectedLang: 'en' | 'fa') => {
     const isRTL = selectedLang === 'fa';
     await AsyncStorage.setItem('lang', selectedLang);
     await i18n.changeLanguage(selectedLang);
-    if (!user?.id) setLanguage(selectedLang);
+    setLanguage(selectedLang);
     if (I18nManager.isRTL !== isRTL) {
       I18nManager.allowRTL(isRTL);
       I18nManager.forceRTL(isRTL);
-    }
-
-    if (Updates.reloadAsync) {
-      await Updates.reloadAsync();
     }
     setShowDrawer(false);
   };

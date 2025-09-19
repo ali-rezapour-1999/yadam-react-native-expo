@@ -11,7 +11,11 @@
     "androidStatusBar": {
       "backgroundColor": "#121212"
     },
-
+    "updates": {
+      "enabled": true,
+      "url": "https://u.expo.dev/YOUR-PROJECT-ID"
+    },
+    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alirg1999.cocheck"
@@ -25,7 +29,7 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-sqlite"
+      "expo-sqlite",
     ],
     "experiments": {
       "typedRoutes": true
