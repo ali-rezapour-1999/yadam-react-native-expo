@@ -22,13 +22,17 @@
       },
       "edgeToEdgeEnabled": true
     },
-    "plugins": [
-      "expo-router",
-      "expo-font",
-      "expo-sqlite"
-    ],
+    "plugins": ["expo-router", "expo-font", "expo-sqlite"],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d4a7b479-8066-4967-8eae-ff37de3596ea"
+      }
     }
   }
 }
