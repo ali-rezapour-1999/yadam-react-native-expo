@@ -300,14 +300,8 @@ const FormControlErrorText = React.forwardRef<
   React.ComponentRef<typeof UIFormControl.Error.Text>,
   IFormControlErrorTextProps
 >(function FormControlErrorText({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
   return (
     <UIFormControl.Error.Text
-      className={formControlErrorTextStyle({
-        parentVariants: { size: parentSize },
-        size,
-        class: className,
-      })}
       ref={ref}
       {...props}
     />
@@ -326,7 +320,6 @@ const FormControlErrorIcon = React.forwardRef<
   React.ComponentRef<typeof UIFormControl.Error.Icon>,
   IFormControlErrorIconProps
 >(function FormControlErrorIcon({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
 
   if (typeof size === 'number') {
     return (
@@ -351,11 +344,6 @@ const FormControlErrorIcon = React.forwardRef<
   }
   return (
     <UIFormControl.Error.Icon
-      className={formControlErrorIconStyle({
-        parentVariants: { size: parentSize },
-        size,
-        class: className,
-      })}
       {...props}
     />
   );
@@ -386,15 +374,9 @@ const FormControlLabelText = React.forwardRef<
   React.ComponentRef<typeof UIFormControl.Label.Text>,
   IFormControlLabelTextProps
 >(function FormControlLabelText({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
 
   return (
     <UIFormControl.Label.Text
-      className={formControlLabelTextStyle({
-        parentVariants: { size: parentSize },
-        size,
-        class: className,
-      })}
       ref={ref}
       {...props}
     />
@@ -434,11 +416,6 @@ const FormControlHelperText = React.forwardRef<
 
   return (
     <UIFormControl.Helper.Text
-      className={formControlHelperTextStyle({
-        parentVariants: { size: parentSize },
-        size,
-        class: className,
-      })}
       ref={ref}
       {...props}
     />

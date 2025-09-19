@@ -189,13 +189,6 @@ const PopoverContent = React.forwardRef<
         },
       }}
       {...props}
-      className={popoverContentStyle({
-        parentVariants: {
-          size: parentSize,
-        },
-        size,
-        class: className,
-      })}
       pointerEvents="auto"
     />
   );

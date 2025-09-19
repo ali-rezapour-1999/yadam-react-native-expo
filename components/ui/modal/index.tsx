@@ -185,13 +185,6 @@ const ModalContent = React.forwardRef<
         },
       }}
       {...props}
-      className={modalContentStyle({
-        parentVariants: {
-          size: parentSize,
-        },
-        size,
-        class: className,
-      })}
       pointerEvents="auto"
     />
   );

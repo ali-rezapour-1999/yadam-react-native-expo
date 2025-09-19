@@ -1,26 +1,25 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
 export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+  main: {
+    background: '#121212',
+    cardBackground: '#1A1A1E',
+    border: '#2D2D33',
+    primary: '#8E7CFF',
+    primaryLight: '#B5A8FF',
+    primaryDark: '#5A4ECF',
+    accent: '#FF6F91',
+    success: '#4ADE80',
+    warning: '#FBBF24',
+    info: '#38BDF8',
+    textPrimary: '#FFFFFF',
+    textSecondary: '#C5C5C5',
+    button: '#5A4ECF',
+    lightBlue: '#3F3CBB',
+    tag: {
+      office: 'rgba(178, 127, 255, 0.4)',
+      home: '#FFB6C1',
+      homeOpacity: 'rgba(255, 182, 193, 0.4)',
+      urgent: 'rgba(255, 120, 100, 0.4)',
+      work: 'rgba(130, 210, 130, 0.4)',
+    },
   },
 };
