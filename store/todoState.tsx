@@ -1,6 +1,5 @@
 import { TaskStatus } from '@/constants/TaskEnum';
 import { create } from 'zustand';
-import { v4 as uuidv4 } from 'uuid';
 import { Task, TaskWithCategory } from '@/types/database-type';
 import { taskStorage } from '@/storage/database';
 
@@ -89,7 +88,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
           if (task.reminderDays.includes(weekdayName) && nextDate.toISOString().split('T')[0] !== task.date) {
             const clonedTask: Task = {
               ...task,
-              id: uuidv4(),
+              id: new Date().toTimeString(),
               date: nextDate.toISOString().split('T')[0],
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),

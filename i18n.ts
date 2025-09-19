@@ -8,10 +8,10 @@ import fa from './locales/fa.json';
 const languageDetector = {
   type: 'languageDetector',
   async: true,
-  detect: async (callback: () => void) => {
+  detect: async (callback: (lang: string) => void) => {
     const savedLanguage = await AsyncStorage.getItem('lang');
     if (savedLanguage) {
-      callback();
+      callback(savedLanguage);
     }
   },
   init: () => {},

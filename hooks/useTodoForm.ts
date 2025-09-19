@@ -6,7 +6,6 @@ import { addTodoSchema, AddTodoSchemaType } from '@/components/schema/addTodoSch
 import { TaskStatus } from '@/constants/TaskEnum';
 import { router } from 'expo-router';
 import { useAppStore } from '@/store/appState';
-import { v4 as uuid } from 'uuid';
 import { Task } from '@/types/database-type';
 
 interface Props {
@@ -18,7 +17,6 @@ interface Props {
 export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
   const { createTask, updateTask } = useTodoStore();
   const { user } = useAppStore();
-  const id = uuid();
 
   const isEditMode = Boolean(task?.id);
 
@@ -80,7 +78,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
     async (data: AddTodoSchemaType) => {
       try {
         const todoData = {
-          id: isEditMode ? task!.id : id,
+          id: isEditMode ? task!.id : new Date().toISOString(),
           userId: user?.id as string,
           title: data.title.trim(),
           description: data.description?.trim() || '',

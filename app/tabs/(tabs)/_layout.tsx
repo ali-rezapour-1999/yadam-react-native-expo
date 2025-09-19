@@ -1,36 +1,34 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={18} style={{ marginBottom: -3 }} {...props} />;
-}
+import HomeIcon from '@/assets/Icons/Home';
+import TodoIcon from '@/assets/Icons/Todo';
+import ActiveIcon from '@/assets/Icons/ActiveIcon';
+import { CustomTabBar } from '@/components/common/buttonNavigation';
 
 export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}
-    >
+    <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen
-        name="tab1"
+        name="index"
         options={{
-          title: 'Tab 1',
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ focused }) => <HomeIcon focused={!focused} />,
+          animation:'shift'
         }}
       />
       <Tabs.Screen
-        name="tab2"
+        name="tasks/index"
         options={{
-          title: 'Tab 2',
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: 'Tasks',
+          tabBarIcon: ({ focused }) => <TodoIcon focused={!focused} />,
+          animation: 'shift',
+        }}
+      />
+      <Tabs.Screen
+        name="topics/index"
+        options={{
+          title: 'Topics',
+          tabBarIcon: ({ focused }) => <ActiveIcon focused={!focused} />,
+          animation: 'shift',
         }}
       />
     </Tabs>
