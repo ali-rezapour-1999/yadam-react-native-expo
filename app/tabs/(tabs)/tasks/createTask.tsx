@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Colors } from '@/constants/Colors';
 import { useTodoStore } from '@/store/todoState';
@@ -49,7 +50,7 @@ const CreateTask: React.FC = () => {
   const selectedTopic = userTopics.find((topic) => topic.id === selectedCategoryId);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={true}>
           <Box style={styles.header}>
@@ -67,7 +68,7 @@ const CreateTask: React.FC = () => {
               activeOpacity={0.8}
               disabled={userTopics.length === 0}
             >
-              <Box style={styles.sectionButtonContent}>
+              <Box >
                 <Text style={styles.sectionTitle}>{t('activity.title')}</Text>
                 <Text style={[styles.sectionSubtitle, { display: userTopics.length === 0 ? 'flex' : 'none' }]}>{t('create_task.no_topics')}</Text>
                 <Text style={[styles.sectionSubtitle, { display: selectedTopic ? 'flex' : 'none' }]}>{selectedTopic ? selectedTopic.title : ''}</Text>
@@ -90,13 +91,13 @@ const CreateTask: React.FC = () => {
           </ModalOption>
         </ScrollView>
 
-        <Box style={styles.fixedButtonContainer}>
-          <Button onPress={handleSubmit(onSubmit)} style={styles.buttonStyle}>
-            <ButtonText style={styles.buttonText}>{t('button.add_task')}</ButtonText>
-          </Button>
-        </Box>
       </KeyboardAvoidingView>
-    </View>
+      <Box style={styles.fixedButtonContainer}>
+        <Button onPress={handleSubmit(onSubmit)} style={styles.buttonStyle}>
+          <ButtonText style={styles.buttonText}>{t('button.add_task')}</ButtonText>
+        </Button>
+      </Box>
+    </SafeAreaView>
   );
 };
 
@@ -132,9 +133,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  sectionButtonContent: {
-    flex: 1,
-  },
   sectionTitle: {
     fontSize: 16,
     color: Colors.main.textPrimary,
@@ -149,13 +147,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: Colors.main.background,
-    paddingTop: 12,
     paddingHorizontal: 18,
-    alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: 1,
-    borderTopColor: Colors.main.cardBackground,
+    height: 140,
   },
   buttonStyle: {
     backgroundColor: Colors.main.button,

@@ -19,6 +19,7 @@ import TrashIcon from '@/assets/Icons/TrushIcon';
 import EditIcon from '@/assets/Icons/EditIcon';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Loading } from '@/components/common/loading';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth } = Dimensions.get('window');
 const SWIPE_THRESHOLD = screenWidth * 0.4;
@@ -147,100 +148,102 @@ const TaskDetail = () => {
   }
 
   return (
-    <GestureHandlerRootView style={styles.screenContainer}>
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        <VStack space="xl">
-          <HStack className="w-full items-center justify-between px-2">
-            <Box className="w-4/5 flex-1">
-              <HeaderTitle size="lg" />
+    <SafeAreaView style={styles.screenContainer}>
+      <GestureHandlerRootView style={styles.screenContainer}>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+          <VStack space="xl">
+            <HStack className="w-full items-center justify-between px-2">
+              <Box className="w-4/5 flex-1">
+                <HeaderTitle size="lg" />
+              </Box>
+              <Button className="flex items-center justify-center w-12 h-12 rounded-lg bg-transparent" onPress={removeHandler}>
+                <TrashIcon size={50} />
+              </Button>
+            </HStack>
+
+            <Box style={[styles.timeCard, { flex: 1 }]}>
+              <Text className="text-lg">{get(task, 'title', t('task_detail.no_title'))}</Text>
             </Box>
-            <Button className="flex items-center justify-center w-12 h-12 rounded-lg bg-transparent" onPress={removeHandler}>
-              <TrashIcon size={50} />
-            </Button>
-          </HStack>
-
-          <Box style={[styles.timeCard, { flex: 1 }]}>
-            <Text className="text-lg">{get(task, 'title', t('task_detail.no_title'))}</Text>
-          </Box>
-          <Box style={styles.mainCard}>
-            <VStack space="lg">
-              <HStack className="justify-between items-center">
-                <Text style={styles.sectionTitle}>{t('task_detail.status')}</Text>
-                {StatusBadge(taskStatus)}
-              </HStack>
-
-              <Box style={styles.divider} />
-
-              <VStack space="md">
+            <Box style={styles.mainCard}>
+              <VStack space="lg">
                 <HStack className="justify-between items-center">
-                  <Text style={styles.label}>{t('task_detail.category')}</Text>
-                  <Text style={styles.value}>{get(task, 'topicsTitle', '') !== '' ? get(task, 'topicsTitle', '') : t('task_detail.no_category')}</Text>
+                  <Text style={styles.sectionTitle}>{t('task_detail.status')}</Text>
+                  {StatusBadge(taskStatus)}
                 </HStack>
 
-                {get(task, 'goalId', '') === '' ? null : (
+                <Box style={styles.divider} />
+
+                <VStack space="md">
                   <HStack className="justify-between items-center">
-                    <Text style={styles.label}>{t('task_detail.goal')}</Text>
-                    <Text style={styles.value}>{get(task, 'goalId', '') !== '' ? get(task, 'goalId', '') : t('task_detail.no_goal')}</Text>
+                    <Text style={styles.label}>{t('task_detail.category')}</Text>
+                    <Text style={styles.value}>{get(task, 'topicsTitle', '') !== '' ? get(task, 'topicsTitle', '') : t('task_detail.no_category')}</Text>
                   </HStack>
-                )}
+
+                  {get(task, 'goalId', '') === '' ? null : (
+                    <HStack className="justify-between items-center">
+                      <Text style={styles.label}>{t('task_detail.goal')}</Text>
+                      <Text style={styles.value}>{get(task, 'goalId', '') !== '' ? get(task, 'goalId', '') : t('task_detail.no_goal')}</Text>
+                    </HStack>
+                  )}
+                </VStack>
               </VStack>
-            </VStack>
-          </Box>
-
-          <HStack className="justify-between gap-2">
-            <Box style={[styles.timeCard, { flex: 1 }]}>
-              <Text style={styles.timeLabel}>{t('task_detail.start_date')}</Text>
-              <Text style={styles.timeValue}>{get(task, 'date', '-')}</Text>
             </Box>
 
-            <Box style={[styles.timeCard, { flex: 1 }]}>
-              <Text style={styles.timeLabel}>{t('task_detail.start_time')}</Text>
-              <Text style={styles.timeValue}>{get(task, 'startTime', '-')}</Text>
-            </Box>
-
-            <Box style={[styles.timeCard, { flex: 1 }]}>
-              <Text style={styles.timeLabel}>{t('task_detail.end_time')}</Text>
-              <Text style={styles.timeValue}>{get(task, 'endTime', '-')}</Text>
-            </Box>
-          </HStack>
-
-          {get(task, 'description', '') === '' ? null : (
-            <Box style={styles.descriptionCard}>
-              <Text style={styles.sectionTitle}>{t('task_detail.description')}</Text>
-              <Box style={styles.descriptionContent}>
-                <Text style={styles.descriptionText}>{get(task, 'description')}</Text>
+            <HStack className="justify-between gap-2">
+              <Box style={[styles.timeCard, { flex: 1 }]}>
+                <Text style={styles.timeLabel}>{t('task_detail.start_date')}</Text>
+                <Text style={styles.timeValue}>{get(task, 'date', '-')}</Text>
               </Box>
-            </Box>
-          )}
-        </VStack>
-      </ScrollView>
 
-      <Box style={styles.swipeAreaContainer}>
-        <Pressable onPress={handleEdit} style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.97 : 1 }] }]}>
-          <LinearGradient colors={[Colors.main.accent, Colors.main.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.editButton}>
-            <EditIcon size={22} color="#fff" />
-            <Text style={styles.editButtonText}>{t('task_detail.need_edit')}</Text>
-          </LinearGradient>
-        </Pressable>
-        <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
-          <Animated.View style={[styles.swipeHandle, animatedSwipeStyle]}>
-            <HStack style={styles.handleInner}>
-              <Text style={[styles.handleText, { color: '#fff' }]}>
-                {swipeOptions.left.icon} {swipeOptions.left.label}
-              </Text>
-              <Text>
-                {'<< '}
-                {t('event.swip')}
-                {' >>'}
-              </Text>
-              <Text style={[styles.handleText, { color: '#fff' }]}>
-                {swipeOptions.right.label} {swipeOptions.right.icon}
-              </Text>
+              <Box style={[styles.timeCard, { flex: 1 }]}>
+                <Text style={styles.timeLabel}>{t('task_detail.start_time')}</Text>
+                <Text style={styles.timeValue}>{get(task, 'startTime', '-')}</Text>
+              </Box>
+
+              <Box style={[styles.timeCard, { flex: 1 }]}>
+                <Text style={styles.timeLabel}>{t('task_detail.end_time')}</Text>
+                <Text style={styles.timeValue}>{get(task, 'endTime', '-')}</Text>
+              </Box>
             </HStack>
-          </Animated.View>
-        </PanGestureHandler>
-      </Box>
-    </GestureHandlerRootView>
+
+            {get(task, 'description', '') === '' ? null : (
+              <Box style={styles.descriptionCard}>
+                <Text style={styles.sectionTitle}>{t('task_detail.description')}</Text>
+                <Box style={styles.descriptionContent}>
+                  <Text style={styles.descriptionText}>{get(task, 'description')}</Text>
+                </Box>
+              </Box>
+            )}
+          </VStack>
+        </ScrollView>
+
+        <Box style={styles.swipeAreaContainer}>
+          <Pressable onPress={handleEdit} style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.97 : 1 }] }]}>
+            <LinearGradient colors={[Colors.main.accent, Colors.main.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.editButton}>
+              <EditIcon size={22} color="#fff" />
+              <Text style={styles.editButtonText}>{t('task_detail.need_edit')}</Text>
+            </LinearGradient>
+          </Pressable>
+          <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
+            <Animated.View style={[styles.swipeHandle, animatedSwipeStyle]}>
+              <HStack style={styles.handleInner}>
+                <Text style={[styles.handleText, { color: '#fff' }]}>
+                  {swipeOptions.left.icon} {swipeOptions.left.label}
+                </Text>
+                <Text>
+                  {'<< '}
+                  {t('event.swip')}
+                  {' >>'}
+                </Text>
+                <Text style={[styles.handleText, { color: '#fff' }]}>
+                  {swipeOptions.right.label} {swipeOptions.right.icon}
+                </Text>
+              </HStack>
+            </Animated.View>
+          </PanGestureHandler>
+        </Box>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
 

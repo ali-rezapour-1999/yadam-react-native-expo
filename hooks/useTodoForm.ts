@@ -100,7 +100,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
         }
 
         reset();
-        router.push('/tabs/(tabs)/todos');
+        router.push('/tabs/(tabs)/tasks');
       } catch (error) {
         console.error('Error saving task:', error);
       }
@@ -111,7 +111,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
   const onDelete = useCallback(async () => {
     try {
       if (isEditMode && task) {
-        router.push('/tabs/(tabs)/todos');
+        router.push('/tabs/(tabs)/tasks');
       }
     } catch (error) {
       console.error('Error deleting task:', error);

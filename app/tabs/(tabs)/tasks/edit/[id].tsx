@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Colors } from '@/constants/Colors';
 import { useTodoStore } from '@/store/todoState';
@@ -18,6 +18,7 @@ import TopicSelector from '@/components/shared/topicSelector';
 import { CancelIcon } from '@/assets/Icons/Cancel';
 import { useAppStore } from '@/store/appState';
 import ModalOption from '@/components/common/modelOption';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const EditTask: React.FC = () => {
   const { selectedDate, task } = useTodoStore();
@@ -45,7 +46,7 @@ const EditTask: React.FC = () => {
   const selectedTopic = userTopics.find((topic) => topic.id === selectedCategoryId);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <Box className="mt-5">
           <HeaderTitle title={t('todos.edit_event')} path={`/tabs/(tabs)/tasks/detail/${task?.id}`} />
@@ -88,7 +89,7 @@ const EditTask: React.FC = () => {
           <ButtonText style={styles.buttonText}>{t('button.edit')}</ButtonText>
         </Button>
       </Box>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -134,12 +135,10 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: Colors.main.background,
     paddingHorizontal: 16,
-    paddingTop: 12,
     alignItems: 'center',
     justifyContent: 'center',
     shadowRadius: 8,
-    borderTopWidth: 1,
-    borderTopColor: Colors.main.cardBackground,
+    height: 130,
   },
   buttonStyle: {
     backgroundColor: Colors.main.button,

@@ -22,7 +22,7 @@ const UserHeaderTitle = memo(() => {
 
   const displayName = user?.first_name && user?.first_name.length > 0 ? `${capitalizeWords(user.first_name)} ${capitalizeWords(user.last_name || '')}`.trim() : t('home.welcome_to_cocheck');
   return (
-    <HStack className="mb-5 justify-between items-center px-5">
+    <HStack className="mb-5 justify-between items-center px-5 mt-12">
       <VStack>
         <Heading className="font-bold" size="lg" style={{ color: Colors.main.primary }}>
           {displayName}

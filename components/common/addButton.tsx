@@ -9,6 +9,7 @@ import { Colors } from '@/constants/Colors';
 import React from 'react';
 import { Text } from '../Themed';
 import { Box } from '../ui/box';
+import { Plus } from 'lucide-react-native';
 
 const BUTTON_SIZE = 64;
 interface MenuItemProps {
@@ -117,7 +118,7 @@ const AddButton: React.FC = memo(() => {
               duration: 200,
             }}
           >
-            <Text className='text-4xl'>+</Text>
+            <Plus color={Colors.main.textPrimary} />
           </MotiView>
         </LinearGradient>
       </Pressable>

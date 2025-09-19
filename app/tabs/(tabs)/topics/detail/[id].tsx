@@ -19,6 +19,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import TopicSubTaskList from '@/components/shared/topicSubTaskList';
 import { useTodoStore } from '@/store/todoState';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TopicDetail: React.FC = () => {
   const { id } = useLocalSearchParams();
@@ -43,49 +44,51 @@ const TopicDetail: React.FC = () => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.screenContainer}>
-      <Suspense fallback={<Loading />}>
-        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-          <VStack space="xl">
-            <HStack className="items-center justify-between ">
-              <HeaderTitle path={'/tabs/(tabs)/topics'} size="md" width="[80%]" />
-              <Pressable onPress={removeTopicHandler}>
-                <TrashIcon size={48} />
-              </Pressable>
-            </HStack>
-
-            <Box style={styles.mainCard} className="p-5 px-7">
-              <Heading style={styles.headerTitle}>{t('task_detail.title')}</Heading>
-              <Text className="mt-4 text-[16px]  rounded-lg px-4">{topic?.title}</Text>
-            </Box>
-
-            {topic?.description ? (
-              <Box style={styles.mainCard} className="p-5 px-7">
-                <Heading style={styles.headerTitle}>{t('task_detail.description')}</Heading>
-                <Text className="mt-4 text-[14px]  rounded-lg px-4">{topic?.description || t('task_detail.no_description_todo')}</Text>
-              </Box>
-            ) : null}
-
-            <Box style={styles.mainCard} className="p-5 px-7">
-              <Heading style={styles.headerTitle}>{t('task_detail.category')}</Heading>
-              <Text className="mt-4 text-[14px] p-2 w-max rounded-lg px-5" style={{ backgroundColor: category?.color + '40' }}>
-                {language === 'fa' ? category?.fa : category?.name}
-              </Text>
-              <HStack className="pt-2 mt-4 border-t-2  items-center justify-between" style={{ borderColor: Colors.main.border }}>
-                <Heading style={styles.headerTitle}>{t('activity.is_public')}</Heading>
-                <Text className="text-[14px] p-2 rounded-lg">{topic?.isPublic ? t('activity.yes') : t('activity.no')}</Text>
+    <SafeAreaView style={styles.screenContainer}>
+      <GestureHandlerRootView style={styles.screenContainer}>
+        <Suspense fallback={<Loading />}>
+          <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+            <VStack space="xl">
+              <HStack className="items-center justify-between ">
+                <HeaderTitle path={'/tabs/(tabs)/topics'} size="md" width="[80%]" />
+                <Pressable onPress={removeTopicHandler}>
+                  <TrashIcon size={48} />
+                </Pressable>
               </HStack>
-            </Box>
-          </VStack>
-          <TopicSubTaskList id={id as string} />
-        </ScrollView>
-      </Suspense>
-      <Box className="px-5 mb-5">
-        <Button className="h-16 rounded-lg" style={{ backgroundColor: Colors.main.button }} onPress={() => router.push(`/tabs/(tabs)/topics/edit/${id}`)}>
-          <ButtonText className="text-xl">{t('button.edit')}</ButtonText>
-        </Button>
-      </Box>
-    </GestureHandlerRootView>
+
+              <Box style={styles.mainCard} className="p-5 px-7">
+                <Heading style={styles.headerTitle}>{t('task_detail.title')}</Heading>
+                <Text className="mt-4 text-[16px]  rounded-lg px-4">{topic?.title}</Text>
+              </Box>
+
+              {topic?.description ? (
+                <Box style={styles.mainCard} className="p-5 px-7">
+                  <Heading style={styles.headerTitle}>{t('task_detail.description')}</Heading>
+                  <Text className="mt-4 text-[14px]  rounded-lg px-4">{topic?.description || t('task_detail.no_description_todo')}</Text>
+                </Box>
+              ) : null}
+
+              <Box style={styles.mainCard} className="p-5 px-7">
+                <Heading style={styles.headerTitle}>{t('task_detail.category')}</Heading>
+                <Text className="mt-4 text-[14px] p-2 w-max rounded-lg px-5" style={{ backgroundColor: category?.color + '40' }}>
+                  {language === 'fa' ? category?.fa : category?.name}
+                </Text>
+                <HStack className="pt-2 mt-4 border-t-2  items-center justify-between" style={{ borderColor: Colors.main.border }}>
+                  <Heading style={styles.headerTitle}>{t('activity.is_public')}</Heading>
+                  <Text className="text-[14px] p-2 rounded-lg">{topic?.isPublic ? t('activity.yes') : t('activity.no')}</Text>
+                </HStack>
+              </Box>
+            </VStack>
+            <TopicSubTaskList id={id as string} />
+          </ScrollView>
+        </Suspense>
+        <Box className="px-5 mb-5">
+          <Button className="h-16 rounded-lg" style={{ backgroundColor: Colors.main.button }} onPress={() => router.push(`/tabs/(tabs)/topics/edit/${id}`)}>
+            <ButtonText style={{ color: Colors.main.textPrimary }} className="text-xl">{t('button.edit')}</ButtonText>
+          </Button>
+        </Box>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
 

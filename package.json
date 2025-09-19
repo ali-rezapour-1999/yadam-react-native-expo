@@ -12,9 +12,6 @@
     "build:preview": "expo export --platform web --output-dir dist",
     "test": "jest --watchAll"
   },
-  "jest": {
-    "preset": "jest-expo"
-  },
   "dependencies": {
     "@expo/html-elements": "^0.12.5",
     "@expo/metro-runtime": "~6.1.2",

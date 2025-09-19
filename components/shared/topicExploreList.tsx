@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNetworkStatus } from '@/hooks/networkStatus';
-import Search from '../common/search';
 import NoInternetConnection from '../common/noInternetConnection';
-import { useAppStore } from '@/store/appState';
 import NeedLogin from '../common/needLogin';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text } from '../Themed';
 
 const TopicExploreList = () => {
   const connection = useNetworkStatus();
@@ -15,9 +15,10 @@ const TopicExploreList = () => {
     return <NeedLogin />;
   }
   return (
-    <>
-      <Search />
-    </>
+    <SafeAreaView>
+
+      <Text>noInternetConnection</Text>
+    </SafeAreaView>
   );
 };
 

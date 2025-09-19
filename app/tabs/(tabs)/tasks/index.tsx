@@ -15,6 +15,7 @@ import { Text } from '@/components/Themed';
 import { Loading } from '@/components/common/loading';
 import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
 import SelectYearWithMonth from '@/components/shared/forms/selectYearWithMonth';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
 
@@ -26,7 +27,7 @@ const HeaderComponent = React.memo(
     }, [selectedDate]);
 
     return (
-      <Box style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <HeaderPage title={t('todos.todo_list')} />
 
         <VStack className="mt-5">
@@ -50,7 +51,7 @@ const HeaderComponent = React.memo(
           <Text>{isToday ? t('todos.today') : t('todos.select_date')}</Text>
           <Text>{displayDate}</Text>
         </HStack>
-      </Box>
+      </SafeAreaView>
     );
   },
 );

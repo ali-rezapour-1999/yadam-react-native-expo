@@ -16,9 +16,10 @@ import { debounce } from 'lodash';
 import { Loading } from '@/components/common/loading';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TopicExploreList = React.lazy(()=>import("@/components/shared/topicExploreList"))
-const TopicListView = React.lazy(()=>import("@/components/shared/topicListView"))
+const TopicExploreList = React.lazy(() => import("@/components/shared/topicExploreList"))
+const TopicListView = React.lazy(() => import("@/components/shared/topicListView"))
 
 const NoTopicsImage = () => {
   return (
@@ -85,7 +86,7 @@ const MyTopicsSection = () => {
   return (
     <>
       <Search search={search} onChange={onChange} />
-      {userTopics.length === 0 ? NoData() : <Suspense fallback={<Loading/>}><TopicListView data={userTopics} /></Suspense>}
+      {userTopics.length === 0 ? NoData() : <Suspense fallback={<Loading />}><TopicListView data={userTopics} /></Suspense>}
     </>
   );
 };
@@ -94,7 +95,7 @@ const Activity = () => {
   const [topicSelect, setTopicSelect] = useState<TopicSelect>(TopicSelect.MY_TOPICS);
 
   return (
-    <Box style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <HStack className="items-center justify-between gap-4">
         <Heading style={styles.title} size="2xl">
           {t('activity.title')}
@@ -123,7 +124,7 @@ const Activity = () => {
       <Box className="flex-1">
         <Suspense fallback={<Loading />}>{topicSelect === TopicSelect.MY_TOPICS ? <MyTopicsSection /> : <TopicExploreList />}</Suspense>
       </Box>
-    </Box>
+    </SafeAreaView>
   );
 };
 

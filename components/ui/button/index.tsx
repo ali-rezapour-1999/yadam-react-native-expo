@@ -10,6 +10,7 @@ import { cssInterop } from 'nativewind';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
+import { useDynamicFont } from '@/hooks/useDynamicFont';
 
 const SCOPE = 'BUTTON';
 
@@ -316,6 +317,8 @@ const ButtonText = React.forwardRef<
     action: parentAction,
   } = useStyleContext(SCOPE);
 
+  const fontStyle = useDynamicFont(props.style);
+
   return (
     <UIButton.Text
       ref={ref}
@@ -336,6 +339,7 @@ const ButtonText = React.forwardRef<
           | undefined,
         class: className,
       })}
+      style={fontStyle}
     />
   );
 });

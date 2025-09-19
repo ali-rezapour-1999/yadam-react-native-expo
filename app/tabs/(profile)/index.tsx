@@ -17,6 +17,7 @@ import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
 import { Info, Settings, Headset, ChevronRight, ChevronLeft } from 'lucide-react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const profileItem = [
   { title: 'profile.setting', icon: Settings, path: '/tabs/(wizardForm)' },
@@ -29,7 +30,7 @@ const Profile = () => {
   const isLogin = false;
 
   return (
-    <Box className="flex-1" style={{ backgroundColor: Colors.main.background }}>
+    <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
       {isLogin ? <UsernameInput /> : null}
       <HStack className="items-center justify-between my-6 px-7">
         <HeaderTitle title="" path="/tabs/(tabs)" width="1/2" />
@@ -110,7 +111,7 @@ const Profile = () => {
           </Text>
         </Center>
       </Button>
-    </Box>
+    </SafeAreaView>
   );
 };
 export default Profile;
