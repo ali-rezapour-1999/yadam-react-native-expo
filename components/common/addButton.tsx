@@ -64,13 +64,13 @@ const AddButton: React.FC = memo(() => {
   const firstMenuAnimation = {
     from: { opacity: 0, translateY: 0 },
     animate: { opacity: 1, translateY: -65 },
-    transition: { type: 'spring', damping: 18, stiffness: 200 } as const,
+    transition: { type: 'spring', damping: 30, stiffness: 400 } as const,
   };
 
   const secondMenuAnimation = {
     from: { opacity: 0, translateY: 0 },
     animate: { opacity: 1, translateY: -130 },
-    transition: { type: 'spring', damping: 18, stiffness: 200 } as const,
+    transition: { type: 'spring', damping: 30, stiffness: 400 } as const,
   };
 
   const addTaskText = useMemo(() => t('button.add_task'), []);
@@ -117,7 +117,7 @@ const AddButton: React.FC = memo(() => {
               duration: 200,
             }}
           >
-            <Icon as={AddIcon} size="xxxl" color={Colors.main.textSecondary} />
+            <Text className='text-4xl'>+</Text>
           </MotiView>
         </LinearGradient>
       </Pressable>

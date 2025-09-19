@@ -10,6 +10,8 @@ import {
 import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
+import { useDynamicFont } from '@/hooks/useDynamicFont';
+import { useAppStore } from '@/store/appState';
 
 const SCOPE = 'INPUT';
 
@@ -193,6 +195,8 @@ const InputField = React.forwardRef<
   IInputFieldProps
 >(function InputField({ className, ...props }, ref) {
   const { variant: parentVariant, size: parentSize } = useStyleContext(SCOPE);
+  const fontStyle = useDynamicFont(props.style);
+  const { language } = useAppStore();
 
   return (
     <UIInput.Input
@@ -205,6 +209,7 @@ const InputField = React.forwardRef<
         },
         class: className,
       })}
+      style={[{ textAlign: language === 'fa' ? 'right' : 'left' }, fontStyle]}
     />
   );
 });
