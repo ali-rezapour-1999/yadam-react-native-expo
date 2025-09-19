@@ -11,7 +11,12 @@ import { Text } from '../Themed';
 const WizardStepper = () => {
   const { t } = useTranslation();
   const { language } = useAppStore();
-  const stepLabels = [t('onboarding.Information'), t('onboarding.Goal'), t('onboarding.Lifestyle'), t('onboarding.Priority')];
+  const stepLabels = [
+    t('onboarding.Information'),
+    t('onboarding.Goal'),
+    t('onboarding.Lifestyle'),
+    t('onboarding.Priority'),
+  ];
   const { step: currentStep } = useWizardStore();
 
   const isRTL = language === 'fa';
@@ -45,10 +50,16 @@ const WizardStepper = () => {
           height: 2,
           backgroundColor: Colors.main.primary,
           zIndex: 0,
+          transform: [{ scaleX: isRTL ? -1 : 1 }],
         }}
       />
 
-      <Box className="relative flex-row items-center justify-between z-10">
+      <Box
+        className="relative flex-row items-center justify-between z-10"
+        style={{
+          flexDirection: isRTL ? 'row-reverse' : 'row',
+        }}
+      >
         {stepLabels.map((stepLabel, index) => {
           const stepNumber = index + 1;
           const isActive = stepNumber === currentStep;
@@ -137,6 +148,7 @@ const WizardStepper = () => {
                     style={{
                       color: isActive ? Colors.main.primary : Colors.main.textSecondary,
                       fontWeight: isActive ? '600' : '400',
+                      writingDirection: isRTL ? 'rtl' : 'ltr',
                     }}
                   >
                     {stepLabel}
@@ -148,9 +160,9 @@ const WizardStepper = () => {
                 <Box
                   className="absolute h-0.5"
                   style={{
-                    top: 20,
-                    left: isRTL ? '10%' : '60%',
-                    right: isRTL ? '60%' : '10%',
+                    top: 15,
+                    [isRTL ? 'right' : 'left']: '60%',
+                    [isRTL ? 'left' : 'right']: '10%',
                     zIndex: -1,
                   }}
                 >

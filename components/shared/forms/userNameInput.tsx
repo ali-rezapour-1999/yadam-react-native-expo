@@ -48,12 +48,12 @@ const UsernameInput = () => {
       created_at: user?.created_at,
       updated_at: user?.updated_at,
       email: user?.email,
-    }).then(() => router.replace('/tabs/(tabs)/profile'));
+    }).then(() => router.replace('/tabs/(profile)'));
   };
 
   const handlerCloseDrawer = () => {
     if (showDrawer) {
-      router.replace('/tabs/(tabs)/');
+      router.replace('/tabs/(tabs)');
     }
     setShowDrawer(false);
   };
@@ -103,7 +103,7 @@ const UsernameInput = () => {
           />
         </DrawerBody>
         <DrawerFooter>
-          <Button className="h-14 rounded-xl w-full" onPress={handleSubmit(onSubmit)}>
+          <Button className="h-14 mb-3 rounded-xl w-full" onPress={handleSubmit(onSubmit)} style={{ backgroundColor: Colors.main.button }}>
             <ButtonText className="text-lg">{t('event.approve')}</ButtonText>
           </Button>
         </DrawerFooter>

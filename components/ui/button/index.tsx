@@ -11,6 +11,7 @@ import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
 import { useDynamicFont } from '@/hooks/useDynamicFont';
+import { Colors } from '@/constants/Colors';
 
 const SCOPE = 'BUTTON';
 
@@ -311,11 +312,6 @@ const ButtonText = React.forwardRef<
   React.ElementRef<typeof UIButton.Text>,
   IButtonTextProps
 >(({ className, variant, size, action, ...props }, ref) => {
-  const {
-    variant: parentVariant,
-    size: parentSize,
-    action: parentAction,
-  } = useStyleContext(SCOPE);
 
   const fontStyle = useDynamicFont(props.style);
 
@@ -324,11 +320,6 @@ const ButtonText = React.forwardRef<
       ref={ref}
       {...props}
       className={buttonTextStyle({
-        parentVariants: {
-          variant: parentVariant,
-          size: parentSize,
-          action: parentAction,
-        },
         variant: variant as 'link' | 'outline' | 'solid' | undefined,
         size,
         action: action as
@@ -339,7 +330,7 @@ const ButtonText = React.forwardRef<
           | undefined,
         class: className,
       })}
-      style={fontStyle}
+      style={[{ color: Colors.main.textPrimary }, fontStyle]}
     />
   );
 });
@@ -389,11 +380,6 @@ const ButtonIcon = React.forwardRef<
     <UIButton.Icon
       {...props}
       className={buttonIconStyle({
-        parentVariants: {
-          size: parentSize,
-          variant: parentVariant,
-          action: parentAction,
-        },
         size,
         class: className,
       })}
@@ -424,7 +410,6 @@ const ButtonGroup = React.forwardRef<
         className={buttonGroupStyle({
           class: className,
           space,
-          isAttached: isAttached as boolean,
           flexDirection: flexDirection as any,
         })}
         {...props}

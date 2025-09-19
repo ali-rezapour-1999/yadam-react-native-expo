@@ -7,7 +7,7 @@ import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
 import { useWizardStore } from '@/store/wizardFormState';
 import { t } from 'i18next';
-import { Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { PriorityEnumItems } from '@/constants/PriorityEnumItems';
 import WizardStepper from '@/components/common/wizardSteper';
@@ -17,6 +17,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useNetworkStatus } from '@/hooks/networkStatus';
 import { useAppStore } from '@/store/appState';
 import { UserProfile } from '@/types/userProfile';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const StepTwo = () => {
   const { setStep, updateProfile, topPriority, setTopPriority, description, age, weight, height, gender, sleepTime, extersize, stressedFeeling, goal } = useWizardStore();
@@ -68,9 +69,9 @@ const StepTwo = () => {
         main_focus: selected.length > 0 ? selected : null,
         description: description,
       } as UserProfile);
-      router.push('/tabs/(tabs)/profile');
+      router.push('/tabs/(profile)');
     } else {
-      router.push('/tabs/(tabs)/profile');
+      router.push('/tabs/(profile)');
     }
   };
 
@@ -79,7 +80,7 @@ const StepTwo = () => {
   };
 
   return (
-    <KeyboardAvoidingView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         <Box>
           <WizardStepper />
@@ -114,19 +115,17 @@ const StepTwo = () => {
         </Box>
       </ScrollView>
 
-      <Box style={{ position: 'absolute', bottom: 20, left: 16, right: 16 }}>
-        <Button
-          className="rounded-xl h-[50px]"
-          style={{
-            backgroundColor: isButtonDisabled ? Colors.main.border : Colors.main.button,
-          }}
-          onPress={onSubmit}
-          disabled={isButtonDisabled}
-        >
-          <ButtonText>{t('button.cocheck_will_start_from_here')}</ButtonText>
-        </Button>
-      </Box>
-    </KeyboardAvoidingView>
+      <Button
+        className="rounded-xl h-[50px] mb-4"
+        style={{
+          backgroundColor: isButtonDisabled ? Colors.main.border : Colors.main.button,
+        }}
+        onPress={onSubmit}
+        disabled={isButtonDisabled}
+      >
+        <ButtonText>{t('button.cocheck_will_start_from_here')}</ButtonText>
+      </Button>
+    </SafeAreaView>
   );
 };
 

@@ -10,6 +10,8 @@ import {
 import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
+import { useDynamicFont } from '@/hooks/useDynamicFont';
+import { Colors } from '@/constants/Colors';
 
 const SCOPE = 'FORM_CONTROL';
 
@@ -374,11 +376,13 @@ const FormControlLabelText = React.forwardRef<
   React.ComponentRef<typeof UIFormControl.Label.Text>,
   IFormControlLabelTextProps
 >(function FormControlLabelText({ className, size, ...props }, ref) {
+  const fontStyle = useDynamicFont(props.style);
 
   return (
     <UIFormControl.Label.Text
       ref={ref}
       {...props}
+      style={[{ color: Colors.main.textPrimary }, fontStyle]}
     />
   );
 });

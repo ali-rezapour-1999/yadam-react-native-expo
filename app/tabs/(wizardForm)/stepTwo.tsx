@@ -9,17 +9,17 @@ import { Colors } from '@/constants/Colors';
 import { GoalEnumItems } from '@/constants/GoalEnumItems';
 import { useWizardStore } from '@/store/wizardFormState';
 import { t } from 'i18next';
-import { Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Checkbox } from '@/components/common/checkBox';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const StepTwo = () => {
   const { setStep } = useWizardStore();
   const { setGoal, goal } = useWizardStore();
   const [selectedGoals, setSelectedGoals] = useState<string[]>(goal ?? []);
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const toggleGoal = (key: string) => {
@@ -55,15 +55,13 @@ const StepTwo = () => {
   };
 
   return (
-    <KeyboardAvoidingView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+
+    <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background, position: 'relative' }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         <Box>
           <WizardStepper />
-          <HeaderTitle title={t('goal.your_goal')} />
-          <Heading size="lg" className="px-3 mt-4" style={{ color: Colors.main.textPrimary }}>
-            {t('goal.what_do_you_want_from_cocheck')}
-          </Heading>
-          <Text className="px-3 text-sm" style={{ color: Colors.main.textPrimary }}>
+          <HeaderTitle title={t('goal.what_do_you_want_from_cocheck')} />
+          <Text className="px-3 mt-3 text-md" style={{ color: Colors.main.textPrimary }}>
             {t('goal.main_goal_guidance_text')}
           </Text>
 
@@ -89,20 +87,17 @@ const StepTwo = () => {
           </VStack>
         </Box>
       </ScrollView>
-
-      <Box style={{ position: 'absolute', bottom: 20, left: 16, right: 16 }}>
-        <Button
-          className="rounded-xl h-[50px]"
-          style={{
-            backgroundColor: isButtonDisabled ? Colors.main.border : Colors.main.button,
-          }}
-          onPress={onSubmit}
-          disabled={isButtonDisabled}
-        >
-          <ButtonText>{t('profile.continue_step')}</ButtonText>
-        </Button>
-      </Box>
-    </KeyboardAvoidingView>
+      <Button
+        className="rounded-xl h-[50px] mb-7"
+        style={{
+          backgroundColor: isButtonDisabled ? Colors.main.border : Colors.main.button,
+        }}
+        onPress={onSubmit}
+        disabled={isButtonDisabled}
+      >
+        <ButtonText>{t('profile.continue_step')}</ButtonText>
+      </Button>
+    </SafeAreaView>
   );
 };
 

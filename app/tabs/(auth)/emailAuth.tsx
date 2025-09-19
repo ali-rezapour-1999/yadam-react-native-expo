@@ -5,7 +5,7 @@ import { Colors } from '@/constants/Colors';
 
 const AuthWithEmail = () => {
   return <SafeAreaView style={{ flex: 1, backgroundColor: Colors.main.background }}>
-    <GenericAuth authType="email" />;
+    <GenericAuth authType="email" />
   </SafeAreaView>
 };
 

@@ -7,13 +7,14 @@ import { Colors } from '@/constants/Colors';
 import { useWizardStore } from '@/store/wizardFormState';
 import { t } from 'i18next';
 import { OneQuestion, ThreeQuestion, TwoQuestion } from '@/constants/LifeStyleEnumItems';
-import { Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { VStack } from '@/components/ui/vstack';
 import { router } from 'expo-router';
 import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Checkbox } from '@/components/common/checkBox';
 import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const StepThree = () => {
   const { setStep, setField, sleepTime, stressedFeeling, extersize } = useWizardStore();
@@ -76,7 +77,7 @@ const StepThree = () => {
   };
 
   return (
-    <KeyboardAvoidingView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         <Box>
           <WizardStepper />
@@ -106,7 +107,7 @@ const StepThree = () => {
                   backgroundColor: selectedOptions.questionOne === item.key ? Colors.main.primary + '20' : Colors.main.background,
                 }}
               >
-                {selectedOptions.questionOne === item.key ? <Checkbox checked={true} onPress={() => {}} /> : <Checkbox checked={false} onPress={() => handleSelect('questionOne', item.key)} />}
+                {selectedOptions.questionOne === item.key ? <Checkbox checked={true} onPress={() => { }} /> : <Checkbox checked={false} onPress={() => handleSelect('questionOne', item.key)} />}
                 <Text style={{ fontSize: 14, color: Colors.main.textPrimary }}>{t(item.label)}</Text>
               </Pressable>
             ))}
@@ -130,7 +131,7 @@ const StepThree = () => {
                   backgroundColor: selectedOptions.questionTwo === item.key ? Colors.main.primary + '20' : Colors.main.background,
                 }}
               >
-                {selectedOptions.questionTwo === item.key ? <Checkbox checked={true} onPress={() => {}} /> : <Checkbox checked={false} onPress={() => handleSelect('questionTwo', item.key)} />}
+                {selectedOptions.questionTwo === item.key ? <Checkbox checked={true} onPress={() => { }} /> : <Checkbox checked={false} onPress={() => handleSelect('questionTwo', item.key)} />}
                 <Text style={{ fontSize: 14, color: Colors.main.textPrimary }}>{t(item.label)}</Text>
               </Pressable>
             ))}
@@ -154,7 +155,7 @@ const StepThree = () => {
                   backgroundColor: selectedOptions.questionThree === item.key ? Colors.main.primary + '20' : Colors.main.background,
                 }}
               >
-                {selectedOptions.questionThree === item.key ? <Checkbox checked={true} onPress={() => {}} /> : <Checkbox checked={false} onPress={() => handleSelect('questionThree', item.key)} />}
+                {selectedOptions.questionThree === item.key ? <Checkbox checked={true} onPress={() => { }} /> : <Checkbox checked={false} onPress={() => handleSelect('questionThree', item.key)} />}
                 <Text style={{ fontSize: 14, color: Colors.main.textPrimary }}>{t(item.label)}</Text>
               </Pressable>
             ))}
@@ -162,19 +163,17 @@ const StepThree = () => {
         </Box>
       </ScrollView>
 
-      <Box style={{ position: 'absolute', bottom: 20, left: 16, right: 16 }}>
-        <Button
-          className="rounded-xl h-[50px]"
-          style={{
-            backgroundColor: isButtonDisabled ? Colors.main.border : Colors.main.button,
-          }}
-          onPress={onSubmit}
-          disabled={isButtonDisabled}
-        >
-          <ButtonText>{t('profile.continue_step')}</ButtonText>
-        </Button>
-      </Box>
-    </KeyboardAvoidingView>
+      <Button
+        className="rounded-xl h-[50px] mb-4"
+        style={{
+          backgroundColor: isButtonDisabled ? Colors.main.border : Colors.main.button,
+        }}
+        onPress={onSubmit}
+        disabled={isButtonDisabled}
+      >
+        <ButtonText>{t('profile.continue_step')}</ButtonText>
+      </Button>
+    </SafeAreaView>
   );
 };
 

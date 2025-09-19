@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SelectLanguage = () => {
   const [showDrawer, setShowDrawer] = React.useState(false);
   const { i18n } = useTranslation();
-  const { isLoading, setLanguage, language } = useAppStore();
+  const { setLanguage, language } = useAppStore();
 
   const selectLanguage = async (selectedLang: 'en' | 'fa') => {
     const isRTL = selectedLang === 'fa';
@@ -32,10 +32,10 @@ const SelectLanguage = () => {
         onPress={() => {
           setShowDrawer(true);
         }}
-        className={`rounded-lg h-12 ${isLoading ? 'w-[48%]' : ' w-full'}`}
+        className="rounded-lg h-12 w-full"
         style={{ backgroundColor: Colors.main.textPrimary }}
       >
-        <ButtonText className="text-lg" style={{ color: Colors.main.button }}>
+        <ButtonText className="text-lg" style={{ color: Colors.main.button }} >
           {language === 'fa' ? 'فارسی' : 'English'}
         </ButtonText>
       </Button>

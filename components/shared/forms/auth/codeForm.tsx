@@ -1,5 +1,4 @@
 import { HStack } from '@/components/ui/hstack';
-import { Box } from '@/components/ui/box';
 import { Text } from '@/components/Themed';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Colors } from '@/constants/Colors';
@@ -77,27 +76,27 @@ export const CodeForm = ({ value, onChange, error, onResendCode, length = 6, has
   };
 
   return (
-    <Box className="items-center">
-      <HStack className="w-full justify-between mb-6 px-2 items-center">
+    <>
+      <HStack className="w-full justify-between mb-6 px-2 items-center rtl">
         <HStack className="items-center gap-3">
           <Text className="text-background font-medium">{t('auth.we_send_code')}</Text>
         </HStack>
         {secondsLeft > 0 ? (
           <Text className="text-background">{formatTime(secondsLeft)}</Text>
         ) : (
-          <Button variant="link" onPress={handleResend} className="bg-blue-50 px-3 py-1 rounded-full">
-            <ButtonText className="text-blue-600 font-semibold">{t('resend_code')}</ButtonText>
+          <Button onPress={handleResend} className="bg-blue-50 px-3 py-1 rounded-full" style={{ backgroundColor: Colors.main.background }}>
+            <ButtonText style={{ color: Colors.main.textPrimary }} className='text-sm'>{t('auth.resend_code')}</ButtonText>
           </Button>
         )}
       </HStack>
 
       <Animated.View style={{ transform: [{ translateX: shakeAnim }] }}>
-        <HStack className="justify-center gap-3">
+        <HStack className="justify-center gap-3" style={{ direction: "ltr" }}>
           {Array.from({ length }).map((_, i) => (
             <TextInput
               key={i}
-              ref={(el) => (inputsRef.current[i] = el!)}
               value={value[i] || ''}
+              ref={(el) => (inputsRef.current[i] = el!)}
               onChangeText={(text) => handleChange(text, i)}
               onKeyPress={(e) => handleKeyPress(e, i)}
               keyboardType="number-pad"
@@ -115,7 +114,7 @@ export const CodeForm = ({ value, onChange, error, onResendCode, length = 6, has
       </Animated.View>
 
       <Text className="text-center text-xs mt-4 leading-relaxed">{error}</Text>
-    </Box>
+    </ >
   );
 };
 

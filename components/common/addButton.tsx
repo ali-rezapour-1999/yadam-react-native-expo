@@ -18,8 +18,8 @@ interface MenuItemProps {
   icon: React.ComponentType<any>;
   text: string;
   animationProps: {
-    from: { opacity: number; translateY: number };
-    animate: { opacity: number; translateY: number };
+    from: { opacity: number; translateY: number; translateX?: number };
+    animate: { opacity: number; translateY: number; translateX?: number };
     transition: { type: 'spring'; damping: number; stiffness: number };
   };
   style?: ViewStyle;
@@ -44,18 +44,18 @@ const MenuItem: React.FC<MenuItemProps> = memo(({ onPress, icon, text, animation
       styles.menuItem,
       shadowStyles.shadow,
       style,
-      isRTL
-        ? { left: 0, right: undefined, flexDirection: 'row-reverse' }
-        : { right: 0, left: undefined, flexDirection: 'row' },
+      {
+        [isRTL ? 'right' : 'left']: isRTL ? BUTTON_SIZE / 2 - 180 / 2 : BUTTON_SIZE / 2 - 180 / 2,
+        flexDirection: isRTL ? 'row-reverse' : 'row',
+      },
     ]}
   >
     <Pressable onPress={onPress} style={styles.menuItemPressable}>
       <Icon as={icon} size="md" color={Colors.main.info} style={styles.iconMargin} />
-      <Text style={styles.menuItemText}>{text}</Text>
+      <Text style={[styles.menuItemText, { writingDirection: isRTL ? 'rtl' : 'ltr' }]}>{text}</Text>
     </Pressable>
   </MotiView>
 ));
-
 
 MenuItem.displayName = 'MenuItem';
 
@@ -63,12 +63,12 @@ const AddButton: React.FC = memo(() => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const path = usePathname();
-  const language = useAppStore.getState().language
+  const language = useAppStore.getState().language;
 
+  const isRTL = language === 'fa';
   const isHidden = useMemo(() => path === '/tabs/(profile)', [path]);
 
   const containerStyle = useMemo(() => [styles.container, isHidden && styles.hidden], [isHidden]);
-
   const gradientButtonStyle = useMemo(() => [styles.gradientButton, shadowStyles.shadow], []);
 
   const gradientColors = useMemo(() => [Colors.main.button, Colors.main.lightBlue] as const, []);
@@ -77,15 +77,15 @@ const AddButton: React.FC = memo(() => {
   const gradientEnd = useMemo(() => ({ x: 1, y: 1 }), []);
 
   const firstMenuAnimation = {
-    from: { opacity: 0, translateY: 0 },
-    animate: { opacity: 1, translateY: -65 },
-    transition: { type: 'spring', damping: 30, stiffness: 400 } as const,
+    from: { opacity: 0, translateY: 0, translateX: -70 },
+    animate: { opacity: 1, translateY: -65, translateX: -70 },
+    transition: { type: 'spring' as 'spring', damping: 30, stiffness: 400 },
   };
 
   const secondMenuAnimation = {
-    from: { opacity: 0, translateY: 0 },
-    animate: { opacity: 1, translateY: -130 },
-    transition: { type: 'spring', damping: 30, stiffness: 400 } as const,
+    from: { opacity: 0, translateY: 0, translateX: -70 },
+    animate: { opacity: 1, translateY: -130, translateX: -70 },
+    transition: { type: 'spring' as 'spring', damping: 30, stiffness: 400 },
   };
 
   const addTaskText = useMemo(() => t('button.add_task'), []);
@@ -113,7 +113,6 @@ const AddButton: React.FC = memo(() => {
     return null;
   }
 
-
   return (
     <Box style={containerStyle}>
       {isOpen && (
@@ -123,7 +122,12 @@ const AddButton: React.FC = memo(() => {
       )}
 
       <Pressable onPress={toggleOpen}>
-        <LinearGradient colors={!isOpen ? gradientColors : gradientColorsIsOpen} start={gradientStart} end={gradientEnd} style={gradientButtonStyle}>
+        <LinearGradient
+          colors={!isOpen ? gradientColors : gradientColorsIsOpen}
+          start={gradientStart}
+          end={gradientEnd}
+          style={gradientButtonStyle}
+        >
           <MotiView
             animate={{
               rotate: isOpen ? '45deg' : '0deg',
@@ -140,8 +144,22 @@ const AddButton: React.FC = memo(() => {
 
       {isOpen && (
         <>
-          <MenuItem onPress={handleAddTask} icon={AddIcon} text={addTaskText} animationProps={firstMenuAnimation} style={styles.menuItemStyle} isRTL={language == 'fa' ? true : false} />
-          <MenuItem onPress={handleAddByAi} icon={GlobeIcon} text={addByAiText} animationProps={secondMenuAnimation} style={styles.menuItemStyle} isRTL={language == 'fa' ? true : false} />
+          <MenuItem
+            onPress={handleAddTask}
+            icon={AddIcon}
+            text={addTaskText}
+            animationProps={firstMenuAnimation}
+            style={styles.menuItemStyle}
+            isRTL={isRTL}
+          />
+          <MenuItem
+            onPress={handleAddByAi}
+            icon={GlobeIcon}
+            text={addByAiText}
+            animationProps={secondMenuAnimation}
+            style={styles.menuItemStyle}
+            isRTL={isRTL}
+          />
         </>
       )}
     </Box>

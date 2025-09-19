@@ -25,9 +25,8 @@ const profileItem = [
 ];
 
 const Profile = () => {
-  const { user, language } = useAppStore();
+  const { user, language, isLogin } = useAppStore();
   const { description } = useWizardStore();
-  const isLogin = false;
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
@@ -57,9 +56,9 @@ const Profile = () => {
             </Link>
           )}
         </HStack>
-        <HStack className="justify-between items-center mt-7 gap-2">
+        <VStack className="justify-between items-center mt-7 gap-2" >
           {isLogin ? (
-            <Button className="h-12 w-[48%] rounded-xl" onPress={() => router.push('/tabs/(wizardForm)/stepOne')}>
+            <Button className="h-12 rounded-xl w-full" style={{ backgroundColor: Colors.main.button }} onPress={() => router.push('/tabs/(wizardForm)/stepOne')}>
               <EditIcon size={28} />
               <ButtonText className="text-lg" style={{ color: Colors.main.textPrimary }}>
                 {t('button.edit')}
@@ -68,13 +67,10 @@ const Profile = () => {
           ) : null}
 
           <SelectLanguage />
-        </HStack>
+        </VStack>
         {isLogin ? (
           <VStack>
-            <Heading className="mt-5" style={{ color: Colors.main.textPrimary }}>
-              {t('profile.about')}
-            </Heading>
-            <Text className="p-4 rounded-xl max-h-40 text-md" style={{ color: Colors.main.textPrimary, backgroundColor: Colors.main.background }}>
+            <Text className="p-4 mt-5 rounded-xl max-h-40 text-md" style={{ color: Colors.main.textPrimary, backgroundColor: Colors.main.background }}>
               {description.length > 0 ? description : t('profile.no_description')}
             </Text>
           </VStack>
@@ -85,7 +81,7 @@ const Profile = () => {
               onPress={() => router.push(item.path as any)}
               key={item.title}
               className="w-full h-16 rounded-2xl justify-between bg-transparent mt-3 border-[1px]"
-              style={{ borderColor: Colors.main.border + 80 }}
+              style={{ borderColor: Colors.main.border }}
             >
               <HStack className="gap-5">
                 <item.icon size={28} color={Colors.main.textPrimary} />

@@ -8,6 +8,8 @@ import {
   useStyleContext,
 } from '@gluestack-ui/utils/nativewind-utils';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+import { useDynamicFont } from '@/hooks/useDynamicFont';
+import { Colors } from '@/constants/Colors';
 
 const SCOPE = 'TEXTAREA';
 const UITextarea = createTextarea({
@@ -72,6 +74,7 @@ const TextareaInput = React.forwardRef<
   ITextareaInputProps
 >(function TextareaInput({ className, ...props }, ref) {
   const { size: parentSize } = useStyleContext(SCOPE);
+  const fontStyle = useDynamicFont(props.style);
 
   return (
     <UITextarea.Input
@@ -84,6 +87,7 @@ const TextareaInput = React.forwardRef<
         },
         class: className,
       })}
+      style={[{ color: Colors.main.textPrimary }, fontStyle]}
     />
   );
 });
