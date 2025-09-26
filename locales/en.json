@@ -190,7 +190,8 @@
     "select_date": "Select Date",
     "go_to_today": "Go to Today",
     "title_form_todo": "Title",
-    "create_your_task_for_now_time": "Add your first task"
+    "create_your_task_for_now_time": "Add your first task",
+    "no_task_for_topic": "No task for this topic"
   },
   "create_task": {
     "create_task": "Create Task",

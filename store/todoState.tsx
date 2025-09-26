@@ -17,6 +17,7 @@ export interface TodoState {
   setSelectedDate: (date: string) => Promise<void>;
   setSelectedTask: (task: Task | null) => void;
   setEditDrawerOpen: (open: boolean) => void;
+  setTask: (task: Task) => void;
 
   loadTasks: (date: string, status?: TaskStatus) => Promise<void>;
   createTask: (task: Task) => Promise<void>;
@@ -58,6 +59,10 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       isEditDrawerOpen: open,
       selectedTask: open ? state.selectedTask : null,
     });
+  },
+
+  setTask: async (data: Task) => {
+    set({ task: data });
   },
 
   loadTasks: async (date: string, status?: TaskStatus) => {

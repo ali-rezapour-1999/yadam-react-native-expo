@@ -54,7 +54,7 @@ const CreateTask: React.FC = () => {
       <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={true}>
           <Box style={styles.header}>
-            <HeaderTitle title={t('create_task.create_task')} path={topicIdFromRoute ? `tabs/(tabs)/topics/detail/${topicIdFromRoute}` : '/tabs/(tabs)'} />
+            <HeaderTitle />
           </Box>
 
           <Box style={styles.section}>

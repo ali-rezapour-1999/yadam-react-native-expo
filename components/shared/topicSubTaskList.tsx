@@ -10,12 +10,14 @@ import { HStack } from '../ui/hstack';
 import TaskCardInTopic from './card/taskCardInTopic';
 import { Task } from '@/types/database-type';
 import EmptySlot from './emptySlot';
+import { Box } from '../ui/box';
 
 interface TopicSubTaskListProps {
   id: string;
+  isUserTask: boolean;
 }
 
-const Wrapper = React.memo(({ children, id }: { children: React.ReactNode; id?: string }) => (
+const Wrapper = React.memo(({ children, id, isUserTask = true }: { children: React.ReactNode; id?: string, isUserTask?: boolean }) => (
   <ScrollView showsVerticalScrollIndicator={false} className="mt-5 rounded-lg min-h-max" contentContainerStyle={{ backgroundColor: Colors.main.cardBackground, padding: 20, minHeight: 300 }}>
     <HStack className="mb-4 items-center justify-between">
       <Text className="text-xl" style={{ color: Colors.main.textPrimary }}>
@@ -31,13 +33,21 @@ const Wrapper = React.memo(({ children, id }: { children: React.ReactNode; id?: 
   </ScrollView>
 ));
 
-const TopicSubTaskList: React.FC<TopicSubTaskListProps> = ({ id }) => {
+const TopicSubTaskList: React.FC<TopicSubTaskListProps> = ({ id, isUserTask }) => {
   const allTaskByTopicId = useTodoStore((state) => state.allTaskByTopicId);
 
   if (allTaskByTopicId.length === 0) {
     return (
-      <Wrapper>
-        <EmptySlot route={`/tabs/(tabs)/tasks/createTask?topicId=${id}`} placeholder={t('activity.any_topics_sub_task')} />
+      <Wrapper isUserTask={isUserTask} >
+        {
+          isUserTask
+            ?
+            <EmptySlot route={`/tabs/(tabs)/tasks/createTask?topicId=${id}`} placeholder={t('activity.any_topics_sub_task')} />
+            :
+            <Box style={{ backgroundColor: Colors.main.background, padding: 20 }} className='rounded-lg'>
+              <Text className='text-center'>{t('todos.no_task_for_topic')}</Text>
+            </Box>
+        }
       </Wrapper>
     );
   }

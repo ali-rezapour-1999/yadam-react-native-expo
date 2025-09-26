@@ -2,7 +2,8 @@ import { topicStorage } from '@/storage/database';
 import { Topic, TopicWithCount } from '@/types/database-type';
 import { create } from 'zustand';
 import { getListOfTopics } from '@/api/topicsApi/getPublicApi';
-import { useAppStore } from '@/store/appState';
+import { getTopicId } from '@/api/topicsApi/getTopicId';
+import { mapTopicFromBackend } from '@/utils/topicConverter';
 
 export interface TopicState {
   topic: Topic | null;
@@ -29,6 +30,7 @@ export interface TopicState {
 
   //api
   getTopicsByApi: () => Promise<void>;
+  getTopicByIdApi: (id: string) => Promise<void>;
 }
 
 
@@ -164,4 +166,16 @@ export const useTopicStore = create<TopicState>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+  getTopicByIdApi: async (id) => {
+    set({ isLoading: true });
+    try {
+      const topic = await getTopicId(id);
+      set({ topic: mapTopicFromBackend(topic.data), isLoading: false });
+    } catch (error) {
+      console.error('Failed to load public topics:', error);
+      set({ isLoading: false });
+    }
+  },
+
 }));

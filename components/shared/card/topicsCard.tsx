@@ -12,15 +12,16 @@ import { TopicWithCount } from '@/types/database-type';
 type TopicsCardProps = {
   color?: string;
   data?: TopicWithCount;
+  inExplore?: boolean;
 };
 
-const TopicsCard: React.FC<TopicsCardProps> = ({ data }) => {
+const TopicsCard: React.FC<TopicsCardProps> = ({ data, inExplore = false }) => {
   const { language } = useAppStore();
-  const category = Category.find((c) => c.id === data?.categoryId);
+  const category = Category.find((c) => c.id == data?.categoryId);
   const gradientColors: [string, string] = [Colors.main.background, Colors.main.cardBackground];
 
   return (
-    <Link href={`/tabs/(tabs)/topics/detail/${data?.id}`} style={styles.container}>
+    <Link href={`/tabs/(tabs)/topics/detail/${data?.id}?inExplore=${inExplore}`} style={styles.container}>
       <LinearGradient colors={gradientColors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
         <View style={styles.header}>
           <View style={styles.titleSection}>

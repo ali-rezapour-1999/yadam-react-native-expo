@@ -15,7 +15,7 @@ interface TaskCardInTopicProps {
 const TaskCardInTopic: React.FC<TaskCardInTopicProps> = ({ data }) => {
   const language = useAppStore((state) => state.language);
   return (
-    <Button onPress={() => router.push(`/tabs/(tabs)/${data.id}`)} style={styles.container} className="flex justify-between items-center h-max rounded-lg py-3 mt-3">
+    <Button onPress={() => router.push(`/tabs/(tabs)/tasks/${data!.id}`)} style={styles.container} className="flex justify-between items-center h-max rounded-lg py-3 mt-3">
       <Text style={{ color: Colors.main.textPrimary }}>{data.title}</Text>
       <Icon as={language === 'fa' ? ChevronLeftIcon : ChevronRightIcon} size="lg" color={Colors.main.textPrimary} />
     </Button>
