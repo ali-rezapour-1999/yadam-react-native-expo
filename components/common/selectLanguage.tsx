@@ -8,6 +8,8 @@ import { Text } from '../Themed';
 import { I18nManager } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Updates from 'expo-updates';
+import { router } from 'expo-router';
 
 const SelectLanguage = () => {
   const [showDrawer, setShowDrawer] = React.useState(false);
@@ -19,11 +21,21 @@ const SelectLanguage = () => {
     await AsyncStorage.setItem('lang', selectedLang);
     await i18n.changeLanguage(selectedLang);
     setLanguage(selectedLang);
+
     if (I18nManager.isRTL !== isRTL) {
       I18nManager.allowRTL(isRTL);
       I18nManager.forceRTL(isRTL);
     }
+
+    if (Updates.reloadAsync) {
+      try {
+        await Updates.reloadAsync();
+      } catch (e) {
+        console.warn('reloadAsync failed:', e);
+      }
+    }
     setShowDrawer(false);
+    router.push('/tabs/(profile)');
   };
 
   return (

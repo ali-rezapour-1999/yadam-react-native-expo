@@ -31,7 +31,6 @@ export class UnifiedDatabase {
             title TEXT NOT NULL,
             description TEXT DEFAULT '',
             is_public INTEGER NOT NULL DEFAULT 0,
-            status TEXT DEFAULT NULL,
             category_id TEXT DEFAULT NULL,
             likes INTEGER DEFAULT 0,
             created_at TEXT NOT NULL,

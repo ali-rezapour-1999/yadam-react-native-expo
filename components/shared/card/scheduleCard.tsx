@@ -89,7 +89,7 @@ const ScheduleCard = ({ task, onPress, style }: ScheduleCardProps) => {
             {task.startTime} - {task.endTime}
           </Text>
         </HStack>
-        <Text className="px-2 rounded-xl text-sm" style={{ backgroundColor: isFinished ? Colors.main.background : category?.color, color: Colors.main.textPrimary }}>
+        <Text className="px-2 rounded-xl text-sm" style={{ backgroundColor: isFinished ? Colors.main.background : category!.color + 40, color: Colors.main.textPrimary }}>
           {language === 'fa' ? category?.fa : category?.name}
         </Text>
       </HStack>

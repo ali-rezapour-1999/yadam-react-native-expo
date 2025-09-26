@@ -12,18 +12,21 @@ import { VStack } from '@/components/ui/vstack';
 import { router } from 'expo-router';
 import GoogleIcon from '@/assets/Icons/Google';
 import MailIcon from '@/assets/Icons/Mail';
+import uuid from 'react-native-uuid';
+import * as Update from 'expo-updates';
 
 const Language = () => {
   const [selectedLang, setSelectedLang] = useState<'en' | 'fa'>('en');
   const { i18n } = useTranslation();
   const { setUserAndLanguage, user } = useAppStore();
-  const id = new Date().toTimeString();
+  const id = uuid.v4();
 
   const selectLanguage = async (withEmail: boolean) => {
     await AsyncStorage.setItem('lang', selectedLang);
     await i18n.changeLanguage(selectedLang);
     if (!user?.id) setUserAndLanguage(id, selectedLang);
     if (withEmail && user?.id && user?.language) {
+      await Update.reloadAsync();
       router.push('/');
     } else {
       router.push('/tabs/(auth)/emailAuth');

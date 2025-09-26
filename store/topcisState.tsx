@@ -1,6 +1,8 @@
 import { topicStorage } from '@/storage/database';
 import { Topic, TopicWithCount } from '@/types/database-type';
 import { create } from 'zustand';
+import { getListOfTopics } from '@/api/topicsApi/getPublicApi';
+import { useAppStore } from '@/store/appState';
 
 export interface TopicState {
   topic: Topic | null;
@@ -8,6 +10,7 @@ export interface TopicState {
   publicTopics: Topic[];
   userTopics: TopicWithCount[];
   selectedTopic: Topic | null;
+  explorerTopics: Topic[];
 
   isLoading: boolean;
   isEditDrawerOpen: boolean;
@@ -23,7 +26,11 @@ export interface TopicState {
   removeTopic: (id: string) => Promise<void>;
   updateTopicsAfterLogin: (newId: string, lastId: string) => Promise<void>;
   searchTopics: (search: string) => Promise<void>;
+
+  //api
+  getTopicsByApi: () => Promise<void>;
 }
+
 
 export const useTopicStore = create<TopicState>((set, get) => ({
   topic: null,
@@ -33,6 +40,7 @@ export const useTopicStore = create<TopicState>((set, get) => ({
   selectedTopic: null,
   isLoading: false,
   isEditDrawerOpen: false,
+  explorerTopics: [],
 
   setSelectedTopic: (topic: Topic | null) => {
     set({ selectedTopic: topic });
@@ -142,6 +150,17 @@ export const useTopicStore = create<TopicState>((set, get) => ({
       set({ userTopics, isLoading: false });
     } catch (error) {
       console.error('Failed to load user topics:', error);
+      set({ isLoading: false });
+    }
+  },
+
+  getTopicsByApi: async () => {
+    set({ isLoading: true });
+    try {
+      const topics = await getListOfTopics();
+      set({ explorerTopics: topics.data, isLoading: false });
+    } catch (error) {
+      console.error('Failed to load public topics:', error);
       set({ isLoading: false });
     }
   },

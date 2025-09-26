@@ -1,9 +1,8 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { AuthStateType, AuthResult, User } from '@/types/auth-type';
+import { AuthStateType, Result, User } from '@/types/auth-type';
 import { googleLoginAction, sendMassageAction, sendOtpAction } from '@/api/authApi';
-import { useTopicStore } from './topcisState';
 import { updateUserInformationAction } from '@/api/authApi/userInforamtionUpdate';
 
 export const useAppStore = create<AuthStateType>()(
@@ -31,10 +30,11 @@ export const useAppStore = create<AuthStateType>()(
         if (state.user) {
           set({
             language: lang,
+            calender: lang === 'fa' ? 'jalali' : 'gregorian',
             user: { ...state.user, language: lang },
           });
         } else {
-          set({ language: lang });
+          set({ language: lang, calender: lang === 'fa' ? 'jalali' : 'gregorian' });
         }
       },
 
@@ -42,13 +42,15 @@ export const useAppStore = create<AuthStateType>()(
         const state = get();
         if (state.user) {
           set({
-            user: { ...state.user, id: userid, language: lang },
+            user: { ...state.user, id: userid, language: lang, },
+            calender: lang === 'fa' ? 'jalali' : 'gregorian',
             language: lang,
           });
         } else {
           set({
             user: { id: userid, language: lang },
             language: lang,
+            calender: lang === 'fa' ? 'jalali' : 'gregorian',
           });
         }
       },
@@ -61,13 +63,13 @@ export const useAppStore = create<AuthStateType>()(
           isSendCode: false,
         }),
 
-      googleLogin: async (): Promise<AuthResult> => {
+      googleLogin: async (): Promise<Result> => {
         set({ isLoading: true });
         const result = await googleLoginAction();
-        if (result.success && result.user && result.access_token) {
+        if (result.success && result.data && result.access_token) {
           set({
             isLogin: true,
-            user: result.user,
+            user: result.data,
             token: result.access_token,
           });
         }
@@ -75,7 +77,7 @@ export const useAppStore = create<AuthStateType>()(
         return result;
       },
 
-      sendMassage: async (identifier: string): Promise<AuthResult> => {
+      sendMassage: async (identifier: string): Promise<Result> => {
         set({ isLoading: true });
         const result = await sendMassageAction(identifier);
         if (result.success) {
@@ -85,16 +87,16 @@ export const useAppStore = create<AuthStateType>()(
         return result;
       },
 
-      sendOtp: async (identifier: string, code: string): Promise<AuthResult> => {
+      sendOtp: async (identifier: string, code: string): Promise<Result> => {
         set({ isLoading: true });
         const result = await sendOtpAction(identifier, code);
-        if (result.success && result.user && result.access_token) {
-          useTopicStore.getState().updateTopicsAfterLogin(result.user.id, get().user?.id as string);
+        if (result.success && result.data && result.access_token) {
+          //useTopicStore.getState().updateTopicsAfterLogin(result.data.id, get().user?.id as string);
           set({
             isLogin: true,
-            user: result.user,
+            user: result.data,
             token: result.access_token,
-            language: result.user.language,
+            language: result.data.language,
           });
         }
         set({ isLoading: false });
@@ -106,7 +108,7 @@ export const useAppStore = create<AuthStateType>()(
         const result = await updateUserInformationAction(data, get().token as string);
         if (result.success) {
           set({
-            user: result.user,
+            user: result.data,
           });
         }
         set({ isLoading: false });

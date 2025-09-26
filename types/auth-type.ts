@@ -14,13 +14,13 @@ export type User = {
   updated_at?: string;
 };
 
-export type AuthResult = {
+export type Result = {
   success: boolean;
   message: string;
   access_token?: string;
   refresh_token?: string;
   status?: number;
-  user?: User;
+  data?: any;
 };
 
 export type ProfileResult = {
@@ -50,8 +50,8 @@ export type AuthStateType = {
   setUserInformation: (user: User) => void;
   logout: () => void;
 
-  sendMassage: (identifier: string) => Promise<AuthResult>;
-  sendOtp: (identifier: string, code: string) => Promise<AuthResult>;
-  googleLogin: () => Promise<AuthResult>;
-  updateUserInformation: (data: User) => Promise<AuthResult>;
+  sendMassage: (identifier: string) => Promise<Result>;
+  sendOtp: (identifier: string, code: string) => Promise<Result>;
+  googleLogin: () => Promise<Result>;
+  updateUserInformation: (data: User) => Promise<Result>;
 };

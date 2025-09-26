@@ -59,11 +59,11 @@ const UsernameInput = () => {
   };
 
   return (
-    <Drawer className="bg-black/60 border-0" isOpen={showDrawer} onClose={handlerCloseDrawer} size="md" anchor="bottom">
+    <Drawer className="bg-black/60 border-0" isOpen={showDrawer} onClose={handlerCloseDrawer} size="sm" anchor="bottom" >
       <DrawerBackdrop />
-      <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-[30px]">
-        <DrawerHeader>
-          <Text className="text-[24px]" style={{ color: Colors.main.textPrimary }}>
+      <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-[30px] h-[40%]">
+        <DrawerHeader className='justify-center'>
+          <Text className="text-[24px] text-center " style={{ color: Colors.main.textPrimary }}>
             {t('profile.enter_your_first_and_last_name')}
           </Text>
         </DrawerHeader>

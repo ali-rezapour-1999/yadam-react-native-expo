@@ -1,15 +1,15 @@
 import Api from '../baseApi';
-import { Result, User } from '@/types/auth-type';
+import { Result } from '@/types/auth-type';
 
-export const updateUserInformationAction = async (data: User, token: string): Promise<Result> => {
+export const getListOfTopics = async (): Promise<Result> => {
   try {
-    const response = await Api.patch('auth/user-update/', data, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await Api.get('/topics/list_all_topics');
     if (response.status === 200) {
       return {
         success: true,
         status: response.status,
         message: response.data.message,
-        data: response.data.user,
+        data: response.data.data,
       };
     }
     return {
@@ -23,7 +23,7 @@ export const updateUserInformationAction = async (data: User, token: string): Pr
       return {
         success: false,
         status: 500,
-        message: 'خطا در ارتباط با سرور',
+        message: error,
       };
     }
     return {

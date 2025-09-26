@@ -53,10 +53,10 @@
   },
   "profile": {
     "first_name": "اسم",
-    "first_name_placeholder": "اسم خودت رو وارد کن",
-    "last_name": "فامیلی (اختیاری)",
-    "last_name_placeholder": "فامیلی خودت رو وارد کن",
-    "first_name_required": "برای اینکه بهتر کمکت کنیم، اسمت رو نیاز داریم",
+    "first_name_placeholder": "نام خودت رو وارد کن",
+    "last_name": "نام خانوادگی (اختیاری)",
+    "last_name_placeholder": "نام خانوادگی خودت رو وارد کن (اختیاری)",
+    "first_name_required": "برای تجربه کاربری بهتر نام خود را وارد کنید",
     "height": "قد (سانتی‌متر)",
     "height_placeholder": "قدت رو وارد کن",
     "weight": "وزن (کیلوگرم)",
@@ -149,7 +149,8 @@
     "create_event": "ایجاد فعالیت",
     "confirm": "تایید",
     "add_by_ai": "هوش مصنوعی",
-    "edit": "ویرایش"
+    "edit": "ویرایش",
+    "edit_account": "ویرایش حساب کاربری"
   },
   "home": {
     "hi": "سلام",

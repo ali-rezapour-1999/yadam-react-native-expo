@@ -142,13 +142,13 @@ const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
       </Box>
 
       <KeyboardAvoidingView
-        className="flex-1 px-5 rounded-3xl h-max"
+        className="flex-1 px-5 rounded-3xl"
         style={{ backgroundColor: Colors.main.cardBackground, flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <VStack>
-          <VStack className="mt-4">
+          <VStack className="mt-2">
             {!isSendCode && (
               <Controller
                 name="identifier"
@@ -191,12 +191,12 @@ const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
             )}
           </VStack>
 
-          <VStack className="mt-5">
+          <VStack className="mt-4">
             <Button
               isDisabled={!canSubmit}
-              className="h-14 rounded-2xl mb-6 relative overflow-hidden"
+              className="h-14 rounded-xl mb-6 relative overflow-hidden"
               style={{
-                backgroundColor: canSubmit ? Colors.main.button : Colors.main.button + 20,
+                backgroundColor: canSubmit ? Colors.main.button : Colors.main.textPrimary + 20,
                 opacity: canSubmit ? 1 : 0.6,
               }}
               onPress={handleSubmit(onSubmit)}
@@ -215,7 +215,7 @@ const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
 
             {isSendCode ? (
               <Button
-                className="h-14 rounded-2xl mb-6 overflow-hidden"
+                className="h-14 rounded-xl mb-6 overflow-hidden"
                 style={{
                   backgroundColor: Colors.main.textPrimary,
                 }}
@@ -234,16 +234,16 @@ const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
                   <Text className="mx-4 text-gray-500 text-sm font-medium">{t('auth.or')}</Text>
                   <Box className="flex-1 h-px bg-gray-200" />
                 </HStack>
-                <Button className="h-14 rounded-2xl" style={{ backgroundColor: Colors.main.textPrimary }}>
-                  <HStack className="items-center gap-3">
+                <Button className="h-14 mb-4 rounded-xl" style={{ backgroundColor: Colors.main.background }}>
+                  <HStack className="items-center gap-3 ">
                     <GoogleIcon />
-                    <ButtonText className="text-gray-700 text-lg font-medium">{t('auth.continue_with_google')}</ButtonText>
+                    <ButtonText className="text-lg">{t('auth.continue_with_google')}</ButtonText>
                   </HStack>
                 </Button>
               </>
             )}
 
-            <Text className="text-center text-xs mt-4 leading-relaxed">{t('auth.policy_approve')}</Text>
+            <Text className="text-center leading-relaxed">{t('auth.policy_approve')}</Text>
           </VStack>
         </VStack>
       </KeyboardAvoidingView>

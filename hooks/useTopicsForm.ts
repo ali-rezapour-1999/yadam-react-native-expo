@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback } from 'react';
-import { TaskStatus } from '@/constants/TaskEnum';
 import { router } from 'expo-router';
 import { AddTopicSchemaType, addTopicSchema } from '@/components/schema/addTopicSchema';
 import { useTopicStore } from '@/store/topcisState';
@@ -69,7 +68,6 @@ export const useTopicsForm = ({ topic }: Props) => {
           userId: (user?.id as string) || '0',
           title: data.title.trim(),
           description: data.description?.trim() || '',
-          status: topic?.status ?? TaskStatus.PENDING,
           categoryId: data.categoryId ?? '',
           createdAt: data.createdAt,
           updatedAt: new Date().toISOString(),
@@ -78,7 +76,7 @@ export const useTopicsForm = ({ topic }: Props) => {
         };
 
         if (isEditMode) {
-          await updateTopic(topicData).then((res) => {
+          await updateTopic(topicData).then(() => {
             router.push(`/tabs/(tabs)/topics/detail/${topic!.id}`);
           });
         } else {

@@ -1,4 +1,3 @@
-import BellIcon from '@/assets/Icons/BellIcon';
 import EditIcon from '@/assets/Icons/EditIcon';
 import HeaderTitle from '@/components/common/headerTitle';
 import SelectLanguage from '@/components/common/selectLanguage';
@@ -6,7 +5,7 @@ import UserImage from '@/components/common/userImage';
 import UsernameInput from '@/components/shared/forms/userNameInput';
 import { Text } from '@/components/Themed';
 import { Box } from '@/components/ui/box';
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Center } from '@/components/ui/center';
 import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
@@ -16,10 +15,11 @@ import { useAppStore } from '@/store/appState';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
-import { Info, Settings, Headset, ChevronRight, ChevronLeft } from 'lucide-react-native';
+import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const profileItem = [
+  { title: 'button.edit_account', icon: EditIcon, path: '/tabs/(wizardForm)/stepOne' },
   { title: 'profile.setting', icon: Settings, path: '/tabs/(wizardForm)' },
   { title: 'profile.about_cocheck', icon: Info, path: '/tabs/(profile)/aboutMe' },
 ];
@@ -34,9 +34,12 @@ const Profile = () => {
       <HStack className="items-center justify-between my-6 px-7">
         <HeaderTitle title="" path="/tabs/(tabs)" width="1/2" />
         <HStack className="gap-2">
-          <Button className="h-14 w-14 rounded-xl">
-            <BellIcon />
-          </Button>
+          {isLogin ?
+            <Button className="h-14 w-14 rounded-xl" style={{ backgroundColor: Colors.main.accent }}>
+              <LogOutIcon color={Colors.main.textPrimary} />
+            </Button>
+            : null
+          }
         </HStack>
       </HStack>
 
@@ -51,36 +54,25 @@ const Profile = () => {
               </Text>
             </VStack>
           ) : (
-            <Link href="/tabs/(auth)" className="w-full py-2 text-center rounded-xl" style={{ backgroundColor: Colors.main.button }}>
+            <Link href="/tabs/(auth)" className="w-full py-2 text-center rounded-xl mb-4" style={{ backgroundColor: Colors.main.button }}>
               <Text className="text-xl">{t('auth.enter_your_account')}</Text>
             </Link>
           )}
         </HStack>
-        <VStack className="justify-between items-center mt-7 gap-2" >
-          {isLogin ? (
-            <Button className="h-12 rounded-xl w-full" style={{ backgroundColor: Colors.main.button }} onPress={() => router.push('/tabs/(wizardForm)/stepOne')}>
-              <EditIcon size={28} />
-              <ButtonText className="text-lg" style={{ color: Colors.main.textPrimary }}>
-                {t('button.edit')}
-              </ButtonText>
-            </Button>
-          ) : null}
-
-          <SelectLanguage />
-        </VStack>
         {isLogin ? (
-          <VStack>
+          <VStack className='mb-4'>
             <Text className="p-4 mt-5 rounded-xl max-h-40 text-md" style={{ color: Colors.main.textPrimary, backgroundColor: Colors.main.background }}>
               {description.length > 0 ? description : t('profile.no_description')}
             </Text>
           </VStack>
         ) : null}
+        <SelectLanguage />
         <VStack className="gap-2 items-center mt-4">
           {profileItem.map((item) => (
             <Button
               onPress={() => router.push(item.path as any)}
               key={item.title}
-              className="w-full h-16 rounded-2xl justify-between bg-transparent mt-3 border-[1px]"
+              className="w-full h-20 rounded-2xl justify-between bg-transparent mt-3 border-[1px]"
               style={{ borderColor: Colors.main.border }}
             >
               <HStack className="gap-5">

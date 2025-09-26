@@ -1,7 +1,7 @@
-import { AuthResult } from '@/types/auth-type';
+import { Result } from '@/types/auth-type';
 import api from '../baseApi';
 
-export const sendMassageAction = async (email: string): Promise<AuthResult> => {
+export const sendMassageAction = async (email: string): Promise<Result> => {
   try {
     const response = await api.post('auth/request-otp/', { email });
 
@@ -33,7 +33,7 @@ export const sendMassageAction = async (email: string): Promise<AuthResult> => {
   }
 };
 
-export const sendOtpAction = async (email: string, otp: string): Promise<AuthResult> => {
+export const sendOtpAction = async (email: string, otp: string): Promise<Result> => {
   try {
     const response = await api.post('auth/verify-otp/', { email, otp });
     if (response.status === 200) {
@@ -41,8 +41,8 @@ export const sendOtpAction = async (email: string, otp: string): Promise<AuthRes
         success: true,
         status: response.data.status,
         message: response.data.message,
-        user: response.data.user,
-        access_token: response.data.access_token,
+        data: response.data.user,
+        access_token: response.data.token.access,
       };
     }
     return {
@@ -66,7 +66,7 @@ export const sendOtpAction = async (email: string, otp: string): Promise<AuthRes
   }
 };
 
-export const googleLoginAction = async (): Promise<AuthResult> => {
+export const googleLoginAction = async (): Promise<Result> => {
   try {
     const response = await api.post('auth/google-callback/');
     if (response.status === 200) {
@@ -74,7 +74,7 @@ export const googleLoginAction = async (): Promise<AuthResult> => {
         success: true,
         status: response.data.status,
         message: response.data.message,
-        user: response.data.user,
+        data: response.data.user,
       };
     }
     return {

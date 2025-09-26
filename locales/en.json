@@ -148,7 +148,8 @@
     "create_event": "Create Event",
     "confirm": "Confirm",
     "edit": "Edit",
-    "add_by_ai": "Add By AI"
+    "add_by_ai": "Add By AI",
+    "edit_account": "Edit Profile"
   },
   "home": {
     "hi": "Hi",

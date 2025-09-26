@@ -11,6 +11,7 @@
     "androidStatusBar": {
       "backgroundColor": "#121212"
     },
+    "newArchEnabled": true,
     "updates": {
       "enabled": true,
       "url": "https://u.expo.dev/YOUR-PROJECT-ID"
@@ -30,6 +31,7 @@
       "expo-router",
       "expo-font",
       "expo-sqlite",
+      "expo-updates"
     ],
     "experiments": {
       "typedRoutes": true
