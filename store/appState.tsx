@@ -114,6 +114,14 @@ export const useAppStore = create<AuthStateType>()(
         set({ isLoading: false });
         return result;
       },
+
+      logOut: async () => {
+        set({
+          user: {} as Pick<User, 'id' | 'username' | 'last_name' | "first_name" | 'language'>,
+          token: null,
+          isLogin: false,
+        });
+      },
     }),
 
     {
@@ -128,4 +136,5 @@ export const useAppStore = create<AuthStateType>()(
       }),
     },
   ),
+
 );

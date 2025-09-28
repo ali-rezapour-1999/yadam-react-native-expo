@@ -54,4 +54,5 @@ export type AuthStateType = {
   sendOtp: (identifier: string, code: string) => Promise<Result>;
   googleLogin: () => Promise<Result>;
   updateUserInformation: (data: User) => Promise<Result>;
+  logOut: () => Promise<void>;
 };

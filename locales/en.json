@@ -79,7 +79,8 @@
     "setting": "Setting",
     "help_text": "Can I help you?",
     "about_cocheck": "About Cocheck",
-    "no_description": "You don't have any description. Write description with edit button"
+    "no_description": "You don't have any description. Write description with edit button",
+    "logout_message": "Are you sure you want to logout from your account?"
   },
   "goal": {
     "your_goal": "Your Goal",
@@ -237,7 +238,8 @@
     "approve": "Approve",
     "lost_internet_connection": "No Internet Connection",
     "need_to_auth": "You need to login to continue",
-    "close": "Close"
+    "close": "Close",
+    "logout": "Logout from Account"
   },
   "status_enum": {
     "pending": "Pending",

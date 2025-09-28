@@ -14,6 +14,7 @@ import { mapTopicFromBackend } from '@/utils/topicConverter';
 const TopicExploreList = () => {
   const connection = useNetworkStatus();
   const isLogin = useAppStore((state) => state.isLogin);
+  const userId = useAppStore((state) => state.user?.id as string);
   const [exploreData, setExploreData] = useState<TopicWithCount[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,7 +28,7 @@ const TopicExploreList = () => {
     const fetchTopics = async () => {
       setIsLoading(true);
       try {
-        const res = await getListOfTopics();
+        const res = await getListOfTopics(userId);
         if (res.success) {
           const topics: TopicWithCount[] = res.data.map(mapTopicFromBackend);
           setExploreData(topics);

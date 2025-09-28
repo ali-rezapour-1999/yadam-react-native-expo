@@ -31,6 +31,7 @@ export class UnifiedDatabase {
             title TEXT NOT NULL,
             description TEXT DEFAULT '',
             is_public INTEGER NOT NULL DEFAULT 0,
+            status TEXT DEFAULT NULL,
             category_id TEXT DEFAULT NULL,
             likes INTEGER DEFAULT 0,
             created_at TEXT NOT NULL,
@@ -120,9 +121,9 @@ export class UnifiedDatabase {
   }
 
   private validateTopic(topic: Topic): void {
-    if (!topic.id?.trim()) throw new Error('Topic ID is required');
+    if (!topic.id) throw new Error('Topic ID is required');
     if (!topic.title?.trim()) throw new Error('Topic title is required');
-    if (!topic.userId?.trim()) throw new Error('User ID is required');
+    if (!topic.userId) throw new Error('User ID is required');
   }
 
   public async createTopic(topic: Topic): Promise<void> {

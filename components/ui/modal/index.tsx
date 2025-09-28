@@ -9,12 +9,10 @@ import {
   MotionComponentProps,
 } from '@legendapp/motion';
 import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import {
-  withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/utils/nativewind-utils';
+import { withStyleContext, } from '@gluestack-ui/utils/nativewind-utils';
 import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+import { useStaticDynamicStyle } from '@/hooks/useDynamicStyle';
 
 type IAnimatedPressableProps = React.ComponentProps<typeof Pressable> &
   MotionComponentProps<typeof Pressable, ViewStyle, unknown, unknown, unknown>;
@@ -133,13 +131,13 @@ const ModalBackdrop = React.forwardRef<
         opacity: 0,
       }}
       animate={{
-        opacity: 0.5,
+        opacity: 0.7,
       }}
       exit={{
         opacity: 0,
       }}
       transition={{
-        type: 'spring',
+        type: 'tween',
         damping: 18,
         stiffness: 250,
         opacity: {
@@ -159,7 +157,7 @@ const ModalContent = React.forwardRef<
   React.ComponentRef<typeof UIModal.Content>,
   IModalContentProps
 >(function ModalContent({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
+  const dirStyle = useStaticDynamicStyle(props.style);
 
   return (
     <UIModal.Content
@@ -186,6 +184,7 @@ const ModalContent = React.forwardRef<
       }}
       {...props}
       pointerEvents="auto"
+      style={dirStyle}
     />
   );
 });

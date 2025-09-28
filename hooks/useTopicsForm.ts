@@ -73,6 +73,7 @@ export const useTopicsForm = ({ topic }: Props) => {
           updatedAt: new Date().toISOString(),
           likes: data.likes ?? 0,
           isPublic: data.isPublic ?? false,
+          status: 'ACTIVE'
         };
 
         if (isEditMode) {

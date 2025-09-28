@@ -1,9 +1,10 @@
 import api from '../baseApi';
 import { Result } from '@/types/auth-type';
 
-export const getListOfTopics = async (userId: string): Promise<Result> => {
+export const getTopicsByUserId = async (userId: string, token: string): Promise<Result> => {
+
   try {
-    const response = await api.get(`/topics/${userId}/list_all_topics`);
+    const response = await api.get(`/topics/${userId}/get_topics_by_user`, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 200) {
       return {
         success: true,
@@ -32,4 +33,5 @@ export const getListOfTopics = async (userId: string): Promise<Result> => {
       message: 'خطای ناشناخته در ارتباط با سرور',
     };
   }
-};
+
+}

@@ -1,11 +1,11 @@
 import EditIcon from '@/assets/Icons/EditIcon';
-import HeaderTitle from '@/components/common/headerTitle';
+import AppModal from '@/components/common/appModal';
 import SelectLanguage from '@/components/common/selectLanguage';
 import UserImage from '@/components/common/userImage';
 import UsernameInput from '@/components/shared/forms/userNameInput';
 import { Text } from '@/components/Themed';
 import { Box } from '@/components/ui/box';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonText } from '@/components/ui/button';
 import { Center } from '@/components/ui/center';
 import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
@@ -15,7 +15,8 @@ import { useAppStore } from '@/store/appState';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
-import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon } from 'lucide-react-native';
+import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon, HomeIcon } from 'lucide-react-native';
+import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const profileItem = [
@@ -24,23 +25,44 @@ const profileItem = [
   { title: 'profile.about_cocheck', icon: Info, path: '/tabs/(profile)/aboutMe' },
 ];
 
+
+
 const Profile = () => {
-  const { user, language, isLogin } = useAppStore();
+  const { user, language, isLogin, logout } = useAppStore();
   const { description } = useWizardStore();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const logoutHandler = () => {
+    logout();
+    router.push('/tabs/(profile)');
+  };
+
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
       {isLogin ? <UsernameInput /> : null}
-      <HStack className="items-center justify-between my-6 px-7">
-        <HeaderTitle title="" path="/tabs/(tabs)" width="1/2" />
-        <HStack className="gap-2">
-          {isLogin ?
-            <Button className="h-14 w-14 rounded-xl" style={{ backgroundColor: Colors.main.accent }}>
-              <LogOutIcon color={Colors.main.textPrimary} />
-            </Button>
-            : null
-          }
-        </HStack>
+      <HStack className="mx-auto my-6 w-[90%]" style={{ justifyContent: 'space-between', alignItems: 'center', direction: 'ltr' }}>
+        <Button style={{ backgroundColor: Colors.main.button, width: 50, height: 50 }} onPress={() => router.push('/tabs/(tabs)')} className="rounded-xl">
+          <HomeIcon color={Colors.main.textPrimary} size={28} />
+        </Button>
+        {isLogin ?
+          <AppModal title={t("event.logout")} onCloseProps={setIsOpen} isOpenProps={isOpen} buttonContent={<LogOutIcon color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.accent, height: 50, width: 50 }} modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, height: "32%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
+            <VStack className='gap-5 justify-between h-full'>
+              <Text className="text-center text-2xl ">{t("profile.logout_message")}</Text>
+              <Button className="w-full h-12 rounded-xl" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
+                <ButtonText>
+                  <Text>{t("event.logout")}</Text>
+                </ButtonText>
+              </Button>
+              <Button className="w-full h-12 rounded-xl" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
+                <ButtonText>
+                  <Text>{t("event.logout")}</Text>
+                </ButtonText>
+              </Button>
+            </VStack>
+          </AppModal>
+          : null
+        }
       </HStack>
 
       <Box className="flex-1 rounded-t-[50px] pt-4 px-6" style={{ backgroundColor: Colors.main.border + 80 }}>

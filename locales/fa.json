@@ -80,7 +80,8 @@
     "help_text": "چطور می‌تونم به شما کمک کنم؟",
     "about_cocheck": "درباره کوچک",
     "no_description": "شما هیچ توضیحی ندارید. توضیح را با دکمه ویرایش بنویسید",
-    "need_to_auth": "ورود به حساب کاربری"
+    "need_to_auth": "ورود به حساب کاربری",
+    "logout_message": "آیا مطمئن هستید که می‌خواهید از حساب کاربری خارج شوید؟"
   },
   "goal": {
     "your_goal": "هدف تو",
@@ -196,7 +197,7 @@
     "cancelled_successfully": "فعالیت لغو شد",
     "completed_successfully": "فعالیت انجام شد",
     "pending_successfully": "فعالیت در انتظار است",
-    "no_task_for_topic" : "فعالیتی برای این گروه فعالیت وجود نداره"
+    "no_task_for_topic": "فعالیتی برای این گروه فعالیت وجود نداره"
   },
   "create_task": {
     "create_task": "ایجاد فعالیت",
@@ -241,7 +242,8 @@
     "approve": "تایید",
     "lost_internet_connection": "به اینترنت متصل نیستید",
     "need_to_auth": "برای ادامه نیاز به ورود به حساب کاربری دارید",
-    "close": "بستن"
+    "close": "بستن",
+    "logout": "خروج از حساب کاربری"
   },
   "status_enum": {
     "pending": "در انتظار",

@@ -9,7 +9,7 @@ type IBoxProps = ViewProps &
   VariantProps<typeof boxStyle> & { className?: string };
 
 const Box = React.forwardRef<React.ComponentRef<typeof View>, IBoxProps>(
-  function Box({ className,  ...props }, ref) {
+  function Box({ className, ...props }, ref) {
     const dirStyle = useStaticDynamicStyle(props.style);
 
     return (

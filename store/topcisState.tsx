@@ -4,6 +4,8 @@ import { create } from 'zustand';
 import { getListOfTopics } from '@/api/topicsApi/getPublicApi';
 import { getTopicId } from '@/api/topicsApi/getTopicId';
 import { mapTopicFromBackend } from '@/utils/topicConverter';
+import { getTopicsByUserId } from '@/api/topicsApi/getTopicsByUserId';
+import { useAppStore } from '@/store/appState';
 
 export interface TopicState {
   topic: Topic | null;
@@ -31,6 +33,7 @@ export interface TopicState {
   //api
   getTopicsByApi: () => Promise<void>;
   getTopicByIdApi: (id: string) => Promise<void>;
+  getTopicsByUserIdApi: (userId: string) => Promise<void>;
 }
 
 
@@ -71,7 +74,20 @@ export const useTopicStore = create<TopicState>((set, get) => ({
     set({ isLoading: true });
     try {
       const userTopics = await topicStorage.getUserTopics(userId);
-      set({ userTopics, isLoading: false });
+      const apiRes = await getTopicsByUserId(useAppStore.getState().user?.id as string, useAppStore.getState().token as string);
+
+      const apiTopics = apiRes.success
+        ? apiRes.data.map(mapTopicFromBackend)
+        : [];
+
+      const mergedTopics = [
+        ...(Array.isArray(userTopics) ? userTopics : [userTopics]),
+        ...apiTopics,
+      ];
+      set({
+        userTopics: mergedTopics,
+        isLoading: false,
+      });
     } catch (error) {
       console.error('Failed to load user topics:', error);
       set({ isLoading: false });
@@ -80,6 +96,8 @@ export const useTopicStore = create<TopicState>((set, get) => ({
 
   createTopic: async (topic: Topic) => {
     set({ isLoading: true });
+    console.log(topic);
+
     try {
       await topicStorage.createTopic(topic);
       await get().loadUserTopics(topic.userId as string);
@@ -97,6 +115,8 @@ export const useTopicStore = create<TopicState>((set, get) => ({
 
   updateTopic: async (topic: Topic) => {
     set({ isLoading: true });
+    console.log('update');
+    console.log(topic);
     try {
       await topicStorage.updateTopic(topic);
       await get().loadUserTopics(topic.userId as string);
@@ -123,6 +143,7 @@ export const useTopicStore = create<TopicState>((set, get) => ({
       return null;
     }
   },
+
   removeTopic: async (id: string) => {
     set({ isLoading: true });
     try {
@@ -137,6 +158,7 @@ export const useTopicStore = create<TopicState>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
   updateTopicsAfterLogin: async (newId: string, lastId: string) => {
     try {
       await topicStorage.updateTopicAfterLogin(newId, lastId);
@@ -148,10 +170,31 @@ export const useTopicStore = create<TopicState>((set, get) => ({
   searchTopics: async (search: string) => {
     set({ isLoading: true });
     try {
-      const userTopics = await topicStorage.searchTopics(get().topic?.userId as string, search);
-      set({ userTopics, isLoading: false });
+      const localTopics = await topicStorage.searchTopics(
+        get().topic?.userId as string,
+        search
+      );
+
+      const apiRes = await getTopicsByUserId(
+        useAppStore.getState().user?.id as string,
+        useAppStore.getState().token as string
+      );
+
+      const apiTopics = apiRes.success
+        ? apiRes.data.map(mapTopicFromBackend)
+        : [];
+
+      const mergedTopics = [
+        ...(Array.isArray(localTopics) ? localTopics : [localTopics]),
+        ...apiTopics,
+      ];
+
+      set({
+        userTopics: mergedTopics,
+        isLoading: false,
+      });
     } catch (error) {
-      console.error('Failed to load user topics:', error);
+      console.error("Failed to load user topics:", error);
       set({ isLoading: false });
     }
   },
@@ -159,7 +202,7 @@ export const useTopicStore = create<TopicState>((set, get) => ({
   getTopicsByApi: async () => {
     set({ isLoading: true });
     try {
-      const topics = await getListOfTopics();
+      const topics = await getListOfTopics(useAppStore.getState().user?.id as string);
       set({ explorerTopics: topics.data, isLoading: false });
     } catch (error) {
       console.error('Failed to load public topics:', error);
@@ -172,6 +215,17 @@ export const useTopicStore = create<TopicState>((set, get) => ({
     try {
       const topic = await getTopicId(id);
       set({ topic: mapTopicFromBackend(topic.data), isLoading: false });
+    } catch (error) {
+      console.error('Failed to load public topics:', error);
+      set({ isLoading: false });
+    }
+  },
+
+  getTopicsByUserIdApi: async (id) => {
+    set({ isLoading: true });
+    try {
+      const topics = await getTopicsByUserId(id, useAppStore().token as string);
+      set({ userTopics: [...get().userTopics, topics.data.map(mapTopicFromBackend)], isLoading: false });
     } catch (error) {
       console.error('Failed to load public topics:', error);
       set({ isLoading: false });
