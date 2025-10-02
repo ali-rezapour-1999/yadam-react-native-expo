@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, Suspense } from 'react';
+import React, { useEffect, useMemo, Suspense, useState } from 'react';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
 import { useDateTime } from '@/hooks/useDateTime';
@@ -26,13 +26,14 @@ const HeaderComponent = React.memo(
   ({ selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, selectedDate, setDateTimeSelectedDate, shouldShowTodayButton, goToToday, isToday, displayDate }: any) => {
     const { setSelectedDate } = useTodoStore();
     const { syncDataFromServer, isLoading } = useAppStore();
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
       setSelectedDate(selectedDate);
     }, [selectedDate]);
 
     const syncDataHandler = async () => {
-      await syncDataFromServer();
+      await syncDataFromServer().then(() => setIsOpen(false));
     }
 
     return (
@@ -40,7 +41,7 @@ const HeaderComponent = React.memo(
 
         <HStack className="justify-between">
           <Heading style={{ color: Colors.main.primaryDark, fontSize: 26 }}>{t('todos.todo_list')}</Heading>
-          <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.button }} onCloseProps={syncDataHandler} modalBodyStyle={{ paddingHorizontal: 20 }}>
+          <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.button }} onCloseProps={() => setIsOpen(!isOpen)} modalBodyStyle={{ paddingHorizontal: 20 }} isOpenProps={isOpen}>
             <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('todos.sync_data_description')}</Text>
             <Button onPress={syncDataHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-md mt-5'>
               {isLoading ? <Loading style={{ backgroundColor: 'transparent' }} /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('button.accept')}</ButtonText>}

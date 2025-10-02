@@ -126,7 +126,6 @@ export const useAppStore = create<AuthStateType>()(
           const listTask = await useTodoStore.getState().getAllTask();
           const listTopic = await useTopicStore.getState().getAllTopic();
           await pushSyncDataWithServer({ listTopic: listTopic, listTask: listTask, token: get().token as string }).then((res) => {
-            console.log(res.data)
             if (res.success) {
               res.data.topics.forEach((topic: any) => {
                 useTopicStore.getState().createTopic(mapTopicFromBackend(topic));
