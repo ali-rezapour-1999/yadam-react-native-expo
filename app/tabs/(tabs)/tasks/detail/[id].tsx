@@ -7,19 +7,21 @@ import { Colors } from '@/constants/Colors';
 import { useTodoStore } from '@/store/todoState';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { t } from 'i18next';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions, Vibration, Pressable } from 'react-native';
 import { PanGestureHandler, State, PanGestureHandlerGestureEvent, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolateColor, runOnJS } from 'react-native-reanimated';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { TaskStatus } from '@/constants/TaskEnum';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonText } from '@/components/ui/button';
 import TrashIcon from '@/assets/Icons/TrushIcon';
 import EditIcon from '@/assets/Icons/EditIcon';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Loading } from '@/components/common/loading';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AppModal from '@/components/common/appModal';
+import { useAppStore } from '@/store/appState';
 
 const { width: screenWidth } = Dimensions.get('window');
 const SWIPE_THRESHOLD = screenWidth * 0.4;
@@ -27,6 +29,8 @@ const SWIPE_THRESHOLD = screenWidth * 0.4;
 const TaskDetail = () => {
   const { id } = useLocalSearchParams();
   const { task, getTaskById, updateTask, isLoading, removeTask, getTodayAllTask } = useTodoStore();
+  const { user } = useAppStore();
+  const [isOpen, setIsOpen] = useState(false);
   const translateX = useSharedValue(0);
 
   useFocusEffect(
@@ -70,6 +74,7 @@ const TaskDetail = () => {
   };
 
   const removeHandler = () => {
+    setIsOpen(false);
     removeTask(task?.id as string).then(() => getTodayAllTask());
     router.push('/tabs/(tabs)/tasks');
   };
@@ -147,6 +152,8 @@ const TaskDetail = () => {
     );
   }
 
+  const isOwned = user?.id == task.userId;
+
   return (
     <SafeAreaView style={styles.screenContainer}>
       <GestureHandlerRootView style={styles.screenContainer}>
@@ -156,9 +163,17 @@ const TaskDetail = () => {
               <Box className="w-4/5 flex-1">
                 <HeaderTitle size="lg" />
               </Box>
-              <Button className="flex items-center justify-center w-12 h-12 rounded-lg bg-transparent" onPress={removeHandler}>
-                <TrashIcon size={50} />
-              </Button>
+              {isOwned ? (
+                <AppModal title={t('event.delete')} buttonContent={<TrashIcon size={48} />} buttonStyle={{ backgroundColor: "transparent", width: 45 }} modalContentStyle={{ height: 280 }} modalBodyStyle={{ paddingHorizontal: 20 }} onCloseProps={() => setIsOpen(!isOpen)} isOpenProps={isOpen} >
+                  <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('button.insure_delete')}</Text>
+                  <Button onPress={removeHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-lg mt-5 h-14'>
+                    <ButtonText style={{ color: Colors.main.textPrimary }} className='text-xl'>{t('event.delete')}</ButtonText>
+                  </Button>
+                  <Button style={{ backgroundColor: Colors.main.textPrimary }} className='rounded-lg mt-5 h-14' onPress={() => setIsOpen(!isOpen)}>
+                    <ButtonText style={{ color: Colors.main.button }} className='text-xl'>{t('event.cancel')}</ButtonText>
+                  </Button>
+                </AppModal>
+              ) : null}
             </HStack>
 
             <Box style={[styles.timeCard, { flex: 1 }]}>
@@ -220,14 +235,14 @@ const TaskDetail = () => {
         <Box style={styles.swipeAreaContainer}>
           <Pressable onPress={handleEdit} style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.97 : 1 }] }]}>
             <LinearGradient colors={[Colors.main.accent, Colors.main.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.editButton}>
-              <EditIcon size={22} color="#fff" />
+              <EditIcon size={22} color={Colors.main.textPrimary} />
               <Text style={styles.editButtonText}>{t('task_detail.need_edit')}</Text>
             </LinearGradient>
           </Pressable>
           <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
             <Animated.View style={[styles.swipeHandle, animatedSwipeStyle]}>
               <HStack style={styles.handleInner}>
-                <Text style={[styles.handleText, { color: '#fff' }]}>
+                <Text style={[styles.handleText, { color: Colors.main.textPrimary }]}>
                   {swipeOptions.left.icon} {swipeOptions.left.label}
                 </Text>
                 <Text>
@@ -235,7 +250,7 @@ const TaskDetail = () => {
                   {t('event.swip')}
                   {' >>'}
                 </Text>
-                <Text style={[styles.handleText, { color: '#fff' }]}>
+                <Text style={[styles.handleText, { color: Colors.main.textPrimary }]}>
                   {swipeOptions.right.label} {swipeOptions.right.icon}
                 </Text>
               </HStack>
@@ -256,7 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main.cardBackground,
     borderRadius: 20,
     padding: 24,
-    shadowColor: '#000',
+    shadowColor: Colors.main.background,
     shadowOpacity: 0.08,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
@@ -267,7 +282,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: Colors.main.background,
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,
@@ -277,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main.cardBackground,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: Colors.main.background,
     shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 6,
@@ -307,7 +322,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editButton: { display: 'flex', flexDirection: 'row', width: screenWidth - 40, height: 55, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginBottom: 12, gap: 6 },
-  editButtonText: { fontSize: 16, color: '#fff' },
+  editButtonText: { fontSize: 16, color: Colors.main.textPrimary },
   swipeHandle: { height: 65, borderRadius: 30, alignItems: 'center', justifyContent: 'center', width: screenWidth - 40 },
   handleInner: { flexDirection: 'row', justifyContent: 'space-between', width: '85%', direction: 'ltr' },
   handleText: { fontSize: 15 },

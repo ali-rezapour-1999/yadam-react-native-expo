@@ -5,17 +5,6 @@ function normalizeTime(time: string): string {
   return time.length === 8 ? time.slice(0, 5) : time;
 }
 
-export function mapStatusToDjango(status: string): string {
-  switch (status) {
-    case "COMPLETED":
-      return "DONE";
-    case "CANCELLED":
-      return "SKIPPED";
-    default:
-      return "PENDING";
-  }
-}
-
 export function mapStatusToRN(status: string): string {
   switch (status) {
     case "DONE":

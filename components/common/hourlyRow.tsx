@@ -74,11 +74,9 @@ const style = StyleSheet.create<StyleType>({
     borderBottomWidth: 1,
   },
   isCurrentHourContainer: {
-    backgroundColor: Colors.main.border + 70,
+    backgroundColor: Colors.main.border + 30,
     borderLeftWidth: 3,
     borderLeftColor: Colors.main.textSecondary,
-    borderBottomColor: Colors.main.textSecondary,
-    borderBottomWidth: 1,
   },
   scrollView: {
     paddingRight: 16,

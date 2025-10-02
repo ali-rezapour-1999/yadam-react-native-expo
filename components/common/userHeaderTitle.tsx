@@ -24,7 +24,7 @@ const UserHeaderTitle = memo(() => {
   return (
     <HStack className="mb-5 justify-between items-center px-5 mt-12">
       <VStack>
-        <Heading className="font-bold" size="lg" style={{ color: Colors.main.primary }}>
+        <Heading className="font-bold" size="lg" style={{ color: Colors.main.textPrimary }}>
           {displayName}
         </Heading>
         <Text style={{ color: Colors.main.textSecondary }}>{t('home.lets_make_this_day_productive')}</Text>

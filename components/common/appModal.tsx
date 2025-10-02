@@ -40,7 +40,7 @@ const AppModal = ({
       <Button
         onPress={toggleOpen}
         accessibilityLabel="Open modal"
-        className="rounded-lg"
+        className="rounded-lg w-full"
         style={props.buttonStyle}
       >
         {props.buttonContent}

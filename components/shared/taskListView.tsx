@@ -50,8 +50,7 @@ const TaskListView = ({ mode, enableSwipeActions = true }: TaskListViewProps) =>
         onPress={() => router.push(`/tabs/(tabs)/tasks/detail/${item.id}`)}
         style={{
           marginVertical: 4,
-          borderRadius: 10,
-          padding: 10,
+          borderRadius: 0,
         }}
       />
     ),
@@ -93,7 +92,6 @@ const TaskListView = ({ mode, enableSwipeActions = true }: TaskListViewProps) =>
         closeOnRowBeginSwipe
         closeOnRowPress={false}
         initialNumToRender={10}
-        showsVerticalScrollIndicator={false}
         swipeToOpenPercent={30}
         swipeToClosePercent={30}
       />

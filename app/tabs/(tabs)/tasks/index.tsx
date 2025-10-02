@@ -26,6 +26,7 @@ const HeaderComponent = React.memo(
   ({ selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, selectedDate, setDateTimeSelectedDate, shouldShowTodayButton, goToToday, isToday, displayDate }: any) => {
     const { setSelectedDate } = useTodoStore();
     const { syncDataFromServer, isLoading } = useAppStore();
+    const isLogin = useAppStore.getState().token;
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
@@ -41,18 +42,22 @@ const HeaderComponent = React.memo(
 
         <HStack className="justify-between">
           <Heading style={{ color: Colors.main.primaryDark, fontSize: 26 }}>{t('todos.todo_list')}</Heading>
-          <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.button }} onCloseProps={() => setIsOpen(!isOpen)} modalBodyStyle={{ paddingHorizontal: 20 }} isOpenProps={isOpen}>
-            <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('todos.sync_data_description')}</Text>
-            <Button onPress={syncDataHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-md mt-5'>
-              {isLoading ? <Loading style={{ backgroundColor: 'transparent' }} /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('button.accept')}</ButtonText>}
-            </Button>
-          </AppModal>
+          {
+            isLogin ?
 
+              <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.lightBlue} />} buttonStyle={{ backgroundColor: 'transparent', height: 40, width: 45 }} onCloseProps={() => setIsOpen(!isOpen)} modalBodyStyle={{ paddingHorizontal: 20 }} isOpenProps={isOpen}>
+                <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('todos.sync_data_description')}</Text>
+                <Button onPress={syncDataHandler} style={{ backgroundColor: Colors.main.lightBlue }} className='rounded-md mt-5'>
+                  {isLoading ? <Loading style={{ backgroundColor: 'transparent' }} /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('button.accept')}</ButtonText>}
+                </Button>
+              </AppModal>
+              : null
+          }
         </HStack>
 
         <VStack className="mt-5">
           <HStack className="items-center justify-between mb-2">
-            <Text>{t('todos.day_of_week')}</Text>
+            <Text className='text-xl'>{t('todos.day_of_week')}</Text>
             <SelectYearWithMonth selectedYear={selectedYear} setSelectedYear={setSelectedYear} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
           </HStack>
 
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     zIndex: 1,
     elevation: 1,
-    shadowColor: '#000',
+    shadowColor: Colors.main.background,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

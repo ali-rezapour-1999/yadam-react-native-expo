@@ -213,7 +213,7 @@ export class UnifiedDatabase {
       const rows = await this.db.getAllAsync<TopicWithCount>(
         `SELECT t.*, count(ta.id) as tasks_count
          FROM topics t
-         LEFT JOIN tasks ta ON ta.topic_id = t.id
+         LEFT JOIN tasks ta ON ta.topic_id = t.id AND ta.is_deleted = 0
          WHERE t.user_id = ? AND t.is_deleted = 0
          GROUP BY t.id`,
         [userId],
@@ -279,8 +279,8 @@ export class UnifiedDatabase {
       const rows = await this.db.getAllAsync<TopicWithCount>(
         `SELECT t.*, count(ta.id) as tasks_count
          FROM topics t
-         LEFT JOIN tasks ta ON ta.topic_id = t.id
-         WHERE t.user_id = ? And t.is_deleted = 0
+         LEFT JOIN tasks ta ON ta.topic_id = t.id and ta.is_deleted = 0
+         WHERE t.user_id = ? And t.is_deleted = 0 
          AND LOWER(t.title) LIKE '%' || LOWER(?) || '%'
          GROUP BY t.id`,
         [userId, search],
@@ -384,7 +384,7 @@ export class UnifiedDatabase {
           title = ?, description = ?, start_time = ?, end_time = ?, date = ?, 
           status = ?, topic_id = ?, goal_id = ?, updated_at = ? , is_deleted = ?
          WHERE id = ?`,
-        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.id, row.is_deleted],
+        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.is_deleted, row.id]
       );
 
       if (result.changes === 0) {
@@ -392,7 +392,6 @@ export class UnifiedDatabase {
       }
     } catch (error) {
       console.error(`Failed to update task with ID ${task.id}:`, error);
-      throw new Error(`Failed to update task: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

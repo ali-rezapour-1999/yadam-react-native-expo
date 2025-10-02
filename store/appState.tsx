@@ -131,6 +131,7 @@ export const useAppStore = create<AuthStateType>()(
                 useTopicStore.getState().createTopic(mapTopicFromBackend(topic));
               });
               res.data.tasks.forEach((task: any) => {
+                console.log(task)
                 useTodoStore.getState().createTask(mapTaskFromBackend(task));
               });
             }

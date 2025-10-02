@@ -31,7 +31,7 @@ const HeaderTitle = ({ title, path, isLight = false, size = '2xl', width = '[87%
   return (
     <HStack className={`gap-4 fixed top-0 w-${width}`}>
       <Button
-        className="rounded-xl h-14 w-14"
+        className="rounded-xl h-12 w-12"
         onPress={handleBackPress}
         style={{
           backgroundColor: Colors.main.button,

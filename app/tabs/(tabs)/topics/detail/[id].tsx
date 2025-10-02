@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useMemo } from 'react';
+import React, { Suspense, useCallback, useMemo, useState } from 'react';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Loading } from '@/components/common/loading';
 import { Text } from '@/components/Themed';
@@ -14,10 +14,11 @@ import { useTopicStore } from '@/store/topcisState';
 import { useTodoStore } from '@/store/todoState';
 import { useFocusEffect, useLocalSearchParams, router } from 'expo-router';
 import { t } from 'i18next';
-import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TrashIcon from '@/assets/Icons/TrushIcon';
+import AppModal from '@/components/common/appModal';
 
 const MemoizedTopicSubTaskList = React.lazy(() => import('@/components/shared/topicSubTaskList'));
 
@@ -26,6 +27,7 @@ const TopicDetail: React.FC = () => {
   const id = params.id as string;
   const inExplore = params.inExplore === "true";
 
+  const [isOpen, setIsOpen] = useState(false);
   const { language, user } = useAppStore();
   const { getTopicById, topic, removeTopic, getTopicByIdApi } = useTopicStore();
   const { getTaskByTopicId } = useTodoStore();
@@ -47,6 +49,7 @@ const TopicDetail: React.FC = () => {
 
   const removeTopicHandler = useCallback(() => {
     if (topic?.id) {
+      setIsOpen(false);
       removeTopic(topic.id);
       router.push('/tabs/(tabs)/topics');
     }
@@ -56,8 +59,8 @@ const TopicDetail: React.FC = () => {
     return <Loading />;
   }
 
-  const isOwned = user?.id === topic.userId;
-  const buttonText = isOwned && inExplore ? t('button.edit') : t('button.add');
+  const isOwned = user?.id == topic.userId;
+  const buttonText = isOwned && !inExplore ? t('button.edit') : t('button.add');
   const buttonAction = () => router.push(`/tabs/(tabs)/topics/edit/${id}`);
 
   return (
@@ -73,9 +76,15 @@ const TopicDetail: React.FC = () => {
               <HStack className="items-center justify-between">
                 <HeaderTitle path={'/tabs/(tabs)/topics'} size="md" width="[80%]" />
                 {isOwned ? (
-                  <Pressable onPress={removeTopicHandler}>
-                    <TrashIcon size={48} />
-                  </Pressable>
+                  <AppModal title={t('event.delete')} buttonContent={<TrashIcon size={48} />} buttonStyle={{ backgroundColor: 'transparent' }} modalContentStyle={{ height: 280 }} modalBodyStyle={{ paddingHorizontal: 20 }} onCloseProps={() => setIsOpen(!isOpen)} isOpenProps={isOpen} >
+                    <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('button.insure_delete')}</Text>
+                    <Button onPress={removeTopicHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-lg mt-5 h-14'>
+                      <ButtonText style={{ color: Colors.main.textPrimary }} className='text-xl'>{t('event.delete')}</ButtonText>
+                    </Button>
+                    <Button style={{ backgroundColor: Colors.main.textPrimary }} className='rounded-lg mt-5 h-14' onPress={() => setIsOpen(!isOpen)}>
+                      <ButtonText style={{ color: Colors.main.button }} className='text-xl'>{t('event.cancel')}</ButtonText>
+                    </Button>
+                  </AppModal>
                 ) : null}
               </HStack>
 

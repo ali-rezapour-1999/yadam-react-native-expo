@@ -93,8 +93,8 @@ const Home: React.FC = () => {
           </Suspense>
         ),
         todoList: (
-          <Box className="px-4">
-            <Suspense fallback={<Loading />}>
+          <Box>
+            <Suspense fallback={''}>
               <TaskListView mode="flat" enableSwipeActions={true} />
             </Suspense>
           </Box>
