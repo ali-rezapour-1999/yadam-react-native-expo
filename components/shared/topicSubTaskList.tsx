@@ -17,7 +17,7 @@ interface TopicSubTaskListProps {
   isUserTask: boolean;
 }
 
-const Wrapper = React.memo(({ children, id, isUserTask = true }: { children: React.ReactNode; id?: string, isUserTask?: boolean }) => (
+const Wrapper = React.memo(({ children, id }: { children: React.ReactNode; id?: string, isUserTask?: boolean }) => (
   <ScrollView showsVerticalScrollIndicator={false} className="mt-5 rounded-lg min-h-max" contentContainerStyle={{ backgroundColor: Colors.main.cardBackground, padding: 20, minHeight: 300 }}>
     <HStack className="mb-4 items-center justify-between">
       <Text className="text-xl" style={{ color: Colors.main.textPrimary }}>

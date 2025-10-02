@@ -34,7 +34,7 @@ const TopicSelector = ({ visible, onClose, topics, selectedTopicId, onSelectTopi
     <Box style={styles.modalContainer}>
       <Box style={styles.modalHeader}>
         <TouchableOpacity onPress={onClose}>
-          <Text style={styles.cancelButton}>{t('event.close')}</Text>
+          <Text style={styles.cancelButton}>{t('event.approve')}</Text>
         </TouchableOpacity>
         <Text style={styles.modalTitle}>{t('category.select_category')}</Text>
         <Box style={styles.placeholder} />

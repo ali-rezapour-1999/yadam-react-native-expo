@@ -1,6 +1,5 @@
 import { StyleProp, ViewStyle } from 'react-native';
 import { View } from '../Themed';
-import { Spinner } from '../ui/spinner';
 import { MotiView } from 'moti';
 
 export const Loading = ({ style }: { style?: StyleProp<ViewStyle> }) => {
@@ -21,7 +20,7 @@ export const Loading = ({ style }: { style?: StyleProp<ViewStyle> }) => {
             width: 12,
             height: 12,
             borderRadius: 6,
-            backgroundColor: '#4f46e5',
+            backgroundColor: '#FF7A45',
             marginHorizontal: 6,
           }}
         />

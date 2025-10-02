@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
 import { TaskIcon } from '@/assets/Icons/TaskIcon';
 import { Category } from '@/constants/Category';
 import { Link } from 'expo-router';
 import { useAppStore } from '@/store/appState';
 import { Text } from '../../Themed';
 import { TopicWithCount } from '@/types/database-type';
+import { Box } from '@/components/ui/box';
 
 type TopicsCardProps = {
   color?: string;
@@ -18,11 +18,10 @@ type TopicsCardProps = {
 const TopicsCard: React.FC<TopicsCardProps> = ({ data, inExplore = false }) => {
   const { language } = useAppStore();
   const category = Category.find((c) => c.id == data?.categoryId);
-  const gradientColors: [string, string] = [Colors.main.background, Colors.main.cardBackground];
 
   return (
     <Link href={`/tabs/(tabs)/topics/detail/${data?.id}?inExplore=${inExplore}`} style={styles.container}>
-      <LinearGradient colors={gradientColors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
+      <Box style={[styles.gradient, { backgroundColor: category!.color + 20 }]}>
         <View style={styles.header}>
           <View style={styles.titleSection}>
             <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
@@ -34,23 +33,19 @@ const TopicsCard: React.FC<TopicsCardProps> = ({ data, inExplore = false }) => {
               </Text>
             )}
           </View>
-
-          <View style={[styles.categoryBadge, { backgroundColor: category?.color + '20' }]}>
-            <View style={[styles.categoryDot, { backgroundColor: category?.color }]} />
-          </View>
         </View>
 
         <View style={styles.footer}>
-          <View style={[styles.categoryTag, { backgroundColor: category?.color + '15' }]}>
+          <View style={[styles.categoryTag, { backgroundColor: Colors.main.textPrimary }]}>
             <Text style={[styles.categoryText, { color: category?.color }]}>{language === 'fa' ? category?.fa : category?.name}</Text>
           </View>
 
           <View style={styles.taskCounter}>
-            <TaskIcon color={Colors.main.textSecondary} size={16} />
+            <TaskIcon color={Colors.main.textSecondary} size={20} />
             <Text style={styles.taskCount}>{data?.tasksCount || null}</Text>
           </View>
         </View>
-      </LinearGradient>
+      </Box>
     </Link>
   );
 };
@@ -59,7 +54,7 @@ export default TopicsCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 140,
+    height: 130,
     width: '100%',
     marginVertical: 4,
   },
@@ -102,11 +97,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 2,
   },
-  categoryDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-  },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -125,6 +115,7 @@ const styles = StyleSheet.create({
   taskCounter: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -132,7 +123,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   taskCount: {
-    fontSize: 14,
+    fontSize: 16,
     color: Colors.main.textSecondary,
   },
 });

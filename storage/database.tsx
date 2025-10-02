@@ -36,7 +36,8 @@ export class UnifiedDatabase {
             likes INTEGER DEFAULT 0,
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL,
-            user_id TEXT NOT NULL
+            user_id TEXT NOT NULL,
+            is_deleted INTEGER NOT NULL DEFAULT 0
           );
         `);
 
@@ -55,6 +56,7 @@ export class UnifiedDatabase {
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL,
             user_id TEXT NOT NULL,
+            is_deleted INTEGER NOT NULL DEFAULT 0
 
             CHECK (date LIKE '____-__-__'),
             CHECK (start_time LIKE '__:__'),
@@ -95,6 +97,7 @@ export class UnifiedDatabase {
       created_at: topic.createdAt,
       updated_at: topic.updatedAt,
       user_id: topic.userId,
+      is_deleted: topic.isDeleted ? 1 : 0,
     };
   }
 
@@ -110,6 +113,7 @@ export class UnifiedDatabase {
       createdAt: row.created_at,
       updatedAt: row.updated_at,
       userId: row.user_id,
+      isDeleted: !!row.is_deleted,
     };
   }
 
@@ -134,7 +138,7 @@ export class UnifiedDatabase {
       const row = this.topicToRow(topic);
       await this.db.runAsync(
         `
-        INSERT INTO topics (
+        INSERT OR REPLACE INTO topics (
           id, title, description, is_public, status, category_id, likes, created_at, updated_at, user_id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [row.id, row.title, row.description, row.is_public, row.status, row.category_id, row.likes, row.created_at, row.updated_at, row.user_id],
@@ -154,9 +158,9 @@ export class UnifiedDatabase {
       const result = await this.db.runAsync(
         `
         UPDATE topics SET
-          title = ?, description = ?, is_public = ?, status = ?, category_id = ?, likes = ?, updated_at = ?
+          title = ?, description = ?, is_public = ?, status = ?, category_id = ?, likes = ?, updated_at = ? , is_deleted = ?
          WHERE id = ?`,
-        [row.title, row.description, row.is_public, row.status, row.category_id, row.likes, new Date().toISOString(), row.id],
+        [row.title, row.description, row.is_public, row.status, row.category_id, row.likes, new Date().toISOString(), row.id, row.is_deleted],
       );
 
       if (result.changes === 0) {
@@ -210,8 +214,25 @@ export class UnifiedDatabase {
         `SELECT t.*, count(ta.id) as tasks_count
          FROM topics t
          LEFT JOIN tasks ta ON ta.topic_id = t.id
-         WHERE t.user_id = ?
+         WHERE t.user_id = ? AND t.is_deleted = 0
          GROUP BY t.id`,
+        [userId],
+      );
+      return rows.map((row) => this.rowToTopics(row));
+    } catch (error) {
+      console.error(`Failed to get topics for user ${userId}:`, error);
+      throw new Error(`Failed to get topics: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+
+  public async getAllUserTopicsByUserId(userId: string): Promise<Topic[]> {
+    await this.ensureInitialized();
+    if (!userId) throw new Error('User ID is required');
+
+    try {
+      const rows = await this.db.getAllAsync<TopicWithCount>(
+        `SELECT t.* FROM topics t WHERE t.user_id = ?`,
         [userId],
       );
       return rows.map((row) => this.rowToTopics(row));
@@ -225,7 +246,7 @@ export class UnifiedDatabase {
     await this.ensureInitialized();
 
     try {
-      const rows = await this.db.getAllAsync('SELECT * FROM topics WHERE is_public = 1');
+      const rows = await this.db.getAllAsync('SELECT * FROM topics WHERE is_public = 1 AND is_deleted = 0');
       return rows.map((row) => this.rowToTopic(row));
     } catch (error) {
       console.error('Failed to get public topics:', error);
@@ -239,7 +260,7 @@ export class UnifiedDatabase {
 
     try {
       await this.db.runAsync('UPDATE tasks SET topic_id = NULL WHERE topic_id = ?', [id]);
-      const result = await this.db.runAsync('DELETE FROM topics WHERE id = ?', [id]);
+      const result = await this.db.runAsync('Update topics SET is_deleted = 1 WHERE id = ?', [id]);
 
       if (result.changes === 0) {
         throw new Error(`Topic with ID ${id} not found`);
@@ -259,7 +280,7 @@ export class UnifiedDatabase {
         `SELECT t.*, count(ta.id) as tasks_count
          FROM topics t
          LEFT JOIN tasks ta ON ta.topic_id = t.id
-         WHERE t.user_id = ?
+         WHERE t.user_id = ? And t.is_deleted = 0
          AND LOWER(t.title) LIKE '%' || LOWER(?) || '%'
          GROUP BY t.id`,
         [userId, search],
@@ -286,6 +307,7 @@ export class UnifiedDatabase {
       created_at: task.createdAt,
       updated_at: task.updatedAt,
       user_id: task.userId,
+      is_deleted: task.isDeleted ? 1 : 0,
     };
   }
 
@@ -304,6 +326,7 @@ export class UnifiedDatabase {
       createdAt: row.created_at,
       updatedAt: row.updated_at,
       userId: row.user_id,
+      isDeleted: !!row.is_deleted,
     };
   }
 
@@ -318,9 +341,13 @@ export class UnifiedDatabase {
   private validateTask(task: Task): void {
     if (!task.id?.trim()) throw new Error('Task ID is required');
     if (!task.title?.trim()) throw new Error('Task title is required');
-    if (!task.userId?.trim()) throw new Error('User ID is required');
-    if (!task.date?.match(/^\d{4}-\d{2}-\d{2}$/)) throw new Error('Invalid date format. Expected: YYYY-MM-DD');
-    if (!task.startTime?.match(/^\d{2}:\d{2}$/)) throw new Error('Invalid start time format. Expected: HH:MM');
+    if (!task.userId) throw new Error('User ID is required');
+    if (!task.startTime?.match(/^\d{2}:\d{2}(:\d{2})?$/)) {
+      throw new Error('Invalid start time format. Expected: HH:MM or HH:MM:SS');
+    }
+    if (!task.endTime?.match(/^\d{2}:\d{2}(:\d{2})?$/)) {
+      throw new Error('Invalid end time format. Expected: HH:MM or HH:MM:SS');
+    }
     if (!task.endTime?.match(/^\d{2}:\d{2}$/)) throw new Error('Invalid end time format. Expected: HH:MM');
     if (!['PENDING', 'CANCELLED', 'COMPLETED'].includes(task.status ?? '')) throw new Error('Invalid status value');
   }
@@ -333,11 +360,11 @@ export class UnifiedDatabase {
       const row = this.taskToRow(task);
       await this.db.runAsync(
         `
-        INSERT INTO tasks (
+        INSERT OR REPLACE INTO tasks (
           id, title, description, start_time, end_time, date, status, 
-          topic_id, goal_id, created_at, updated_at, reminder_days, user_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [row.id, row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, row.created_at, row.updated_at, row.reminder_days, row.user_id],
+          topic_id, goal_id, created_at, updated_at, reminder_days, user_id , is_deleted
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)`,
+        [row.id, row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, row.created_at, row.updated_at, row.reminder_days, row.user_id, row.is_deleted],
       );
     } catch (error) {
       console.error(`Failed to create task with ID ${task.id}:`, error);
@@ -355,9 +382,9 @@ export class UnifiedDatabase {
         `
         UPDATE tasks SET
           title = ?, description = ?, start_time = ?, end_time = ?, date = ?, 
-          status = ?, topic_id = ?, goal_id = ?, updated_at = ?
+          status = ?, topic_id = ?, goal_id = ?, updated_at = ? , is_deleted = ?
          WHERE id = ?`,
-        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.id],
+        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.id, row.is_deleted],
       );
 
       if (result.changes === 0) {
@@ -391,7 +418,7 @@ export class UnifiedDatabase {
     try {
       let query = `SELECT t.* , c.title as topic_title, c.category_id as topic_category_id FROM tasks t 
         LEFT JOIN topics c ON t.topic_id = c.id
-        WHERE t.date = ?`;
+        WHERE t.date = ? AND t.is_deleted = 0`;
       let params: any[] = [date];
 
       if (status) {
@@ -424,7 +451,7 @@ export class UnifiedDatabase {
           topics.category_id AS topic_category_id
         FROM tasks
         LEFT JOIN topics ON tasks.topic_id = topics.id
-        WHERE tasks.date = ?
+        WHERE tasks.date = ? AND tasks.is_deleted = 0
       `;
 
       let params: any[] = [date];
@@ -458,7 +485,7 @@ export class UnifiedDatabase {
           topics.category_id AS topic_category_id
         FROM tasks
         LEFT JOIN topics ON tasks.topic_id = topics.id
-        WHERE tasks.topic_id = ?
+        WHERE tasks.topic_id = ? and tasks.is_deleted = 0
       `;
 
       let params: any[] = [topicId];
@@ -473,18 +500,20 @@ export class UnifiedDatabase {
     }
   }
 
-  public async getUserTasks(userId: string, limit?: number): Promise<Task[]> {
+  public async getUserTasks(userId: string, includeDeleted: boolean = false): Promise<Task[]> {
     await this.ensureInitialized();
     if (!userId) throw new Error('User ID is required');
 
     try {
-      let query = 'SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC';
-      let params: any[] = [userId];
+      let query = 'SELECT * FROM tasks WHERE user_id = ?';
+      const params: any[] = [userId];
 
-      if (limit) {
-        query += ' LIMIT ?';
-        params.push(limit);
+      if (!includeDeleted) {
+        query += ' AND is_deleted = 0';
       }
+
+      query += ' ORDER BY created_at DESC';
+
 
       const rows = await this.db.getAllAsync(query, params);
       return rows.map((row) => this.rowToTask(row));
@@ -499,7 +528,7 @@ export class UnifiedDatabase {
     if (!id) throw new Error('Task ID is required');
 
     try {
-      const result = await this.db.runAsync('DELETE FROM tasks WHERE id = ?', [id]);
+      const result = await this.db.runAsync('Update tasks SET is_deleted = 1 WHERE id = ?', [id]);
 
       if (result.changes === 0) {
         throw new Error(`Task with ID ${id} not found`);
@@ -533,15 +562,16 @@ export class UnifiedDatabase {
             created_at: string;
             updated_at: string;
             user_id: string;
+            is_delete: number;
           }[];
 
           for (const topic of oldTopics) {
             await this.db.runAsync(
               `
               INSERT OR REPLACE INTO topics (
-                id, title, description, is_public, status, category_id, likes, created_at, updated_at, user_id
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-              [topic.id, topic.title, topic.description || '', topic.is_public || 0, topic.status || null, null, topic.likes || 0, topic.created_at, topic.updated_at, topic.user_id],
+                id, title, description, is_public, status, category_id, likes, created_at, updated_at, user_id , is_delete
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)`,
+              [topic.id, topic.title, topic.description || '', topic.is_public || 0, topic.status || null, null, topic.likes || 0, topic.created_at, topic.updated_at, topic.user_id, topic.is_delete],
             );
           }
           console.warn(`[Migration] Migrated ${oldTopics.length} topics`);
@@ -564,6 +594,7 @@ export const taskStorage = {
   createTask: (task: Task) => unifiedDatabase.createTask(task),
   updateTask: (task: Task) => unifiedDatabase.updateTask(task),
   getTaskById: (id: string) => unifiedDatabase.getTaskById(id),
+  getAllTaskByUserId: (userId: string) => unifiedDatabase.getUserTasks(userId, true),
   loadTasksByDateStatus: (date: string, status?: TaskStatus) => unifiedDatabase.getTasksByDateAndStatus(date, status),
   loadTasksByDateTopic: (date: string, topicId?: string) => unifiedDatabase.getTasksWithTopicByDate(date, topicId),
   loadTasksByTopicId: (topicId?: string) => unifiedDatabase.getTasksWithTopicId(topicId),
@@ -576,6 +607,7 @@ export const topicStorage = {
   getTopicById: (id: string) => unifiedDatabase.getTopicById(id),
   getAllPublicTopics: () => unifiedDatabase.getAllPublicTopics(),
   getUserTopics: (userId: string) => unifiedDatabase.getUserTopics(userId),
+  getAllUserTopicsByUserId: (userId: string) => unifiedDatabase.getAllUserTopicsByUserId(userId),
   updateTopicAfterLogin: (newId: string, lastId: string) => unifiedDatabase.updateTopicAfterLogin(newId, lastId),
   removeTopic: (id: string) => unifiedDatabase.removeTopic(id),
   searchTopics: (userId: string, search: string) => unifiedDatabase.searchTopic(userId, search),

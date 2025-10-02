@@ -27,7 +27,7 @@ const TopicFilter: React.FC<Props> = ({ topics, selectedTopicId, onSelect }) => 
       if (item.type === 'all') {
         const isSelected = selectedTopicId === '0';
         return (
-          <Button onPress={() => onSelect('0')} className="w-12 mx-3 rounded-lg" style={{ backgroundColor: isSelected ? Colors.main.button + 40 : 'transparent' }}>
+          <Button onPress={() => onSelect('0')} className="w-12 mx-3 rounded-lg">
             <TodoIcon color={isSelected ? Colors.main.primary : Colors.main.border} />
           </Button>
         );

@@ -7,6 +7,7 @@ import { useTopicStore } from '@/store/topcisState';
 import { useAppStore } from '@/store/appState';
 import { Topic } from '@/types/database-type';
 import { useFocusEffect } from '@react-navigation/native';
+import { useGenerateNumericId } from './useGenerateId';
 
 interface Props {
   topic: Topic | null;
@@ -16,6 +17,7 @@ export const useTopicsForm = ({ topic }: Props) => {
   const { createTopic, updateTopic } = useTopicStore();
   const { user } = useAppStore();
   const isEditMode = Boolean(topic?.id);
+  const id = useGenerateNumericId()
 
   const form = useForm<AddTopicSchemaType>({
     resolver: zodResolver(addTopicSchema),
@@ -27,6 +29,7 @@ export const useTopicsForm = ({ topic }: Props) => {
       updatedAt: topic?.updatedAt || new Date().toISOString(),
       likes: topic?.likes || 0,
       isPublic: topic?.isPublic || false,
+      isDeleted: topic?.isDeleted || false,
     },
     mode: 'onSubmit',
   });
@@ -44,6 +47,7 @@ export const useTopicsForm = ({ topic }: Props) => {
           updatedAt: new Date().toISOString(),
           likes: topic.likes ?? 0,
           isPublic: topic.isPublic ?? false,
+          isDeleted: topic.isDeleted || false,
         });
       } else {
         const now = new Date();
@@ -55,6 +59,7 @@ export const useTopicsForm = ({ topic }: Props) => {
           updatedAt: now.toISOString(),
           likes: 0,
           isPublic: false,
+          isDeleted: false,
         });
       }
     }, [reset, topic, isEditMode]),
@@ -64,7 +69,7 @@ export const useTopicsForm = ({ topic }: Props) => {
     async (data: AddTopicSchemaType) => {
       try {
         const topicData: Topic = {
-          id: isEditMode ? topic!.id : Date.now().toString(),
+          id: isEditMode ? topic!.id : id,
           userId: (user?.id as string) || '0',
           title: data.title.trim(),
           description: data.description?.trim() || '',
@@ -73,7 +78,8 @@ export const useTopicsForm = ({ topic }: Props) => {
           updatedAt: new Date().toISOString(),
           likes: data.likes ?? 0,
           isPublic: data.isPublic ?? false,
-          status: 'ACTIVE'
+          status: 'ACTIVE',
+          isDeleted: data.isDeleted || false,
         };
 
         if (isEditMode) {

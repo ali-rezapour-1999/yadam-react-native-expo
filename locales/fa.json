@@ -145,13 +145,14 @@
   "button": {
     "cocheck_will_start_from_here": "کوچک از اینجا شروع می‌کنه",
     "add_task": "افزودن فعالیت",
-    "add": "اضافه کن",
+    "add": "افزودن",
     "submit": "ثبت",
     "create_event": "ایجاد فعالیت",
     "confirm": "تایید",
     "add_by_ai": "هوش مصنوعی",
     "edit": "ویرایش",
-    "edit_account": "ویرایش حساب کاربری"
+    "edit_account": "ویرایش حساب کاربری",
+    "accept": "پذیرفتن"
   },
   "home": {
     "hi": "سلام",
@@ -197,7 +198,9 @@
     "cancelled_successfully": "فعالیت لغو شد",
     "completed_successfully": "فعالیت انجام شد",
     "pending_successfully": "فعالیت در انتظار است",
-    "no_task_for_topic": "فعالیتی برای این گروه فعالیت وجود نداره"
+    "no_task_for_topic": "فعالیتی برای این گروه فعالیت وجود نداره",
+    "sync_data_description": "همسان سازی داده های شما با سرور",
+    "sync_data": "همسان سازی داده ها"
   },
   "create_task": {
     "create_task": "ایجاد فعالیت",

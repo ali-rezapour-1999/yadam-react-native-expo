@@ -55,4 +55,5 @@ export type AuthStateType = {
   googleLogin: () => Promise<Result>;
   updateUserInformation: (data: User) => Promise<Result>;
   logOut: () => Promise<void>;
+  syncDataFromServer: () => Promise<void>;
 };

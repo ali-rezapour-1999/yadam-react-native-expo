@@ -46,7 +46,7 @@ module.exports = {
         button: '0px 3px 10px rgba(38, 38, 38, 0.2)',
       },
       borderRadius: {
-        lg: '15px',
+        lg: '12px',
         xl: '1rem',
         '2xl': '1.5rem',
       },

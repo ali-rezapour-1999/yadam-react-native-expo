@@ -15,16 +15,18 @@ const TopicExploreList = () => {
   const connection = useNetworkStatus();
   const isLogin = useAppStore((state) => state.isLogin);
   const userId = useAppStore((state) => state.user?.id as string);
+
   const [exploreData, setExploreData] = useState<TopicWithCount[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!connection) {
-    return <NoInternetConnection />;
-  } else if (!isLogin) {
-    return <NeedLogin />;
-  }
+  const renderItem = useCallback(
+    ({ item }: { item: TopicWithCount }) => <TopicsCard data={item} inExplore={false} />,
+    []
+  );
 
   useEffect(() => {
+    if (!connection || !isLogin) return;
+
     const fetchTopics = async () => {
       setIsLoading(true);
       try {
@@ -41,15 +43,14 @@ const TopicExploreList = () => {
     };
 
     fetchTopics();
-  }, []);
+  }, [connection, isLogin, userId]);
 
-  isLoading ? <Loading /> : null;
-
-  const renderItem = useCallback(({ item }: { item: TopicWithCount }) => <TopicsCard data={item} />, []);
+  if (!connection) return <NoInternetConnection />;
+  if (!isLogin) return <NeedLogin />;
+  if (isLoading) return <Loading />;
 
   return (
     <SafeAreaView>
-
       <FlatList
         data={exploreData}
         renderItem={renderItem}
@@ -63,5 +64,4 @@ const TopicExploreList = () => {
     </SafeAreaView>
   );
 };
-
 export default TopicExploreList;

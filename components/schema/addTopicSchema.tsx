@@ -10,6 +10,7 @@ export const addTopicSchema = z.object({
   updatedAt: z.string(),
   likes: z.number().optional(),
   isPublic: z.boolean().optional(),
+  isDeleted: z.boolean().optional(),
 });
 
 export type AddTopicSchemaType = z.infer<typeof addTopicSchema>;

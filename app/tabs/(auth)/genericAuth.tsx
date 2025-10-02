@@ -21,6 +21,7 @@ import emailAuth from '@/assets/images/email_auth.png';
 import { Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { Center } from '@/components/ui/center';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Update from 'expo-updates';
 
 const emailSchema = z.object({
   identifier: z.string().min(1, { message: 'auth.email_required' }).email({ message: 'auth.email_invalid' }),
@@ -231,7 +232,7 @@ const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
               <>
                 <HStack className="items-center mb-6">
                   <Box className="flex-1 h-px bg-gray-200" />
-                  <Text className="mx-4 text-gray-500 text-sm font-medium">{t('auth.or')}</Text>
+                  <Text className="mx-4 text-gray-500 text-sm">{t('auth.or')}</Text>
                   <Box className="flex-1 h-px bg-gray-200" />
                 </HStack>
                 <Button className="h-14 mb-4 rounded-xl" style={{ backgroundColor: Colors.main.background }}>
@@ -243,7 +244,7 @@ const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
               </>
             )}
 
-            <Text className="text-center leading-relaxed">{t('auth.policy_approve')}</Text>
+            <Text className="text-center leading-relaxed text-sm">{t('auth.policy_approve')}</Text>
           </VStack>
         </VStack>
       </KeyboardAvoidingView>

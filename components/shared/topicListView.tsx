@@ -12,7 +12,7 @@ interface TopicListViewProps {
 const TopicListView = ({ data }: TopicListViewProps) => {
   const { isLoading } = useTopicStore();
 
-  const renderItem = useCallback(({ item }: { item: TopicWithCount }) => <TopicsCard data={item} />, []);
+  const renderItem = useCallback(({ item }: { item: TopicWithCount }) => <TopicsCard data={item} inExplore={false} />, []);
 
   if (isLoading) {
     return <Loading />;

@@ -2,6 +2,7 @@ import { TaskStatus } from '@/constants/TaskEnum';
 import { create } from 'zustand';
 import { Task, TaskWithCategory } from '@/types/database-type';
 import { taskStorage } from '@/storage/database';
+import { useAppStore } from './appState';
 
 export interface TodoState {
   task: TaskWithCategory | null;
@@ -25,6 +26,7 @@ export interface TodoState {
   getCompletionPercentage: () => Promise<number>;
   getTaskById: (id: string) => Promise<void>;
   removeTask: (id: string) => Promise<void>;
+  getAllTask: () => Promise<Task[]>;
 
   getTodayAllTask: () => Promise<void>;
   getTaskByTopicIdAndDate: (categoryId: string) => Promise<void>;
@@ -76,6 +78,15 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       set({ tasks });
     } catch (error) {
       console.error('Failed to load tasks:', error);
+    }
+  },
+
+  getAllTask: async (): Promise<Task[]> => {
+    try {
+      return await taskStorage.getAllTaskByUserId(useAppStore.getState().user?.id as string);
+    } catch (error) {
+      console.error('Failed to load tasks:', error);
+      return [];
     }
   },
 

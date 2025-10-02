@@ -25,6 +25,7 @@ export interface Topic extends BaseEntity {
   isPublic: boolean;
   status?: string;
   likes: number;
+  isDeleted?: boolean;
 }
 
 export interface TopicWithCount extends Topic {
@@ -42,6 +43,7 @@ export interface Task extends BaseEntity {
   reminderDays?: string[];
   topicId?: string;
   goalId?: string;
+  isDeleted?: boolean;
 }
 
 // Combined Task with Category Info

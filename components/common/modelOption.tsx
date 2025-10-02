@@ -53,7 +53,7 @@ const ModalOption = ({ children, title, buttonTitle = t('event.options'), style,
         <Box style={{ backgroundColor: Colors.main.background, height: modalHeight }}>
           <Box style={styles.modalHeader}>
             <TouchableOpacity onPress={toggleOpen}>
-              <Text style={styles.cancelButton}>{t('event.close')}</Text>
+              <Text style={styles.cancelButton}>{t('event.approve')}</Text>
             </TouchableOpacity>
             <Text style={styles.modalTitle}>{title}</Text>
             <Box style={styles.placeholder} />

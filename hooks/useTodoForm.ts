@@ -7,6 +7,7 @@ import { TaskStatus } from '@/constants/TaskEnum';
 import { router } from 'expo-router';
 import { useAppStore } from '@/store/appState';
 import { Task } from '@/types/database-type';
+import { useGenerateNumericId } from './useGenerateId';
 
 interface Props {
   selectedDate: string;
@@ -17,6 +18,7 @@ interface Props {
 export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
   const { createTask, updateTask } = useTodoStore();
   const { user } = useAppStore();
+  const id = useGenerateNumericId();
 
   const isEditMode = Boolean(task?.id);
 
@@ -32,6 +34,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
       date: task?.date || selectedDate,
       createdAt: task?.createdAt || new Date().toISOString(),
       reminderDays: task?.reminderDays || [],
+      isDeleted: task?.isDeleted || false,
     },
     mode: 'onSubmit',
   });
@@ -50,6 +53,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
         date: task.date,
         createdAt: task.createdAt,
         reminderDays: task.reminderDays || [],
+        isDeleted: task.isDeleted || false,
       });
     } else {
       const now = new Date();
@@ -70,6 +74,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
         date: selectedDate,
         createdAt: now.toISOString(),
         reminderDays: [],
+        isDeleted: false,
       });
     }
   }, [reset, selectedDate, task, isEditMode, topicNumber]);
@@ -78,7 +83,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
     async (data: AddTodoSchemaType) => {
       try {
         const todoData = {
-          id: isEditMode ? task!.id : new Date().toISOString(),
+          id: isEditMode ? task!.id : id,
           userId: user?.id as string,
           title: data.title.trim(),
           description: data.description?.trim() || '',
@@ -91,6 +96,7 @@ export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
           createdAt: data.createdAt,
           updatedAt: new Date().toISOString(),
           reminderDays: data.reminderDays?.map(String),
+          isDeleted: data.isDeleted || false,
         };
 
         if (isEditMode) {

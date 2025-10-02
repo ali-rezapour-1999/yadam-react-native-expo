@@ -21,14 +21,13 @@ import TrashIcon from '@/assets/Icons/TrushIcon';
 
 const MemoizedTopicSubTaskList = React.lazy(() => import('@/components/shared/topicSubTaskList'));
 
-
 const TopicDetail: React.FC = () => {
   const params = useLocalSearchParams();
   const id = params.id as string;
-  const inExplore = !!params.inExplore;
+  const inExplore = params.inExplore === "true";
 
   const { language, user } = useAppStore();
-  const { isLoading, getTopicById, topic, removeTopic, getTopicByIdApi } = useTopicStore();
+  const { getTopicById, topic, removeTopic, getTopicByIdApi } = useTopicStore();
   const { getTaskByTopicId } = useTodoStore();
 
   useFocusEffect(
@@ -53,12 +52,12 @@ const TopicDetail: React.FC = () => {
     }
   }, [topic?.id, removeTopic]);
 
-  if (isLoading || !topic) {
+  if (!topic) {
     return <Loading />;
   }
 
   const isOwned = user?.id === topic.userId;
-  const buttonText = isOwned ? t('button.edit') : t('button.add');
+  const buttonText = isOwned && inExplore ? t('button.edit') : t('button.add');
   const buttonAction = () => router.push(`/tabs/(tabs)/topics/edit/${id}`);
 
   return (

@@ -29,6 +29,7 @@ export interface TopicState {
   removeTopic: (id: string) => Promise<void>;
   updateTopicsAfterLogin: (newId: string, lastId: string) => Promise<void>;
   searchTopics: (search: string) => Promise<void>;
+  getAllTopic: () => Promise<Topic[]>;
 
   //api
   getTopicsByApi: () => Promise<void>;
@@ -74,18 +75,8 @@ export const useTopicStore = create<TopicState>((set, get) => ({
     set({ isLoading: true });
     try {
       const userTopics = await topicStorage.getUserTopics(userId);
-      const apiRes = await getTopicsByUserId(useAppStore.getState().user?.id as string, useAppStore.getState().token as string);
-
-      const apiTopics = apiRes.success
-        ? apiRes.data.map(mapTopicFromBackend)
-        : [];
-
-      const mergedTopics = [
-        ...(Array.isArray(userTopics) ? userTopics : [userTopics]),
-        ...apiTopics,
-      ];
       set({
-        userTopics: mergedTopics,
+        userTopics: userTopics,
         isLoading: false,
       });
     } catch (error) {
@@ -96,7 +87,6 @@ export const useTopicStore = create<TopicState>((set, get) => ({
 
   createTopic: async (topic: Topic) => {
     set({ isLoading: true });
-    console.log(topic);
 
     try {
       await topicStorage.createTopic(topic);
@@ -115,8 +105,6 @@ export const useTopicStore = create<TopicState>((set, get) => ({
 
   updateTopic: async (topic: Topic) => {
     set({ isLoading: true });
-    console.log('update');
-    console.log(topic);
     try {
       await topicStorage.updateTopic(topic);
       await get().loadUserTopics(topic.userId as string);
@@ -141,6 +129,15 @@ export const useTopicStore = create<TopicState>((set, get) => ({
       console.error('Failed to get topic by id:', error);
       set({ isLoading: false });
       return null;
+    }
+  },
+
+  getAllTopic: async (): Promise<Topic[]> => {
+    try {
+      return await topicStorage.getAllUserTopicsByUserId(useAppStore.getState().user?.id as string);
+    } catch (error) {
+      console.error('Failed to load topics:', error);
+      return [];
     }
   },
 

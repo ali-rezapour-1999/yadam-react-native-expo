@@ -4,6 +4,12 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { AuthStateType, Result, User } from '@/types/auth-type';
 import { googleLoginAction, sendMassageAction, sendOtpAction } from '@/api/authApi';
 import { updateUserInformationAction } from '@/api/authApi/userInforamtionUpdate';
+import { pushSyncDataWithServer } from '@/api/syncApi';
+import { useTodoStore } from './todoState';
+import { useTopicStore } from './topcisState';
+import { mapTopicFromBackend } from '@/utils/topicConverter';
+import { mapTaskFromBackend } from '@/utils/taskConverter';
+
 
 export const useAppStore = create<AuthStateType>()(
   persist(
@@ -91,7 +97,6 @@ export const useAppStore = create<AuthStateType>()(
         set({ isLoading: true });
         const result = await sendOtpAction(identifier, code);
         if (result.success && result.data && result.access_token) {
-          //useTopicStore.getState().updateTopicsAfterLogin(result.data.id, get().user?.id as string);
           set({
             isLogin: true,
             user: result.data,
@@ -113,6 +118,26 @@ export const useAppStore = create<AuthStateType>()(
         }
         set({ isLoading: false });
         return result;
+      },
+
+      syncDataFromServer: async () => {
+        set({ isLoading: true })
+        if (get().user != null && get().token != null) {
+          const listTask = await useTodoStore.getState().getAllTask();
+          const listTopic = await useTopicStore.getState().getAllTopic();
+          await pushSyncDataWithServer({ listTopic: listTopic, listTask: listTask, token: get().token as string }).then((res) => {
+            console.log(res.data)
+            if (res.success) {
+              res.data.topics.forEach((topic: any) => {
+                useTopicStore.getState().createTopic(mapTopicFromBackend(topic));
+              });
+              res.data.tasks.forEach((task: any) => {
+                useTodoStore.getState().createTask(mapTaskFromBackend(task));
+              });
+            }
+            set({ isLoading: false });
+          })
+        };
       },
 
       logOut: async () => {

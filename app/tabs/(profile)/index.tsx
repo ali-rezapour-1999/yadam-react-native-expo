@@ -25,8 +25,6 @@ const profileItem = [
   { title: 'profile.about_cocheck', icon: Info, path: '/tabs/(profile)/aboutMe' },
 ];
 
-
-
 const Profile = () => {
   const { user, language, isLogin, logout } = useAppStore();
   const { description } = useWizardStore();
@@ -37,24 +35,18 @@ const Profile = () => {
     router.push('/tabs/(profile)');
   };
 
-
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
       {isLogin ? <UsernameInput /> : null}
       <HStack className="mx-auto my-6 w-[90%]" style={{ justifyContent: 'space-between', alignItems: 'center', direction: 'ltr' }}>
-        <Button style={{ backgroundColor: Colors.main.button, width: 50, height: 50 }} onPress={() => router.push('/tabs/(tabs)')} className="rounded-xl">
-          <HomeIcon color={Colors.main.textPrimary} size={28} />
+        <Button style={{ backgroundColor: Colors.main.button, width: 45, height: 45 }} onPress={() => router.push('/tabs/(tabs)')} className="rounded-xl">
+          <HomeIcon color={Colors.main.textPrimary} size={25} />
         </Button>
         {isLogin ?
-          <AppModal title={t("event.logout")} onCloseProps={setIsOpen} isOpenProps={isOpen} buttonContent={<LogOutIcon color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.accent, height: 50, width: 50 }} modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, height: "32%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
-            <VStack className='gap-5 justify-between h-full'>
+          <AppModal title={t("event.logout")} onCloseProps={setIsOpen} isOpenProps={isOpen} buttonContent={<LogOutIcon color={Colors.main.textPrimary} />} buttonStyle={{ height: 50, width: 50 }} modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, height: 240, width: "90%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
+            <VStack className='gap-5 justify-between'>
               <Text className="text-center text-2xl ">{t("profile.logout_message")}</Text>
-              <Button className="w-full h-12 rounded-xl" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
-                <ButtonText>
-                  <Text>{t("event.logout")}</Text>
-                </ButtonText>
-              </Button>
-              <Button className="w-full h-12 rounded-xl" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
+              <Button className="w-full h-12 rounded-xl mt-3" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
                 <ButtonText>
                   <Text>{t("event.logout")}</Text>
                 </ButtonText>

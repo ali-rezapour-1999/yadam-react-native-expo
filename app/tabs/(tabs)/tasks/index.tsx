@@ -7,7 +7,6 @@ import { useTodoStore } from '@/store/todoState';
 import jalaliMoment from 'jalali-moment';
 import { useAppStore } from '@/store/appState';
 import { StyleSheet } from 'react-native';
-import HeaderPage from '@/components/common/headerPage';
 import { HStack } from '@/components/ui/hstack';
 import { t } from 'i18next';
 import { Button, ButtonText } from '@/components/ui/button';
@@ -16,19 +15,39 @@ import { Loading } from '@/components/common/loading';
 import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
 import SelectYearWithMonth from '@/components/shared/forms/selectYearWithMonth';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Heading } from '@/components/ui/heading';
+import { Icon } from '@/components/ui/icon';
+import { FolderSync } from 'lucide-react-native';
+import AppModal from '@/components/common/appModal';
 
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
 
 const HeaderComponent = React.memo(
   ({ selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, selectedDate, setDateTimeSelectedDate, shouldShowTodayButton, goToToday, isToday, displayDate }: any) => {
     const { setSelectedDate } = useTodoStore();
+    const { syncDataFromServer, isLoading } = useAppStore();
+
     useEffect(() => {
       setSelectedDate(selectedDate);
     }, [selectedDate]);
 
+    const syncDataHandler = async () => {
+      await syncDataFromServer();
+    }
+
     return (
       <SafeAreaView style={styles.container}>
-        <HeaderPage title={t('todos.todo_list')} />
+
+        <HStack className="justify-between">
+          <Heading style={{ color: Colors.main.primaryDark, fontSize: 26 }}>{t('todos.todo_list')}</Heading>
+          <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.button }} onCloseProps={syncDataHandler} modalBodyStyle={{ paddingHorizontal: 20 }}>
+            <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('todos.sync_data_description')}</Text>
+            <Button onPress={syncDataHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-md mt-5'>
+              {isLoading ? <Loading style={{ backgroundColor: 'transparent' }} /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('button.accept')}</ButtonText>}
+            </Button>
+          </AppModal>
+
+        </HStack>
 
         <VStack className="mt-5">
           <HStack className="items-center justify-between mb-2">
