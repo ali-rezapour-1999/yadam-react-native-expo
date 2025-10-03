@@ -127,14 +127,14 @@ const SelectYearWithMonth: React.FC<SelectYearWithMonthProps> = ({ selectedYear,
         <DrawerContent style={{ backgroundColor: Colors.main.cardBackground }} className="h-max rounded-t-[40px] border-0">
           <DrawerHeader className="justify-center py-1">
             <HStack className="items-center gap-10 mb-4">
-              <Button onPress={handleDecrease} className={`rounded-lg ${language === 'fa' ? 'rotate-180' : 'rotate-0'}`} style={{ backgroundColor: Colors.main.border, height: 40 }}>
+              <Button onPress={handleDecrease} className={`rounded-lg`} style={{ backgroundColor: Colors.main.border, height: 40 }}>
                 <Icon as={language === 'en' ? ArrowLeftIcon : ArrowRightIcon} size="xl" color={Colors.main.textPrimary} />
               </Button>
 
               <Text style={{ fontSize: 24, color: Colors.main.textPrimary }}>{displayYear}</Text>
 
-              <Button onPress={handleIncrease} className={`rounded-lg ${language === 'fa' ? 'rotate-0' : 'rotate-180'}`} style={{ backgroundColor: Colors.main.border, height: 40 }}>
-                <Icon as={language === 'en' ? ArrowLeftIcon : ArrowRightIcon} size="xl" color={Colors.main.textPrimary} />
+              <Button onPress={handleIncrease} className={`rounded-lg`} style={{ backgroundColor: Colors.main.border, height: 40 }}>
+                <Icon as={language === 'en' ? ArrowRightIcon : ArrowLeftIcon} size="xl" color={Colors.main.textPrimary} />
               </Button>
             </HStack>
           </DrawerHeader>

@@ -49,10 +49,6 @@ const TopicFilter: React.FC<Props> = ({ topics, selectedTopicId, onSelect }) => 
   return (
     <HStack className="border-b-[1px] pb-1 mt-4 mb-3 justify-between items-center" style={{ borderColor: Colors.main.border }}>
       <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.id} horizontal showsHorizontalScrollIndicator={false} />
-
-      <Link href={"/tabs/(tabs)/topics/createTopics"} className="p-2 w-10 h-10 mx-3 rounded-xl" style={{ backgroundColor: Colors.main.cardBackground }}>
-        <AddIcon color={Colors.main.textPrimary} />
-      </Link>
     </HStack>
   );
 };

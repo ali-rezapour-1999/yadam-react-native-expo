@@ -400,7 +400,12 @@ export class UnifiedDatabase {
     if (!id) throw new Error('Task ID is required');
 
     try {
-      const row = await this.db.getFirstAsync('SELECT t.* , c.title as topic_title, c.id as topic_category_id FROM tasks t LEFT JOIN topics c ON t.topic_id = c.id WHERE t.id = ? AND c.is_deleted = 0', [id]);
+      const row = await this.db.getFirstAsync(`
+            SELECT t.*, c.title as topic_title, c.id as topic_category_id 
+            FROM tasks t 
+            LEFT JOIN topics c ON t.topic_id = c.id 
+            WHERE t.id = ? AND (c.is_deleted = 0 OR c.id IS NULL)
+          `, [id]);
       return row ? this.rowToTaskWithTopic(row) : null;
     } catch (error) {
       console.error(`Failed to get task with ID ${id}:`, error);

@@ -17,14 +17,14 @@ import { Loading } from '@/components/common/loading';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import TopicExploreList from '@/components/shared/topicExploreList';
 
-const TopicExploreList = React.lazy(() => import("@/components/shared/topicExploreList"))
 const TopicListView = React.lazy(() => import("@/components/shared/topicListView"))
 
 const NoTopicsImage = () => {
   return (
-    <Box className="flex-1 items-center justify-center overflow-hidden">
-      <Image source={noTopics} contentFit="contain" style={{ width: 400, height: 400 }} />
+    <Box className="items-center justify-center overflow-hidden">
+      <Image source={noTopics} contentFit="contain" style={{ width: 300, height: 300 }} />
       <Text className="text-center text-lg mt-5" style={{ color: Colors.main.textPrimary }}>
         {t('activity.not_topics')}
       </Text>
@@ -35,7 +35,7 @@ const NoTopicsImage = () => {
 const NotFoundDataBySearch = () => {
   return (
     <Box className="flex-1 items-center justify-start overflow-hidden">
-      <Image source={searchNotFoundData} style={{ width: 300, height: 300 }} contentFit="contain" />
+      <Image source={searchNotFoundData} style={{ width: 250, height: 250 }} contentFit="contain" />
       <Text className="text-center text-xl " style={{ color: Colors.main.textPrimary }}>
         {t('activity.not_found_data')}
       </Text>
