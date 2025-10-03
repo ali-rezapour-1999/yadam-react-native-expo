@@ -199,7 +199,7 @@ export const useTopicStore = create<TopicState>((set, get) => ({
   getTopicsByApi: async () => {
     set({ isLoading: true });
     try {
-      const topics = await getListOfTopics(useAppStore.getState().user?.id as string);
+      const topics = await getListOfTopics(useAppStore.getState().token as string);
       set({ explorerTopics: topics.data, isLoading: false });
     } catch (error) {
       console.error('Failed to load public topics:', error);

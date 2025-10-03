@@ -280,7 +280,7 @@ export class UnifiedDatabase {
         `SELECT t.*, count(ta.id) as tasks_count
          FROM topics t
          LEFT JOIN tasks ta ON ta.topic_id = t.id and ta.is_deleted = 0
-         WHERE t.user_id = ? And t.is_deleted = 0 
+         WHERE t.user_id = ? And t.is_deleted = 0
          AND LOWER(t.title) LIKE '%' || LOWER(?) || '%'
          GROUP BY t.id`,
         [userId, search],
@@ -400,7 +400,7 @@ export class UnifiedDatabase {
     if (!id) throw new Error('Task ID is required');
 
     try {
-      const row = await this.db.getFirstAsync('SELECT t.* , c.title as topic_title, c.id as topic_category_id FROM tasks t LEFT JOIN topics c ON t.topic_id = c.id WHERE t.id = ?', [id]);
+      const row = await this.db.getFirstAsync('SELECT t.* , c.title as topic_title, c.id as topic_category_id FROM tasks t LEFT JOIN topics c ON t.topic_id = c.id WHERE t.id = ? AND c.is_deleted = 0', [id]);
       return row ? this.rowToTaskWithTopic(row) : null;
     } catch (error) {
       console.error(`Failed to get task with ID ${id}:`, error);
@@ -449,8 +449,8 @@ export class UnifiedDatabase {
           topics.status AS topic_status,
           topics.category_id AS topic_category_id
         FROM tasks
-        LEFT JOIN topics ON tasks.topic_id = topics.id
-        WHERE tasks.date = ? AND tasks.is_deleted = 0
+        LEFT JOIN topics ON tasks.topic_id = topics.id  
+        WHERE tasks.date = ? AND tasks.is_deleted = 0 and topics.is_deleted = 0
       `;
 
       let params: any[] = [date];
@@ -483,8 +483,8 @@ export class UnifiedDatabase {
           topics.status AS topic_status,
           topics.category_id AS topic_category_id
         FROM tasks
-        LEFT JOIN topics ON tasks.topic_id = topics.id
-        WHERE tasks.topic_id = ? and tasks.is_deleted = 0
+        LEFT JOIN topics ON tasks.topic_id = topics.id  
+        WHERE tasks.topic_id = ? and tasks.is_deleted = 0 and topics.is_deleted = 0
       `;
 
       let params: any[] = [topicId];

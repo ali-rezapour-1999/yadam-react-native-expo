@@ -5,8 +5,6 @@ import { AuthStateType, Result, User } from '@/types/auth-type';
 import { googleLoginAction, sendMassageAction, sendOtpAction } from '@/api/authApi';
 import { updateUserInformationAction } from '@/api/authApi/userInforamtionUpdate';
 import { pushSyncDataWithServer } from '@/api/syncApi';
-import { useTodoStore } from './todoState';
-import { useTopicStore } from './topcisState';
 import { mapTopicFromBackend } from '@/utils/topicConverter';
 import { mapTaskFromBackend } from '@/utils/taskConverter';
 
@@ -121,23 +119,38 @@ export const useAppStore = create<AuthStateType>()(
       },
 
       syncDataFromServer: async () => {
-        set({ isLoading: true })
-        if (get().user != null && get().token != null) {
-          const listTask = await useTodoStore.getState().getAllTask();
-          const listTopic = await useTopicStore.getState().getAllTopic();
-          await pushSyncDataWithServer({ listTopic: listTopic, listTask: listTask, token: get().token as string }).then((res) => {
-            if (res.success) {
-              res.data.topics.forEach((topic: any) => {
-                useTopicStore.getState().createTopic(mapTopicFromBackend(topic));
-              });
-              res.data.tasks.forEach((task: any) => {
-                console.log(task)
-                useTodoStore.getState().createTask(mapTaskFromBackend(task));
-              });
-            }
-            set({ isLoading: false });
-          })
-        };
+        set({ isLoading: true });
+
+        const { user, token } = get();
+        if (!user || !token) {
+          set({ isLoading: false });
+          return;
+        }
+        const todoStore = require('./todoState').useTodoStore.getState();
+        const topicStore = require('./topcisState').useTopicStore.getState();
+        const listTask = await todoStore.getAllTask();
+        const listTopic = await topicStore.getAllTopic();
+
+        try {
+          const res = await pushSyncDataWithServer({
+            listTopic,
+            listTask,
+            token,
+          });
+
+          if (res.success) {
+            res.data.topics.forEach((topic: any) => {
+              topicStore.createTopic(mapTopicFromBackend(topic));
+            });
+            res.data.tasks.forEach((task: any) => {
+              todoStore.createTask(mapTaskFromBackend(task));
+            });
+          }
+        } catch (error) {
+          console.warn('Sync error:', error);
+        } finally {
+          set({ isLoading: false });
+        }
       },
 
       logOut: async () => {

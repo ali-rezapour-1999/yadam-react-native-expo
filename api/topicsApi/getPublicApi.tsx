@@ -1,9 +1,9 @@
 import api from '../baseApi';
 import { Result } from '@/types/auth-type';
 
-export const getListOfTopics = async (userId: string): Promise<Result> => {
+export const getListOfTopics = async (token: string): Promise<Result> => {
   try {
-    const response = await api.get(`/topics/${userId}/list_all_topics`);
+    const response = await api.get(`/topics/list_all_topics`, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 200) {
       return {
         success: true,
