@@ -26,18 +26,21 @@ const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask 
 
   return (
     <HStack
-      className="w-full h-full items-center"
+      className="w-full items-center"
       style={{
         flexDirection: isFa ? 'row' : 'row-reverse',
+        height: 80,
+        marginVertical: 4,
       }}
     >
       <Button
         onPress={() => onCompleteTask(item)}
         disabled={item.status === TaskStatus.COMPLETED}
-        className="h-[90%] w-1/2"
+        className="h-full w-1/2"
         style={{
           backgroundColor: item.status === TaskStatus.COMPLETED ? Colors.main.border : Colors.main.primary,
           justifyContent: isFa ? 'flex-start' : 'flex-end',
+          borderRadius: 0,
         }}
       >
         <Text
@@ -48,17 +51,18 @@ const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask 
             paddingHorizontal: 10,
           }}
         >
-          ✔ {isFa ? 'تکمیل' : 'Done'}
+          ✓ {isFa ? 'تکمیل' : 'Done'}
         </Text>
       </Button>
 
       <Button
         onPress={() => onCancelTask(item)}
         disabled={item.status === TaskStatus.CANCELLED}
-        className="h-[90%] w-1/2"
+        className="h-full w-1/2"
         style={{
           backgroundColor: item.status === TaskStatus.CANCELLED ? Colors.main.border : Colors.main.accent,
           justifyContent: isFa ? 'flex-end' : 'flex-start',
+          borderRadius: 0,
         }}
       >
         <Text
@@ -66,6 +70,7 @@ const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask 
             color: Colors.main.textPrimary,
             fontSize: 12,
             textAlign: isFa ? 'left' : 'right',
+            paddingHorizontal: 10,
           }}
         >
           ✖ {isFa ? 'لغو' : 'Canceled'}

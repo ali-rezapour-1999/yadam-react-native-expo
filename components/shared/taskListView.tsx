@@ -49,7 +49,7 @@ const TaskListView = ({ mode, enableSwipeActions = true }: TaskListViewProps) =>
         task={item}
         onPress={() => router.push(`/tabs/(tabs)/tasks/detail/${item.id}`)}
         style={{
-          marginVertical: 4,
+          marginVertical: 3,
           borderRadius: 0,
         }}
       />

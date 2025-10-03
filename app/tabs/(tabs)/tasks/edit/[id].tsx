@@ -10,7 +10,7 @@ import { TodoBasicFields } from '@/components/shared/forms/todoBaseField';
 import TaskAdvancedFields from '@/components/shared/forms/taskAdvancedField';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Text } from '@/components/Themed';
-import { ChevronUpIcon, Icon } from '@/components/ui/icon';
+import { ChevronUpIcon, CloseIcon, Icon } from '@/components/ui/icon';
 import { useTopicStore } from '@/store/topcisState';
 import { Controller } from 'react-hook-form';
 import DaySelector from '@/components/common/daySelecter';
@@ -19,6 +19,8 @@ import { CancelIcon } from '@/assets/Icons/Cancel';
 import { useAppStore } from '@/store/appState';
 import ModalOption from '@/components/common/modelOption';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ArrowRightFromLine } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 const EditTask: React.FC = () => {
   const { selectedDate, task } = useTodoStore();
@@ -85,8 +87,11 @@ const EditTask: React.FC = () => {
         </Box>
       </KeyboardAvoidingView>
       <Box style={styles.fixedButtonContainer}>
-        <Button onPress={handleSubmit(onSubmit)} style={styles.buttonStyle}>
-          <ButtonText style={styles.buttonText}>{t('button.edit')}</ButtonText>
+        <Button onPress={handleSubmit(onSubmit)} style={[styles.buttonStyle, { backgroundColor: Colors.main.button }]} className='rounded-full'>
+          <Icon as={ArrowRightFromLine} size="2xl" color={Colors.main.textPrimary} />
+        </Button>
+        <Button onPress={() => router.back()} style={[styles.buttonStyle, { backgroundColor: Colors.main.textPrimary }]} className='rounded-full'>
+          <Icon as={CloseIcon} size="xl" color={Colors.main.background} />
         </Button>
       </Box>
     </SafeAreaView>
@@ -136,13 +141,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main.background,
     paddingHorizontal: 16,
     alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     shadowRadius: 8,
     height: 130,
   },
   buttonStyle: {
     backgroundColor: Colors.main.button,
-    width: '100%',
+    width: '35%',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,

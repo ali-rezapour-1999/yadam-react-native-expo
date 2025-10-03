@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Colors } from '@/constants/Colors';
 import { useTodoStore } from '@/store/todoState';
 import { t } from 'i18next';
 import { useTodoForm } from '@/hooks/useTodoForm';
 import { Box } from '@/components/ui/box';
 import { TodoBasicFields } from '@/components/shared/forms/todoBaseField';
-import HeaderTitle from '@/components/common/headerTitle';
 import { Text } from '@/components/Themed';
-import { Icon } from '@/components/ui/icon';
+import { CloseIcon, Icon } from '@/components/ui/icon';
 import { useTopicStore } from '@/store/topcisState';
 import { Controller } from 'react-hook-form';
 import DaySelector from '@/components/common/daySelecter';
@@ -18,8 +17,8 @@ import TopicSelector from '@/components/shared/topicSelector';
 import { CancelIcon } from '@/assets/Icons/Cancel';
 import { useAppStore } from '@/store/appState';
 import ModalOption from '@/components/common/modelOption';
-import { useLocalSearchParams } from 'expo-router';
-import { ChevronDown } from 'lucide-react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { ArrowLeftFromLine, ArrowRightFromLine, ChevronDown } from 'lucide-react-native';
 import TaskAdvancedFields from '@/components/shared/forms/taskAdvancedField';
 
 
@@ -53,9 +52,9 @@ const CreateTask: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={true}>
-          <Box style={styles.header}>
-            <HeaderTitle />
-          </Box>
+          {/* <Box style={styles.header}> */}
+          {/*   <HeaderTitle /> */}
+          {/* </Box> */}
 
           <Box style={styles.section}>
             <TodoBasicFields control={control} errors={errors} startTime={startTime} endTime={endTime} showDatePicker={showDatePicker} setShowDatePicker={setShowDatePicker} />
@@ -93,8 +92,11 @@ const CreateTask: React.FC = () => {
 
       </KeyboardAvoidingView>
       <Box style={styles.fixedButtonContainer}>
-        <Button onPress={handleSubmit(onSubmit)} style={styles.buttonStyle}>
-          <ButtonText style={styles.buttonText}>{t('button.add_task')}</ButtonText>
+        <Button onPress={handleSubmit(onSubmit)} style={[styles.buttonStyle, { backgroundColor: Colors.main.button }]} className='rounded-xl'>
+          <Icon as={ArrowRightFromLine} size="2xl" color={Colors.main.textPrimary} />
+        </Button>
+        <Button onPress={() => router.back()} style={[styles.buttonStyle, { backgroundColor: Colors.main.textPrimary }]} className='rounded-xl'>
+          <Icon as={CloseIcon} size="xl" color={Colors.main.background} />
         </Button>
       </Box>
     </SafeAreaView>
@@ -147,20 +149,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    display: 'flex',
+    flexDirection: 'row',
     paddingHorizontal: 18,
-    justifyContent: 'center',
-    height: 140,
+    justifyContent: 'space-between',
+    height: 110,
   },
   buttonStyle: {
-    backgroundColor: Colors.main.button,
-    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 15,
     height: 50,
-  },
-  buttonText: {
-    color: Colors.main.textPrimary,
-    fontSize: 17,
+    width: "35%"
   },
 });

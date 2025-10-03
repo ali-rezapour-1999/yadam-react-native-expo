@@ -89,19 +89,21 @@ const ScheduleCard = ({ task, onPress, style }: ScheduleCardProps) => {
             {task.startTime} - {task.endTime}
           </Text>
         </HStack>
-        <Text
-          className="px-2 rounded-xl text-sm"
-          style={{
-            backgroundColor: isFinished
-              ? Colors.main.background
-              : category?.color
-                ? category.color + '40'
-                : Colors.main.border,
-            color: Colors.main.textPrimary,
-          }}
-        >
-          {language === 'fa' ? category?.fa ?? '' : category?.name ?? ''}
-        </Text>
+        {category && (
+          <Text
+            className="px-2 rounded-xl text-sm"
+            style={{
+              backgroundColor: isFinished
+                ? Colors.main.background
+                : category?.color
+                  ? category.color + '40'
+                  : Colors.main.border,
+              color: Colors.main.textPrimary,
+            }}
+          >
+            {language === 'fa' ? category?.fa ?? '' : category?.name ?? ''}
+          </Text>
+        )}
       </HStack>
     </Box>
   );
@@ -110,7 +112,6 @@ const ScheduleCard = ({ task, onPress, style }: ScheduleCardProps) => {
     <Pressable
       onPress={handlePress}
       style={({ pressed }) => [
-        styles.pressableContainer,
         {
           opacity: pressed ? 0.8 : 1,
           transform: [{ scale: pressed ? 0.98 : 1 }],
@@ -125,22 +126,16 @@ const ScheduleCard = ({ task, onPress, style }: ScheduleCardProps) => {
 export default ScheduleCard;
 
 const styles = StyleSheet.create({
-  pressableContainer: {
-    marginVertical: 3,
-  },
   cardContainer: {
     minHeight: 78,
     minWidth: 230,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    borderRadius: 16,
-    shadowColor: Colors.main.textPrimary,
     gap: 10,
   },
   cardHeader: {
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginBottom: 8,
   },
   cardFooter: {
     alignItems: 'center',
