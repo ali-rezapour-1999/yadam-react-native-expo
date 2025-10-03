@@ -84,6 +84,7 @@ export const useAppStore = create<AuthStateType>()(
       sendMassage: async (identifier: string): Promise<Result> => {
         set({ isLoading: true });
         const result = await sendMassageAction(identifier);
+        console.log(result);
         if (result.success) {
           set({ isSendCode: true });
         }
