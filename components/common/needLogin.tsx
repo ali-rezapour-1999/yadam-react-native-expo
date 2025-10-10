@@ -10,9 +10,9 @@ import { Link } from 'expo-router';
 const NeedLogin = () => {
   return (
     <VStack className="flex-1 items-center justify-center">
-      <Image source={userAccessImage} contentFit = "contain" style={{ width: 300, height: 300 }} />
-      <Text>{t('event.need_to_auth')}</Text>
-      <Link href={'/tabs/(auth)/'} className="text-center mt-5 rounded-xl py-4 px-14" style={{ backgroundColor: Colors.main.border }}>
+      <Image source={userAccessImage} contentFit="contain" style={{ width: 300, height: 300 }} />
+      <Text>{t('event.need_to_login')}</Text>
+      <Link href={'/tabs/(auth)'} className="text-center mt-5 rounded-xl py-4 px-14" style={{ backgroundColor: Colors.main.border }}>
         <Text>{t('auth.enter_your_account')}</Text>
       </Link>
     </VStack>

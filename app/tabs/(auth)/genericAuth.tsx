@@ -99,7 +99,7 @@ export const DynamicLogin = () => {
       {/* ------------- TOP AREA (text + input) ------------- */}
       <View style={styles.topSection}>
         <Heading style={styles.title}>
-          {t(isSendCode ? 'auth.we_send_code' : 'home.welcome_to_cocheck')}
+          {t(isSendCode ? 'auth.we_send_code' : 'home.welcome_to_yadam')}
         </Heading>
         <Text style={styles.subtitle}>
           {isSendCode ? t('auth.enter_code') : authMethod === 'email' ? t('auth.enter_email') : t('auth.enter_phone')}

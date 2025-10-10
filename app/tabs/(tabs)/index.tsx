@@ -86,7 +86,7 @@ const AIGate = memo(function AIGate({ token, isLoading, onGenerate, onRequireLog
     <Center className="gap-3 py-3">
       <Image source={lockImage} style={{ height: 120, width: '100%' }} contentFit="contain" />
       <Button style={{ backgroundColor: Colors.main.button, height: 40 }} onPress={onRequireLogin} className='rounded-lg'>
-        <ButtonText className="text-lg">{t('event.need_to_auth')}</ButtonText>
+        <ButtonText className="text-lg">{t('event.need_to_login')}</ButtonText>
       </Button>
     </Center>
   );
