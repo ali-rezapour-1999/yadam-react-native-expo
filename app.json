@@ -31,7 +31,8 @@
       "expo-router",
       "expo-font",
       "expo-sqlite",
-      "expo-updates"
+      "expo-updates",
+      "./utils/cleartext.js"
     ],
     "experiments": {
       "typedRoutes": true
