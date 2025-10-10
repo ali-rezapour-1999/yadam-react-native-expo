@@ -35,7 +35,7 @@ const CreateTopics = () => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}>
-        <VStack className="flex-1 p-7 gap-4">
+        <VStack className="flex-1 p-4 gap-4">
           <HeaderTitle title={t('activity.create_topics')} />
           <Controller
             name="title"

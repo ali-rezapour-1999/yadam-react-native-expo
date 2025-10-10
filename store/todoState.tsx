@@ -3,6 +3,8 @@ import { create } from 'zustand';
 import { Task, TaskWithCategory } from '@/types/database-type';
 import { taskStorage } from '@/storage/database';
 import { useAppStore } from './appState';
+import { generateTasksWithAi } from '@/api/aiRequest';
+import { mapTaskFromBackend } from '@/utils/taskConverter';
 
 export interface TodoState {
   task: TaskWithCategory | null;
@@ -31,6 +33,7 @@ export interface TodoState {
   getTodayAllTask: () => Promise<void>;
   getTaskByTopicIdAndDate: (categoryId: string) => Promise<void>;
   getTaskByTopicId: (categoryId: string) => Promise<void>;
+  createWithAi: (description: string) => Promise<void>;
 }
 
 const getCurrentDate = (): string => new Date().toISOString().split('T')[0];
@@ -201,6 +204,25 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       set({ isLoading: false });
     } catch (error) {
       console.error('Failed to remove task:', error);
+      set({ isLoading: false });
+    }
+  },
+  createWithAi: async (description: string) => {
+    set({ isLoading: true });
+
+    const todoStore = require('./todoState').useTodoStore.getState();
+    try {
+      const tasks = await generateTasksWithAi(description, useAppStore.getState().token as string);
+      if (tasks.success) {
+        tasks.data.forEach((task: any) => {
+          todoStore.createTask(mapTaskFromBackend(task));
+        });
+      }
+    } catch (error) {
+      console.error('Failed to create task:', error);
+      throw error;
+    }
+    finally {
       set({ isLoading: false });
     }
   },

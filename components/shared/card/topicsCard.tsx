@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
   taskCounter: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   taskCount: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.main.textSecondary,
   },
 });

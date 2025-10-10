@@ -1,38 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from '@/components/ui/button';
-import { Colors } from '@/constants/Colors';
-import { useTodoStore } from '@/store/todoState';
 import { t } from 'i18next';
-import { useTodoForm } from '@/hooks/useTodoForm';
-import { Box } from '@/components/ui/box';
-import { TodoBasicFields } from '@/components/shared/forms/todoBaseField';
-import { Text } from '@/components/Themed';
-import { CloseIcon, Icon } from '@/components/ui/icon';
-import { useTopicStore } from '@/store/topcisState';
 import { Controller } from 'react-hook-form';
+import { useLocalSearchParams } from 'expo-router';
+import { ArrowRightFromLine } from 'lucide-react-native';
+
+import { Button, ButtonText } from '@/components/ui/button';
+import { Text } from '@/components/Themed';
+import { Colors } from '@/constants/Colors';
+import { Icon } from '@/components/ui/icon';
+
+import { TodoBasicFields } from '@/components/shared/forms/todoBaseField';
+import TaskAdvancedFields from '@/components/shared/forms/taskAdvancedField';
 import DaySelector from '@/components/common/daySelecter';
 import TopicSelector from '@/components/shared/topicSelector';
-import { CancelIcon } from '@/assets/Icons/Cancel';
-import { useAppStore } from '@/store/appState';
 import ModalOption from '@/components/common/modelOption';
-import { router, useLocalSearchParams } from 'expo-router';
-import { ArrowLeftFromLine, ArrowRightFromLine, ChevronDown } from 'lucide-react-native';
-import TaskAdvancedFields from '@/components/shared/forms/taskAdvancedField';
 
+import { useTodoStore } from '@/store/todoState';
+import { useTopicStore } from '@/store/topcisState';
+import { useAppStore } from '@/store/appState';
+import { useTodoForm } from '@/hooks/useTodoForm';
+import HeaderTitle from '@/components/common/headerTitle';
 
 const CreateTask: React.FC = () => {
   const { selectedDate } = useTodoStore();
   const { user } = useAppStore();
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const { userTopics, loadUserTopics } = useTopicStore();
   const { topicId: topicIdFromRoute } = useLocalSearchParams<{ topicId?: string }>();
 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isTopicModalVisible, setIsTopicModalVisible] = useState(false);
+
   useEffect(() => {
-    loadUserTopics(user?.id as string);
-  }, [loadUserTopics]);
+    if (user?.id) loadUserTopics(user.id);
+  }, [user?.id, loadUserTopics]);
 
   const { form, onSubmit } = useTodoForm({ selectedDate, topicNumber: topicIdFromRoute });
   const {
@@ -45,120 +54,175 @@ const CreateTask: React.FC = () => {
   const startTime = watch('startTime');
   const endTime = watch('endTime');
   const selectedCategoryId = watch('topicId');
+  const selectedTopic = useMemo(
+    () => userTopics.find((topic) => topic.id === selectedCategoryId),
+    [selectedCategoryId, userTopics]
+  );
 
-  const selectedTopic = userTopics.find((topic) => topic.id === selectedCategoryId);
+  const handleTopicPress = useCallback(() => {
+    if (userTopics.length > 0) setIsTopicModalVisible(true);
+  }, [userTopics]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={true}>
-          {/* <Box style={styles.header}> */}
-          {/*   <HeaderTitle /> */}
-          {/* </Box> */}
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* Header */}
+          <HeaderTitle title={t('create_task.create_task')} />
 
-          <Box style={styles.section}>
-            <TodoBasicFields control={control} errors={errors} startTime={startTime} endTime={endTime} showDatePicker={showDatePicker} setShowDatePicker={setShowDatePicker} />
-          </Box>
-
-          <Box style={styles.section}>
-            <TouchableOpacity
-              style={[styles.sectionButton, { opacity: userTopics.length === 0 ? 0.7 : 1 }]}
-              onPress={() => setIsModalVisible(true)}
-              activeOpacity={0.8}
-              disabled={userTopics.length === 0}
-            >
-              <Box >
-                <Text style={styles.sectionTitle}>{t('activity.title')}</Text>
-                <Text style={[styles.sectionSubtitle, { display: userTopics.length === 0 ? 'flex' : 'none' }]}>{t('create_task.no_topics')}</Text>
-                <Text style={[styles.sectionSubtitle, { display: selectedTopic ? 'flex' : 'none' }]}>{selectedTopic ? selectedTopic.title : ''}</Text>
-              </Box>
-              {userTopics.length === 0 && <CancelIcon color={'transparent'} />}
-              {userTopics.length > 0 && <Icon as={ChevronDown} size="md" color={Colors.main.textSecondary} />}
-            </TouchableOpacity>
-            <Controller
-              name="topicId"
+          {/* Basic Task Info */}
+          <View style={styles.card}>
+            <TodoBasicFields
               control={control}
-              render={({ field }) => (
-                <TopicSelector visible={isModalVisible} onClose={() => setIsModalVisible(false)} topics={userTopics} selectedTopicId={field.value} onSelectTopic={field.onChange} />
-              )}
+              errors={errors}
+              startTime={startTime}
+              endTime={endTime}
+              showDatePicker={showDatePicker}
+              setShowDatePicker={setShowDatePicker}
             />
-          </Box>
+          </View>
 
-          <ModalOption title={t('event.options')} style={{ padding: 16 }}>
-            <Controller name="reminderDays" control={control} render={({ field }) => <DaySelector field={field} />} />
+          {/* Topic Selector */}
+          <TouchableOpacity
+            style={styles.selectorCard}
+            onPress={handleTopicPress}
+            activeOpacity={0.8}
+            disabled={userTopics.length === 0}
+          >
+            <View>
+              <Text style={styles.selectorTitle}>{t('activity.title')}</Text>
+              <Text style={styles.selectorValue}>
+                {selectedTopic
+                  ? selectedTopic.title
+                  : userTopics.length === 0
+                    ? t('create_task.no_topics')
+                    : t('create_task.select_topic')}
+              </Text>
+            </View>
+            <Icon
+              as={ArrowRightFromLine}
+              size="md"
+              color={Colors.main.textSecondary}
+            />
+          </TouchableOpacity>
+
+          <Controller
+            name="topicId"
+            control={control}
+            render={({ field }) => (
+              <TopicSelector
+                visible={isTopicModalVisible}
+                onClose={() => setIsTopicModalVisible(false)}
+                topics={userTopics}
+                selectedTopicId={field.value}
+                onSelectTopic={field.onChange}
+              />
+            )}
+          />
+
+          {/* Advanced Options */}
+          <ModalOption title={t('event.options')} style={styles.modalOption}>
+            <Controller
+              name="reminderDays"
+              control={control}
+              render={({ field }) => <DaySelector field={field} />}
+            />
             <TaskAdvancedFields control={control} />
           </ModalOption>
         </ScrollView>
-
       </KeyboardAvoidingView>
-      <Box style={styles.fixedButtonContainer}>
-        <Button onPress={handleSubmit(onSubmit)} style={[styles.buttonStyle, { backgroundColor: Colors.main.button }]} className='rounded-xl'>
-          <Icon as={ArrowRightFromLine} size="2xl" color={Colors.main.textPrimary} />
-        </Button>
-        <Button onPress={() => router.back()} style={[styles.buttonStyle, { backgroundColor: Colors.main.textPrimary }]} className='rounded-xl'>
-          <Icon as={CloseIcon} size="xl" color={Colors.main.background} />
-        </Button>
-      </Box>
+
+      {/* Floating Action Button */}
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        style={styles.fabButton}
+        className="rounded-xl shadow-lg"
+      >
+        <ButtonText style={styles.fabText}>{t('create_task.create_task')}</ButtonText>
+      </Button>
     </SafeAreaView>
   );
 };
 
 export default CreateTask;
 
+/**
+ * ------------------------------------------------------------
+ * Styles
+ * ------------------------------------------------------------
+ */
+
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: Colors.main.background,
   },
-  keyboardView: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-    marginBottom: 100,
-  },
-  scrollContent: {
+  scrollContainer: {
     padding: 20,
+    paddingBottom: 140,
   },
-  header: {
-    paddingVertical: 5,
-  },
-  section: {
-    marginBottom: 16,
-  },
-  sectionButton: {
-    backgroundColor: Colors.main.cardBackground,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  sectionTitle: {
-    fontSize: 16,
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
     color: Colors.main.textPrimary,
     marginBottom: 4,
   },
-  sectionSubtitle: {
+  headerSubtitle: {
     fontSize: 14,
     color: Colors.main.textSecondary,
+    marginBottom: 20,
   },
-  fixedButtonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    display: 'flex',
+  card: {
+    backgroundColor: Colors.main.cardBackground,
+    borderRadius: 16,
+    marginBottom: 20,
+  },
+  selectorCard: {
+    backgroundColor: Colors.main.cardBackground,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
     flexDirection: 'row',
-    paddingHorizontal: 18,
     justifyContent: 'space-between',
-    height: 110,
-  },
-  buttonStyle: {
     alignItems: 'center',
+  },
+  selectorTitle: {
+    fontSize: 15,
+    color: Colors.main.textSecondary,
+  },
+  selectorValue: {
+    fontSize: 17,
+    color: Colors.main.textPrimary,
+    fontWeight: '600',
+  },
+  modalOption: {
+    padding: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    elevation: 1,
+  },
+  fabButton: {
+    position: 'absolute',
+    bottom: 40,
+    alignSelf: 'center',
+    width: '90%',
+    height: 58,
+    backgroundColor: Colors.main.button,
     justifyContent: 'center',
-    height: 50,
-    width: "35%"
+  },
+  fabText: {
+    fontSize: 18,
+    color: Colors.main.textPrimary,
+    textAlign: 'center',
   },
 });

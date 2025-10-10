@@ -25,8 +25,6 @@ module.exports = {
         lightBlue: '#3F3CBB',
       },
       fontFamily: {
-        ibmpRegular: 'IBMPRegular',
-        ibmpBold: 'IBMPLexSansThaiLooped-Bold',
         heading: ['DanaBold'],
         danaRegular: ['DanaRegular'],
       },

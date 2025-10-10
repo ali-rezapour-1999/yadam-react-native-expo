@@ -1,255 +1,261 @@
-import { Text } from '@/components/Themed';
-import { Box } from '@/components/ui/box';
-import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
-import { useAppStore } from '@/store/appState';
-import { router } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
+import {
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import SendIcon from '@/assets/Icons/Send';
-import { VStack } from '@/components/ui/vstack';
+import { t } from 'i18next';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Text, View } from '@/components/Themed';
+import { Colors } from '@/constants/Colors';
+import { CodeForm } from '@/components/shared/forms/auth/codeForm';
+import { useAppStore } from '@/store/appState';
+import { router } from 'expo-router';
 import { HStack } from '@/components/ui/hstack';
 import GoogleIcon from '@/assets/Icons/Google';
-import { t } from 'i18next';
-import { CodeForm } from '@/components/shared/forms/auth/codeForm';
-import { Loading } from '@/components/common/loading';
-import { AuthForm } from '@/components/shared/forms/auth/authForm';
-import HeaderTitle from '@/components/common/headerTitle';
-import { Colors } from '@/constants/Colors';
-import emailAuth from '@/assets/images/email_auth.png';
-import { Image, KeyboardAvoidingView, Platform } from 'react-native';
-import { Center } from '@/components/ui/center';
-import { useFocusEffect } from '@react-navigation/native';
-import * as Update from 'expo-updates';
+import { Heading } from '@/components/ui/heading';
 
 const emailSchema = z.object({
-  identifier: z.string().min(1, { message: 'auth.email_required' }).email({ message: 'auth.email_invalid' }),
-});
-
-const codeSchema = z.object({
-  code: z
+  identifier: z
     .string()
-    .min(6, { message: 'code must be 6 digits' })
-    .max(6, { message: 'code must be 6 digits' })
-    .regex(/^\d{6}$/, { message: t('auth.code_must_contain_only_numbers') }),
+    .min(1, { message: t('auth.email_required') })
+    .email({ message: t('auth.email_invalid') }),
+});
+const phoneSchema = z.object({
+  identifier: z
+    .string()
+    .min(10, { message: t('auth.phone_required') })
+    .regex(/^\+?\d{10,14}$/, { message: t('auth.phone_invalid') }),
+});
+const codeSchema = z.object({
+  code: z.string().length(6, { message: t('auth.code_must_be_6') }),
 });
 
-const schemas = {
-  email: emailSchema,
-} as const;
-
-interface GenericAuthProps {
-  authType: 'email';
-}
-
-const GenericAuth: React.FC<GenericAuthProps> = ({ authType }) => {
+export const DynamicLogin = () => {
   const { sendMassage, sendOtp, isSendCode, setIsSendCode, isLoading } = useAppStore();
-  const [hasError, setError] = useState(false);
+  const [authMethod, setAuthMethod] = useState<'email' | 'phone'>('email');
+  const [hasError, setHasError] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      setIsSendCode(false);
-    }, [setIsSendCode]),
-  );
-  const authConfigs = {
-    email: {
-      type: 'email',
-      title: t('auth.login_email'),
-      placeholder: t('auth.email_placeholder'),
-    },
-  } as const;
-
-  const identifierSchema = schemas[authType];
-
-  const config = authConfigs[authType];
-  const combinedSchema = identifierSchema.merge(codeSchema);
-  const currentSchema = isSendCode ? combinedSchema : identifierSchema;
-
-  type IdentifierFormValues = z.infer<typeof identifierSchema>;
-  type CodeFormValues = z.infer<typeof combinedSchema>;
+  const schema = authMethod === 'email' ? emailSchema : phoneSchema;
+  const combinedSchema = schema.merge(codeSchema);
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
     watch,
-    trigger,
-  } = useForm<IdentifierFormValues | CodeFormValues>({
-    resolver: zodResolver(currentSchema),
-    defaultValues: { identifier: '', code: '' },
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(isSendCode ? combinedSchema : schema),
+    defaultValues: isSendCode
+      ? { identifier: '', code: '' }
+      : { identifier: '' },
     mode: 'onChange',
   });
 
-  const identifierValue = watch('identifier');
-  const codeValue = watch('code');
+  const identifier = watch('identifier');
+  const code = watch('code');
 
-  const verifyCode = useCallback(
-    async (identifier: string, code: string) => {
-      try {
-        const result = await sendOtp(identifier, code);
-        if (!result.success && result.status === 400) {
-          setError(true);
-        }
-        return result;
-      } catch (error: any) {
-        console.error('Verify code error:', error);
-        return { success: false, message: t('something_went_wrong') };
-      }
-    },
-    [sendOtp],
-  );
 
-  const onSubmit = async (data: IdentifierFormValues | CodeFormValues) => {
+  const handleSend = async (data: any) => {
     try {
-      if (!isSendCode) {
-        await sendMassage(data.identifier);
-      } else {
-        const result = await verifyCode(data.identifier, (data as CodeFormValues).code);
-        if (result.success) {
-          setIsSendCode(false);
-          router.push("/tabs/(profile)");
-        }
+      const res = await sendMassage(data.identifier);
+      if (res?.success) {
+        reset({ identifier: data.identifier, code: '' });
+        setIsSendCode(true);
       }
-    } catch (error) {
-      console.error('Submit error:', error);
+    } catch {
+      setHasError(true);
     }
   };
 
-  const handleResendCode = useCallback(async () => {
+  const handleVerify = async (data: any) => {
     try {
-      if (identifierValue) {
-        await sendMassage(identifierValue);
+      const res = await sendOtp(identifier, data.code);
+      if (res?.success) {
+        reset();
+        setIsSendCode(false);
+        router.push('/tabs/(profile)');
+      } else {
+        setHasError(true);
       }
-    } catch (error) {
-      console.error('Resend code error:', error);
+    } catch {
+      setHasError(true);
     }
-  }, [identifierValue, sendMassage]);
+  };
 
-  const isIdentifierValid = !!identifierValue && !errors.identifier;
-  const isCodeValid = !isSendCode || (!!codeValue && codeValue.length === 6);
-  const canSubmit = isIdentifierValid && isCodeValid && !isLoading;
+  const isFilled = identifier?.length > 0;
+  const canSubmit = isFilled && (!isSendCode || (code?.length === 6 && !isLoading));
 
   return (
-    <VStack className="flex-1" style={{ backgroundColor: Colors.main.background }}>
-      <Box className="relative pt-6 pb-8 px-6">
-        <HeaderTitle title={t('auth.back_to_home')} path="../(tabs)/" />
-        <VStack className="items-center mt-8">
-          <Center>
-            <Image source={emailAuth} style={{ width: 340, height: 340 }} />
-            <Text className="text-center text-base leading-relaxed px-4">{!isSendCode ? (t('auth.enter_email') as string) : (t('auth.enter_code') as string)}</Text>
-          </Center>
-        </VStack>
-      </Box>
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      {/* ------------- TOP AREA (text + input) ------------- */}
+      <View style={styles.topSection}>
+        <Heading style={styles.title}>
+          {t(isSendCode ? 'auth.we_send_code' : 'home.welcome_to_cocheck')}
+        </Heading>
+        <Text style={styles.subtitle}>
+          {isSendCode ? t('auth.enter_code') : authMethod === 'email' ? t('auth.enter_email') : t('auth.enter_phone')}
+        </Text>
 
-      <KeyboardAvoidingView
-        className="flex-1 px-5 rounded-3xl"
-        style={{ backgroundColor: Colors.main.cardBackground, flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-      >
-        <VStack>
-          <VStack className="mt-2">
-            {!isSendCode && (
-              <Controller
-                name="identifier"
-                control={control}
-                render={({ field }) => (
-                  <AuthForm
-                    value={field.value}
-                    placeholder={t(config.placeholder)}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      trigger('identifier');
-                    }}
-                    error={errors.identifier?.message}
-                  />
-                )}
+
+        {!isSendCode ? (
+          <Controller
+            name="identifier"
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                value={field.value}
+                onChangeText={field.onChange}
+                placeholder="Enter your email"
+                keyboardType={authMethod === 'phone' ? 'phone-pad' : 'email-address'}
+                autoCapitalize="none"
+                placeholderTextColor={Colors.main.textSecondary}
+                style={[
+                  styles.input, { textAlign: 'left', writingDirection: 'ltr' },
+                  errors.identifier && { borderColor: Colors.main.accent },
+                ]}
               />
             )}
-
-            {isSendCode && (
-              <Box className="mt-4">
-                <Controller
-                  name="code"
-                  control={control}
-                  render={({ field }) => (
-                    <CodeForm
-                      value={field.value}
-                      onChange={(value) => {
-                        field.onChange(value);
-                        if (value.length === 6) {
-                          trigger('code');
-                        }
-                      }}
-                      error={errors.root?.message}
-                      onResendCode={handleResendCode}
-                      hasError={hasError}
-                    />
-                  )}
-                />
-              </Box>
+          />
+        ) : (
+          <Controller
+            name="code"
+            control={control}
+            render={({ field }) => (
+              <CodeForm
+                value={field.value as string}
+                onChange={field.onChange}
+                hasError={hasError}
+              />
             )}
-          </VStack>
+          />
+        )}
+      </View>
 
-          <VStack className="mt-4">
-            <Button
-              isDisabled={!canSubmit}
-              className="h-14 rounded-xl mb-6 relative overflow-hidden"
-              style={{
-                backgroundColor: canSubmit ? Colors.main.button : Colors.main.textPrimary + 20,
-                opacity: canSubmit ? 1 : 0.6,
-              }}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {isLoading ? (
-                <Loading style={{ backgroundColor: 'transparent', marginTop: 14 }} />
-              ) : (
-                <HStack className="items-center gap-2">
-                  {!isSendCode && <ButtonIcon as={SendIcon} />}
-                  <ButtonText className="text-white text-lg font-semibold" style={{ color: canSubmit ? '#ffffff' : Colors.main.textSecondary }}>
-                    {!isSendCode ? t('auth.send_code') : t('auth.approve_code')}
-                  </ButtonText>
-                </HStack>
-              )}
-            </Button>
+      {/* ------------- BOTTOM BUTTONS ------------- */}
+      <View style={styles.bottomSection}>
+        <Button
+          onPress={handleSubmit(isSendCode ? handleVerify : handleSend)}
+          disabled={!canSubmit}
+          style={[
+            styles.primaryBtn,
+            { backgroundColor: canSubmit ? Colors.main.button : Colors.main.border },
+          ]}
+        >
+          <ButtonText style={styles.primaryText}>
+            {isSendCode ? t('event.approve') : t('auth.send_code')}
+          </ButtonText>
+        </Button>
 
-            {isSendCode ? (
-              <Button
-                className="h-14 rounded-xl mb-6 overflow-hidden"
-                style={{
-                  backgroundColor: Colors.main.textPrimary,
-                }}
-                onPress={() => setIsSendCode(false)}
-              >
-                <ButtonText className="text-lg" style={{ color: Colors.main.background }}>
-                  {t('auth.edit_email')}
-                </ButtonText>
-              </Button>
-            ) : null}
-
-            {isSendCode ? null : (
-              <>
-                <HStack className="items-center mb-6">
-                  <Box className="flex-1 h-px bg-gray-200" />
-                  <Text className="mx-4 text-gray-500 text-sm">{t('auth.or')}</Text>
-                  <Box className="flex-1 h-px bg-gray-200" />
-                </HStack>
-                <Button className="h-14 mb-4 rounded-xl" style={{ backgroundColor: Colors.main.background }}>
-                  <HStack className="items-center gap-3 ">
-                    <GoogleIcon />
-                    <ButtonText className="text-lg">{t('auth.continue_with_google')}</ButtonText>
-                  </HStack>
-                </Button>
-              </>
-            )}
-
-            <Text className="text-center leading-relaxed text-sm">{t('auth.policy_approve')}</Text>
-          </VStack>
-        </VStack>
-      </KeyboardAvoidingView>
-    </VStack>
+        {isSendCode ? (
+          <Button
+            onPress={() => {
+              reset();
+              setIsSendCode(false);
+            }}
+            style={styles.secondaryBtn}
+          >
+            <ButtonText style={styles.secondaryText}>
+              {t('auth.edit_email')}
+            </ButtonText>
+          </Button>
+        ) : (
+          <Button style={styles.googleBtn}>
+            <HStack className="items-center gap-3 justify-center">
+              <GoogleIcon />
+              <ButtonText style={styles.googleText}>
+                {t('auth.continue_with_google')}
+              </ButtonText>
+            </HStack>
+          </Button>
+        )}
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
-export default GenericAuth;
+/* -------------------------------- Styles -------------------------------- */
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    paddingVertical: 20,
+  },
+  topSection: {
+    width: '100%',
+    marginTop: 30,
+  },
+  title: {
+    fontSize: 28,
+    color: Colors.main.textPrimary,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 15,
+    color: Colors.main.textSecondary,
+    marginBottom: 24,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: Colors.main.border,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    height: 60,
+    fontSize: 18,
+    color: Colors.main.textPrimary,
+    backgroundColor: Colors.main.cardBackground + 30,
+  },
+  switchText: {
+    fontSize: 15,
+    color: Colors.main.textSecondary,
+    opacity: 0.7,
+  },
+  activeSwitch: {
+    color: Colors.main.primary,
+    opacity: 1,
+  },
+  bottomSection: {
+    width: '100%',
+  },
+  primaryBtn: {
+    height: 50,
+    borderRadius: 12,
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  primaryText: {
+    fontSize: 17,
+    color: Colors.main.textPrimary,
+  },
+  secondaryBtn: {
+    height: 50,
+    borderRadius: 12,
+    backgroundColor: Colors.main.warning + 98,
+    justifyContent: 'center',
+  },
+  secondaryText: {
+    color: Colors.main.textPrimary,
+    fontSize: 15,
+  },
+  googleBtn: {
+    height: 52,
+    borderRadius: 12,
+    backgroundColor: Colors.main.background,
+    borderWidth: 1,
+    borderColor: Colors.main.border,
+    justifyContent: 'center',
+  },
+  googleText: {
+    color: Colors.main.textPrimary,
+    fontSize: 16,
+  },
+});

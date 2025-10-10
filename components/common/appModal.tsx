@@ -1,94 +1,138 @@
-import { Platform, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import React, { useState, useCallback } from 'react';
+import {
+  Modal,
+  View,
+  Pressable,
+  StyleSheet,
+  Platform,
+  StyleProp,
+  ViewStyle,
+  ScrollView,
+} from 'react-native';
 import { Text } from '../Themed';
-import { useState, useCallback } from 'react';
 import { Button } from '../ui/button';
-import { Modal, ModalBackdrop, ModalContent, ModalHeader, ModalBody } from '../ui/modal';
+import { Colors } from '@/constants/Colors';
 
 interface AppModalProps {
-  children: React.ReactNode;
   title: string;
-  onCloseProps?: (isOpen: boolean) => void;
-  isOpenProps?: boolean;
+  children: React.ReactNode;
   buttonContent?: React.ReactNode;
-  rootModalStyle?: StyleProp<ViewStyle>;
+  buttonStyle?: StyleProp<ViewStyle>;
+  modalContainerStyle?: StyleProp<ViewStyle>;
   modalContentStyle?: StyleProp<ViewStyle>;
   modalBodyStyle?: StyleProp<ViewStyle>;
-  buttonStyle?: StyleProp<ViewStyle>;
+  visible?: boolean;
+  onChangeVisible?: (open: boolean) => void;
 }
 
-const AppModal = ({
-  children,
+export default function AppModal({
   title,
-  ...props
-}: AppModalProps) => {
-  const [internalOpen, setInternalOpen] = useState(false);
+  children,
+  buttonContent,
+  buttonStyle,
+  modalContainerStyle,
+  modalContentStyle,
+  modalBodyStyle,
+  visible,
+  onChangeVisible,
+}: AppModalProps) {
+  const [internalVisible, setInternalVisible] = useState(false);
 
-  const isControlled = props.isOpenProps !== undefined;
-  const isOpen = isControlled ? props.isOpenProps : internalOpen;
+  const isControlled = visible !== undefined;
+  const isOpen = isControlled ? visible : internalVisible;
 
-  const toggleOpen = useCallback(() => {
-    if (isControlled && props.onCloseProps) {
-      props.onCloseProps(!isOpen);
+  const toggle = useCallback(() => {
+    if (isControlled && onChangeVisible) {
+      onChangeVisible(!isOpen);
     } else {
-      setInternalOpen(prev => !prev);
+      setInternalVisible(prev => !prev);
     }
-  }, [isControlled, isOpen, props.onCloseProps]);
+  }, [isControlled, isOpen, onChangeVisible]);
 
   return (
     <>
       <Button
-        onPress={toggleOpen}
+        onPress={toggle}
+        style={[styles.button, buttonStyle]}
         accessibilityLabel="Open modal"
-        className="rounded-lg w-full"
-        style={props.buttonStyle}
       >
-        {props.buttonContent}
+        {buttonContent || <Text>Open Modal</Text>}
       </Button>
 
-      {isOpen && (
-        <Modal isOpen={isOpen} style={[styles.modalRoot, props.rootModalStyle]} onClose={toggleOpen}>
-          <ModalBackdrop onPress={toggleOpen} style={{ backgroundColor: "#000000" }} />
-          <ModalContent style={[styles.modalContent, props.modalContentStyle]}>
-            <ModalHeader style={styles.modalHeader}>
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={toggle}
+        statusBarTranslucent
+      >
+        <Pressable style={styles.backdrop} onPress={toggle} />
+
+        <View style={[styles.modalContainer, modalContainerStyle]}>
+          <View style={[styles.modalContent, modalContentStyle]}>
+            <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{title}</Text>
-            </ModalHeader>
-            <ModalBody style={props.modalBodyStyle}>
+            </View>
+
+            <ScrollView
+              style={[styles.modalBody, modalBodyStyle]}
+              showsVerticalScrollIndicator={false}
+            >
               {children}
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </>
   );
-};
-
-export default AppModal;
+}
 
 const styles = StyleSheet.create({
-  modalRoot: {
+  button: {
+    borderRadius: 12,
+    width: '100%',
+  },
+
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
+
+  modalContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    margin: 0,
+    paddingHorizontal: 16,
   },
+
+  modalContent: {
+    backgroundColor: Colors.main.background,
+    borderRadius: 12,
+    minHeight: '25%',
+    width: '85%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 20,
+    overflow: 'hidden',
+  },
+
   modalHeader: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
+    paddingVertical: Platform.OS === 'ios' ? 20 : 12,
     borderBottomWidth: 1,
     borderBottomColor: Colors.main.border,
-    paddingTop: Platform.OS === 'ios' ? 50 : 12,
-    marginBottom: 10,
   },
+
   modalTitle: {
     fontSize: 18,
     color: Colors.main.textPrimary,
   },
-  modalContent: {
-    backgroundColor: Colors.main.background,
-    borderRadius: 12,
-    minHeight: '20%',
-    minWidth: '80%',
+
+  modalBody: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
 });

@@ -74,9 +74,9 @@ const TopicDetail: React.FC = () => {
           >
             <VStack space="xl">
               <HStack className="items-center justify-between">
-                <HeaderTitle path={'/tabs/(tabs)/topics'} size="md" width="[80%]" />
+                <HeaderTitle path={'/tabs/(tabs)/topics'} size="md" />
                 {isOwned ? (
-                  <AppModal title={t('event.delete')} buttonContent={<TrashIcon size={48} />} buttonStyle={{ backgroundColor: 'transparent' }} modalContentStyle={{ height: 280 }} modalBodyStyle={{ paddingHorizontal: 20 }} onCloseProps={() => setIsOpen(!isOpen)} isOpenProps={isOpen} >
+                  <AppModal title={t('event.delete')} buttonContent={<TrashIcon size={48} />} buttonStyle={{ backgroundColor: 'transparent' }} modalContentStyle={{ height: 280 }} modalBodyStyle={{ paddingHorizontal: 20 }} visible={isOpen} onChangeVisible={setIsOpen} >
                     <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('button.insure_delete')}</Text>
                     <Button onPress={removeTopicHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-lg mt-5 h-14'>
                       <ButtonText style={{ color: Colors.main.textPrimary }} className='text-xl'>{t('event.delete')}</ButtonText>

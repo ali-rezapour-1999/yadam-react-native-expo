@@ -284,5 +284,9 @@
     "no_categories_found": "No categories found",
     "cancel": "Cancel",
     "add": "Add"
+  },
+  "ai": {
+    "create_daily_task_with_ai": "Create daily task with AI",
+    "description": "Description for day (optional)"
   }
 }

@@ -52,11 +52,9 @@ export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, error
 const styles = StyleSheet.create({
   fieldsContainer: {
     marginVertical: 10,
-    backgroundColor: Colors.main.cardBackground,
     borderRadius: 16,
     padding: 16,
     shadowRadius: 2,
     gap: 20,
-    elevation: 2,
   },
 });

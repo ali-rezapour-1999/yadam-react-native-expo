@@ -21,8 +21,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    IBMPRegular: require('../assets/fonts/IBMPlexSansThaiLooped-Regular.ttf'),
-    IBMPBold: require('../assets/fonts/IBMPlexSansThaiLooped-Bold.ttf'),
     DanaBold: require('../assets/fonts/bold.ttf'),
     DanaReguler: require('../assets/fonts/regular.ttf'),
     ...FontAwesome.font,

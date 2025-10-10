@@ -1,11 +1,18 @@
-import { View, FlatList, TouchableOpacity, I18nManager, Platform, StyleSheet } from 'react-native';
-import { HStack } from '../ui/hstack';
+import React from 'react';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  I18nManager,
+  Platform,
+  StyleSheet,
+} from 'react-native';
+import Modal from 'react-native-modal';
 import { Colors } from '@/constants/Colors';
-import { Text } from '../Themed';
 import { t } from 'i18next';
+import { Text } from '../Themed';
 import { Box } from '../ui/box';
 import { Topic } from '@/types/database-type';
-import Modal from 'react-native-modal';
 
 interface TopicItemProps {
   item: Topic;
@@ -17,36 +24,53 @@ interface TopicSelectorProps {
   visible: boolean;
   onClose: () => void;
   topics: Topic[];
-  selectedTopicId: string | undefined;
+  selectedTopicId?: string;
   onSelectTopic: (id: string) => void;
 }
 
 const TopicItem: React.FC<TopicItemProps> = ({ item, onSelect, isSelected }) => (
-  <TouchableOpacity onPress={onSelect} activeOpacity={0.8}>
-    <HStack className="items-center gap-3" style={[styles.topicItem, isSelected && styles.topicItemSelected]}>
-      <Text>{item.title}</Text>
-    </HStack>
+  <TouchableOpacity
+    onPress={onSelect}
+    activeOpacity={0.8}
+    style={[styles.topicItem, isSelected && styles.topicItemSelected]}
+  >
+    <Text style={[styles.topicText, isSelected && styles.topicTextSelected]}>
+      {item.title}
+    </Text>
   </TouchableOpacity>
 );
 
-const TopicSelector = ({ visible, onClose, topics, selectedTopicId, onSelectTopic }: TopicSelectorProps) => (
-  <Modal isVisible={visible} onBackdropPress={onClose} onSwipeComplete={onClose} swipeDirection="down" style={{ justifyContent: 'flex-end', margin: 0, minHeight: '80%' }}>
-    <Box style={styles.modalContainer}>
-      <Box style={styles.modalHeader}>
-        <TouchableOpacity onPress={onClose}>
-          <Text style={styles.cancelButton}>{t('event.approve')}</Text>
-        </TouchableOpacity>
-        <Text style={styles.modalTitle}>{t('category.select_category')}</Text>
-        <Box style={styles.placeholder} />
-      </Box>
-      <View
-        style={{
-          backgroundColor: Colors.main.background,
-          borderRadius: 12,
-          maxHeight: '80%',
-          padding: 16,
-        }}
-      >
+const TopicSelector: React.FC<TopicSelectorProps> = ({
+  visible,
+  onClose,
+  topics,
+  selectedTopicId,
+  onSelectTopic,
+}) => {
+  return (
+    <Modal
+      isVisible={visible}
+      onBackdropPress={onClose}
+      onSwipeComplete={onClose}
+      swipeDirection="down"
+      backdropTransitionOutTiming={0}
+      propagateSwipe
+      style={styles.modalWrapper}
+    >
+      <Box style={styles.sheetContainer}>
+        {/* Header */}
+        <View style={styles.handleContainer}>
+          <View style={styles.handleBar} />
+        </View>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={onClose}>
+            <Text style={styles.cancelText}>{t('event.cancel')}</Text>
+          </TouchableOpacity>
+          <Text style={styles.titleText}>{t('category.select_category')}</Text>
+          <View style={{ width: 60 }} />
+        </View>
+
+        {/* Topic List */}
         <FlatList
           data={topics}
           keyExtractor={(item) => item.id}
@@ -60,55 +84,92 @@ const TopicSelector = ({ visible, onClose, topics, selectedTopicId, onSelectTopi
               }}
             />
           )}
+          showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.listContainer}
         />
-      </View>
-    </Box>
-  </Modal>
-);
+      </Box>
+    </Modal>
+  );
+};
 
 export default TopicSelector;
 
+/**
+ * ------------------------------------------------------------
+ * Styles
+ * ------------------------------------------------------------
+ */
 const styles = StyleSheet.create({
+  modalWrapper: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  sheetContainer: {
+    backgroundColor: Colors.main.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: -4 },
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  handleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  handleBar: {
+    width: 40,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: Colors.main.border,
+  },
+  headerRow: {
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderBottomColor: Colors.main.border,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  cancelText: {
+    fontSize: 16,
+    color: Colors.main.primary,
+  },
+  titleText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.main.textPrimary,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 30,
+  },
   topicItem: {
     backgroundColor: Colors.main.cardBackground,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowRadius: 1,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: Colors.main.border,
   },
   topicItemSelected: {
-    borderWidth: 2,
     borderColor: Colors.main.primary,
-    elevation: 2,
+    backgroundColor: `${Colors.main.primary}20`,
   },
-  modalContainer: {
-    backgroundColor: Colors.main.background || '#FFFFFF',
-    height: '80%',
-  },
-  modalHeader: {
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.main.border,
-    paddingTop: Platform.OS === 'ios' ? 50 : 12,
-    marginBottom: 10,
-  },
-  cancelButton: {
+  topicText: {
     fontSize: 16,
-    color: Colors.main.primary,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
     color: Colors.main.textPrimary,
   },
-  placeholder: {
-    width: 50,
+  topicTextSelected: {
+    color: Colors.main.primary,
+    fontWeight: '600',
   },
 });

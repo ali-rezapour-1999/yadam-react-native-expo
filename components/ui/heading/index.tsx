@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text as RNText, TextProps } from 'react-native';
-import { useTranslation } from 'react-i18next';
 
 interface HeadingProps extends TextProps {
   children: React.ReactNode;
@@ -25,16 +24,12 @@ const headingSizes = {
 };
 
 export const Heading: React.FC<HeadingProps> = ({ children, size = 'xl', bold, underline, strikeThrough, italic, highlight, style, ...rest }) => {
-  const { i18n } = useTranslation();
-
-  const fontFamily = i18n.language === 'fa' ? 'DanaBold' : 'IBMPBold';
-
   return (
     <RNText
       {...rest}
       style={[
         {
-          fontFamily,
+          fontFamily: "DanaBold",
           fontSize: headingSizes[size],
           fontWeight: bold ? 'bold' : 'normal',
           textDecorationLine: underline ? 'underline' : strikeThrough ? 'line-through' : 'none',
