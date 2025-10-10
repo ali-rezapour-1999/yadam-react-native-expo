@@ -32,7 +32,7 @@ export const AddTodoForm = ({ value, onChange, error, placeholder, style, autoFo
       ]}
     >
       <Box className="">
-        <Text>{t('todos.title_form_todo')}</Text>
+        <Text>{t('common.form.title')}</Text>
       </Box>
       <Input style={[styles.inputContainer, style]}>
         <InputField

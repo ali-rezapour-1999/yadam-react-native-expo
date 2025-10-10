@@ -1,6 +1,6 @@
 import api from "./baseApi";
 
-export const generateTasksWithAi = async (description: string, token: string) => {
+export const generateTasksWithAi = async (description: string | undefined, token: string) => {
   try {
     const response = await api.post(`api-ai/create_with_ai`, description, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 200) {

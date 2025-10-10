@@ -63,7 +63,7 @@ const SelectLanguage = () => {
         <DrawerBackdrop />
         <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-2xl">
           <DrawerHeader>
-            <Text className="text-2xl">{t('profile.choise_language')}</Text>
+            <Text className="text-2xl text-center w-full">{t('event.select_language')}</Text>
           </DrawerHeader>
           <DrawerBody>
             <Button

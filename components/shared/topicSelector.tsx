@@ -64,7 +64,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({
         </View>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={onClose}>
-            <Text style={styles.cancelText}>{t('event.cancel')}</Text>
+            <Text style={styles.cancelText}>{t('common.button.cancel')}</Text>
           </TouchableOpacity>
           <Text style={styles.titleText}>{t('category.select_category')}</Text>
           <View style={{ width: 60 }} />

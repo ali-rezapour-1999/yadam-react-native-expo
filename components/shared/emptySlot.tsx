@@ -23,18 +23,9 @@ const EmptySlot = ({ route, placeholder }: { route?: any; placeholder?: string }
       style={{
         fontSize: 14,
         color: Colors.main.primaryLight,
-        marginBottom: 8,
       }}
     >
       {placeholder}
-    </Text>
-    <Text
-      style={{
-        fontSize: 12,
-        color: Colors.main.textPrimary,
-      }}
-    >
-      + {t('task_detail.add')}
     </Text>
   </Pressable>
 );

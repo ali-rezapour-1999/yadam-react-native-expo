@@ -17,7 +17,7 @@ const Search = ({ onChange, search }: { onChange: any; search: string }) => {
         </Box>
         <InputField
           type="text"
-          placeholder={t('event.search')}
+          placeholder={t('activity.search')}
           value={search}
           style={{ color: Colors.main.textPrimary }}
           onChangeText={onChange}

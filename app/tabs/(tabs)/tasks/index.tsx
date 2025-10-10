@@ -71,7 +71,7 @@ const HeaderComponent = React.memo(
               title={t('todos.sync_data')}
               buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.lightBlue} />}
               buttonStyle={styles.syncButton}
-              modalBodyStyle={{ paddingHorizontal: 20 }}
+              modalBodyStyle={{ paddingHorizontal: 10 }}
               visible={isOpen}
               onChangeVisible={setIsOpen}
             >
@@ -80,7 +80,7 @@ const HeaderComponent = React.memo(
                 {isLoading ? (
                   <Loading style={{ backgroundColor: 'transparent' }} />
                 ) : (
-                  <ButtonText style={styles.syncConfirmText}>{t('button.accept')}</ButtonText>
+                  <ButtonText style={styles.syncConfirmText}>{t('common.button.confirm')}</ButtonText>
                 )}
               </Button>
             </AppModal>
@@ -117,7 +117,7 @@ const HeaderComponent = React.memo(
         </VStack>
 
         {/* Date Summary */}
-        <HStack className="items-center justify-between mb-2 mt-5 pb-3">
+        <HStack className="items-center justify-between mt-5 pb-3">
           <Text>{isToday ? t('todos.today') : t('todos.select_date')}</Text>
           <Text>{displayDate}</Text>
         </HStack>
@@ -182,11 +182,9 @@ const Todos = () => {
       />
 
       {/* Task List */}
-      <VStack className="px-5">
         <Suspense fallback={<Loading />}>
           <TaskListView mode="grouped" />
         </Suspense>
-      </VStack>
     </Box>
   );
 };
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main.background,
   },
   headerContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     paddingTop: 10,
     zIndex: 1,
     elevation: 1,

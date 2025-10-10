@@ -12,9 +12,10 @@ interface HiddenItemProps {
   swipedRows: Set<string>;
   onCompleteTask: (item: Task) => void;
   onCancelTask: (item: Task) => void;
+  size: { width: number; height: number };
 }
 
-const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask }: HiddenItemProps) => {
+const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask, size }: HiddenItemProps) => {
   const { language } = useAppStore();
   const isRowSwiped = swipedRows.has(item.id);
 
@@ -26,11 +27,12 @@ const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask 
 
   return (
     <HStack
-      className="w-full items-center"
+      className="items-center"
       style={{
         flexDirection: isFa ? 'row' : 'row-reverse',
-        height: 80,
         marginVertical: 4,
+        width: size?.width || '100%',
+        height: size?.height - 2 || 80,
       }}
     >
       <Button

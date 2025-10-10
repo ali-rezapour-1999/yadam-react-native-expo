@@ -1,12 +1,15 @@
-import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
-import { FlatList, StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
-import { Colors } from '@/constants/Colors';
-import ScheduleCard from '../shared/card/scheduleCard';
-import { router } from 'expo-router';
-import { Task } from '@/types/database-type';
-import EmptySlot from '../shared/emptySlot';
-import { t } from 'i18next';
+import { HStack } from "@/components/ui/hstack";
+import { VStack } from "@/components/ui/vstack";
+import { StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
+import Animated, { useAnimatedScrollHandler } from "react-native-reanimated";
+import { Colors } from "@/constants/Colors";
+import ScheduleCard from "../shared/card/scheduleCard";
+import { router } from "expo-router";
+import { Task } from "@/types/database-type";
+import EmptySlot from "../shared/emptySlot";
+import { t } from "i18next";
+import { useAppStore } from "@/store/appState";
+import { useScrollHandler } from "@/hooks/useScrollHandler";
 
 interface HourlyRowProps {
   hour: string;
@@ -21,34 +24,60 @@ interface StyleType {
   scrollView: ViewStyle;
   textStyle: TextStyle;
   isCurrentHourText: TextStyle;
-  cardStyle: ViewStyle;
 }
 
 const HourlyRow = ({ hour, tasks, isCurrentHour = false }: HourlyRowProps) => {
   const currentHour = new Date().getHours();
-  const rowHour = parseInt(hour.split(':')[0]);
+  const rowHour = parseInt(hour.split(":")[0]);
+  const { handleScroll, scrollEventThrottle } = useScrollHandler();
+  const { hideScroll } = useAppStore();
 
-  const shouldShowEmptySlot = tasks.length === 0 && (rowHour === currentHour || rowHour === currentHour + 1);
+  const shouldShowEmptySlot =
+    tasks.length === 0 &&
+    (rowHour === currentHour || rowHour === currentHour + 1);
 
   return (
-    <VStack className="py-3 px-4" style={isCurrentHour ? style.isCurrentHourContainer : style.contariner}>
+    <VStack
+      className="py-2 px-4"
+      style={isCurrentHour ? style.isCurrentHourContainer : style.contariner}
+    >
       <HStack className="items-start space-x-4">
-        <Text className="w-14 text-left" style={isCurrentHour ? style.isCurrentHourText : style.textStyle}>
+        <Text
+          className="w-14 text-left"
+          style={isCurrentHour ? style.isCurrentHourText : style.textStyle}
+        >
           {hour}
         </Text>
 
         <VStack className="flex-1">
           {shouldShowEmptySlot ? (
-            <EmptySlot route={'/tabs/(tabs)/tasks/createTask'} placeholder={t('todos.any_schedule')} />
+            <EmptySlot
+              route={"/tabs/(tabs)/tasks/createTask"}
+              placeholder={t("todos.any_schedule")}
+            />
           ) : (
-            <FlatList
+            <Animated.FlatList
               data={tasks}
-              horizontal
+              nestedScrollEnabled
               keyExtractor={(item) => item.id}
               style={style.scrollView}
-              renderItem={({ item }) => <ScheduleCard task={item} onPress={() => router.push(`/tabs/(tabs)/tasks/detail/${item.id}`)} style={style.cardStyle} />}
+              renderItem={({ item }) => (
+                <ScheduleCard
+                  task={item}
+                  onPress={() =>
+                    router.push(`/tabs/(tabs)/tasks/detail/${item.id}`)
+                  }
+                  style={{ marginTop: 2, borderRadius: 10 }}
+                />
+              )}
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 12, alignItems: 'center' }}
+              onScroll={handleScroll} 
+              scrollEventThrottle={scrollEventThrottle}
+              contentContainerStyle={{
+                marginBottom: 20,
+                paddingRight: 16,
+                paddingBottom: hideScroll ? 120 : 70
+              }}
               initialNumToRender={6}
               maxToRenderPerBatch={10}
               windowSize={5}
@@ -69,8 +98,8 @@ export default HourlyRow;
 const style = StyleSheet.create<StyleType>({
   contariner: {
     borderLeftWidth: 0,
-    borderLeftColor: 'transparent',
-    borderBottomColor: 'transparent',
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
     borderBottomWidth: 1,
   },
   isCurrentHourContainer: {
@@ -81,17 +110,12 @@ const style = StyleSheet.create<StyleType>({
   scrollView: {
     paddingRight: 16,
   },
-  cardStyle: {
-    borderRadius: 10,
-    backgroundColor: Colors.main.cardBackground,
-    marginHorizontal: 6,
-  },
   textStyle: {
     color: Colors.main.textPrimary,
-    fontWeight: 600,
+    fontWeight: "600",
   },
   isCurrentHourText: {
     color: Colors.main.info,
-    fontWeight: 700,
+    fontWeight: "700",
   },
 });

@@ -25,7 +25,7 @@ const Wrapper = React.memo(({ children, id }: { children: React.ReactNode; id?: 
       </Text>
       <Button className="rounded-full h-7 px-3" onPress={() => router.push(`/tabs/(tabs)/tasks/createTask?topicId=${id}`)}>
         <Text className="text-sm" style={{ color: Colors.main.textPrimary }}>
-          {t('task_detail.add_task')}
+          {t('event.create_task')}
         </Text>
       </Button>
     </HStack>

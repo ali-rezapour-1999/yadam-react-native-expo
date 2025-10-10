@@ -32,7 +32,7 @@ const TaskAdvancedFields: React.FC<TaskAdvancedFieldsProps> = ({ control }) => {
             <TextareaInput
               value={field.value}
               onChangeText={field.onChange}
-              placeholder={t('todos.write_description_todo')}
+              placeholder={t('common.placeholder.description_task')}
               placeholderTextColor={Colors.main.textSecondary}
               className="text-base"
               style={styles.textInput}

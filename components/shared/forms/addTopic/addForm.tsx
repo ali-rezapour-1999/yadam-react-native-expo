@@ -16,7 +16,7 @@ interface AddTaskFormProps {
   autoFocus?: boolean;
 }
 
-export const AddTaskForm = ({ value, onChange, error, placeholder, style, autoFocus }: AddTaskFormProps) => {
+export const AddForm = ({ value, onChange, error, placeholder, style, autoFocus }: AddTaskFormProps) => {
   return (
     <FormControl
       isInvalid={!!error}
@@ -32,7 +32,7 @@ export const AddTaskForm = ({ value, onChange, error, placeholder, style, autoFo
       ]}
     >
       <Box className="">
-        <Text>{t('todos.title_form_todo')}</Text>
+        <Text>{t('common.form.title')}</Text>
       </Box>
       <Input style={[styles.inputContainer, style]}>
         <InputField

@@ -20,7 +20,7 @@ export const TopicAdvancedFields: React.FC<TopicAdvancedFieldsProps> = ({ contro
         name="description"
         render={({ field, fieldState }) => (
           <VStack style={styles.description}>
-            <Text style={{ color: Colors.main.textPrimary }}>{t('profile.description')}</Text>
+            <Text style={{ color: Colors.main.textPrimary }}>{t('common.form.description')}</Text>
             <Textarea
               className="my-4 w-full rounded-lg px-4 h-[100px]"
               style={{
@@ -36,7 +36,7 @@ export const TopicAdvancedFields: React.FC<TopicAdvancedFieldsProps> = ({ contro
               <TextareaInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder={t('activity.write_description_topic')}
+                placeholder={t('common.placeholder.description_topic')}
                 className="h-10 items-start text-[14px]"
                 style={{ textAlignVertical: 'top', color: Colors.main.textPrimary }}
                 placeholderTextColor={Colors.main.primaryLight}

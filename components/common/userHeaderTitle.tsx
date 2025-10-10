@@ -27,7 +27,7 @@ const UserHeaderTitle = memo(() => {
         <Heading className="font-bold" size="lg" style={{ color: Colors.main.textPrimary }}>
           {displayName}
         </Heading>
-        <Text style={{ color: Colors.main.textSecondary }}>{t('home.lets_make_this_day_productive')}</Text>
+        <Text style={{ color: Colors.main.textSecondary }}>{t('home.make_day_productive')}</Text>
       </VStack>
 
       <Link href="/tabs/(profile)">

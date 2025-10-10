@@ -78,16 +78,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.main.background,
     width: '100%',
-    paddingBottom: 10,
+    paddingBottom: 8,
   },
   innerContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 16,
+    gap: 10
   },
   backButton: {
-    height: 42,
-    width: 42,
+    height: 52,
+    width: 52,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',

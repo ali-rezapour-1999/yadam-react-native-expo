@@ -7,7 +7,7 @@ import { t } from 'i18next';
 import { Box } from '@/components/ui/box';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Controller } from 'react-hook-form';
-import { AddTaskForm } from '@/components/shared/forms/addTask/taskForm';
+import { AddForm } from '@/components/shared/forms/addTopic/addForm';
 import CategoryPicker from '@/components/shared/categorySelector';
 import { Category } from '@/constants/Category';
 import { TopicAdvancedFields } from '@/components/shared/forms/topciAdvancedField';
@@ -36,11 +36,11 @@ const CreateTopics = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}>
         <VStack className="flex-1 p-4 gap-4">
-          <HeaderTitle title={t('activity.create_topics')} />
+          <HeaderTitle title={t('event.create_topics')} />
           <Controller
             name="title"
             control={control}
-            render={({ field }) => <AddTaskForm autoFocus style={{ height: 40 }} value={field.value} placeholder={t('event.title')} onChange={field.onChange} error={errors.title?.message} />}
+            render={({ field }) => <AddForm autoFocus style={{ height: 40 }} value={field.value} placeholder={t('common.placeholder.title_place_holder')} onChange={field.onChange} error={errors.title?.message} />}
           />
 
           <Controller
@@ -48,13 +48,13 @@ const CreateTopics = () => {
             control={control}
             render={({ field, fieldState }) => <CategoryPicker selectedCategory={field.value} onCategorySelect={field.onChange} categories={Category} error={fieldState.error} />}
           />
-          <ModalOption title={t('category.add_new_category')} style={{ padding: 16 }}>
+          <ModalOption title={t('event.options')} style={{ padding: 16 }}>
             <TopicAdvancedFields control={control} />
             <Controller
               name="isPublic"
               control={control}
               render={({ field }) => (
-                <HStack className="items-center justify-between border-b-2 px-1 mt-3" style={{ borderColor: Colors.main.border }}>
+                <HStack className="items-center justify-between border-bP-2 px-1 mt-3" style={{ borderColor: Colors.main.border }}>
                   <Text style={{ color: Colors.main.textPrimary }} className="text-lg">
                     {t('event.is_public')}
                   </Text>

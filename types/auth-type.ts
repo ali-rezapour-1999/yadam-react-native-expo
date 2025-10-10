@@ -38,7 +38,7 @@ export type AuthStateType = {
   token: string | null;
   language: 'fa' | 'en';
   calender: 'jalali' | 'gregorian';
-  hideTabBar: boolean;
+  hideScroll: boolean;
   addInTimeTodoDrawer: boolean;
 
   setIsSendCode: (val: boolean) => void;

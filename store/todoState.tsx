@@ -1,10 +1,10 @@
-import { TaskStatus } from '@/constants/TaskEnum';
-import { create } from 'zustand';
-import { Task, TaskWithCategory } from '@/types/database-type';
-import { taskStorage } from '@/storage/database';
-import { useAppStore } from './appState';
-import { generateTasksWithAi } from '@/api/aiRequest';
-import { mapTaskFromBackend } from '@/utils/taskConverter';
+import { TaskStatus } from "@/constants/TaskEnum";
+import { create } from "zustand";
+import { Task, TaskWithCategory } from "@/types/database-type";
+import { taskStorage } from "@/storage/database";
+import { useAppStore } from "./appState";
+import { generateTasksWithAi } from "@/api/aiRequest";
+import { mapTaskFromBackend } from "@/utils/taskConverter";
 
 export interface TodoState {
   task: TaskWithCategory | null;
@@ -36,7 +36,7 @@ export interface TodoState {
   createWithAi: (description: string) => Promise<void>;
 }
 
-const getCurrentDate = (): string => new Date().toISOString().split('T')[0];
+const getCurrentDate = (): string => new Date().toISOString().split("T")[0];
 
 export const useTodoStore = create<TodoState>((set, get) => ({
   task: null,
@@ -80,15 +80,17 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       }
       set({ tasks });
     } catch (error) {
-      console.error('Failed to load tasks:', error);
+      console.error("Failed to load tasks:", error);
     }
   },
 
   getAllTask: async (): Promise<Task[]> => {
     try {
-      return await taskStorage.getAllTaskByUserId(useAppStore.getState().user?.id as string);
+      return await taskStorage.getAllTaskByUserId(
+        useAppStore.getState().user?.id as string
+      );
     } catch (error) {
-      console.error('Failed to load tasks:', error);
+      console.error("Failed to load tasks:", error);
       return [];
     }
   },
@@ -103,12 +105,17 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         for (let i = 1; i <= 7; i++) {
           const nextDate = new Date(baseDate);
           nextDate.setDate(baseDate.getDate() + i);
-          const weekdayName = nextDate.toLocaleDateString('en-US', { weekday: 'long' });
-          if (task.reminderDays.includes(weekdayName) && nextDate.toISOString().split('T')[0] !== task.date) {
+          const weekdayName = nextDate.toLocaleDateString("en-US", {
+            weekday: "long",
+          });
+          if (
+            task.reminderDays.includes(weekdayName) &&
+            nextDate.toISOString().split("T")[0] !== task.date
+          ) {
             const clonedTask: Task = {
               ...task,
               id: new Date().toTimeString(),
-              date: nextDate.toISOString().split('T')[0],
+              date: nextDate.toISOString().split("T")[0],
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             };
@@ -120,7 +127,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       await state.getTodayAllTask();
       set({ isLoading: false });
     } catch (error) {
-      console.error('Failed to create task:', error);
+      console.error("Failed to create task:", error);
       set({ isLoading: false });
       throw error;
     }
@@ -135,15 +142,19 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       await state.getTodayAllTask();
       set({ isLoading: false });
     } catch (error) {
-      console.error('Failed to update task:', error);
+      console.error("Failed to update task:", error);
       set({ isLoading: false });
       throw error;
     }
   },
 
   getCompletionPercentage: async () => {
-    const validTasks = await taskStorage.loadTasksByDateStatus(getCurrentDate());
-    const completedTasks = await taskStorage.loadTasksByDateStatus(getCurrentDate(), TaskStatus.COMPLETED);
+    const validTasks =
+      await taskStorage.loadTasksByDateStatus(getCurrentDate());
+    const completedTasks = await taskStorage.loadTasksByDateStatus(
+      getCurrentDate(),
+      TaskStatus.COMPLETED
+    );
     if (validTasks.length === 0) return 0;
     return Math.round((completedTasks.length / validTasks.length) * 100);
   },
@@ -153,18 +164,21 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       const tasks = await taskStorage.loadTasksByDateStatus(getCurrentDate());
       set({ todayTasks: tasks });
     } catch (error) {
-      console.error('Failed to load today tasks:', error);
+      console.error("Failed to load today tasks:", error);
     }
   },
 
   getTaskByTopicIdAndDate: async (categoryId: string) => {
     set({ isLoading: true });
     try {
-      const tasks = await taskStorage.loadTasksByDateTopic(getCurrentDate(), categoryId);
+      const tasks = await taskStorage.loadTasksByDateTopic(
+        getCurrentDate(),
+        categoryId
+      );
       set({ todayTasks: tasks, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
-      console.error('Failed to load today tasks:', error);
+      console.error("Failed to load today tasks:", error);
     }
   },
 
@@ -180,7 +194,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       });
     } catch (error) {
       set({ isLoading: false });
-      console.error('Failed to load today tasks:', error);
+      console.error("Failed to load today tasks:", error);
     }
   },
 
@@ -190,7 +204,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       const task = await taskStorage.getTaskById(id);
       set({ task, isLoading: false });
     } catch (error) {
-      console.error('Failed to load task:', error);
+      console.error("Failed to load task:", error);
       set({ isLoading: false });
     }
   },
@@ -203,26 +217,28 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       await state.loadTasks(state.selectedDate);
       set({ isLoading: false });
     } catch (error) {
-      console.error('Failed to remove task:', error);
+      console.error("Failed to remove task:", error);
       set({ isLoading: false });
     }
   },
-  createWithAi: async (description: string) => {
+  createWithAi: async (description: string|undefined) => {
     set({ isLoading: true });
 
-    const todoStore = require('./todoState').useTodoStore.getState();
+    const todoStore = require("./todoState").useTodoStore.getState();
     try {
-      const tasks = await generateTasksWithAi(description, useAppStore.getState().token as string);
+      const tasks = await generateTasksWithAi(
+        description,
+        useAppStore.getState().token as string
+      );
       if (tasks.success) {
         tasks.data.forEach((task: any) => {
           todoStore.createTask(mapTaskFromBackend(task));
         });
       }
     } catch (error) {
-      console.error('Failed to create task:', error);
+      console.error("Failed to create task:", error);
       throw error;
-    }
-    finally {
+    } finally {
       set({ isLoading: false });
     }
   },

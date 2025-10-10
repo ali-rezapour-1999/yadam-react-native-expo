@@ -175,7 +175,7 @@ const SelectYearWithMonth: React.FC<SelectYearWithMonthProps> = ({ selectedYear,
               </Box>
 
               <Button onPress={handleDrawerClose} className="mt-4 h-14 rounded-xl w-full" style={{ backgroundColor: Colors.main.button }}>
-                <ButtonText className="text-white text-lg">{t('button.confirm')}</ButtonText>
+                <ButtonText className="text-white text-lg">{t('common.button.confirm')}</ButtonText>
               </Button>
             </VStack>
           </DrawerBody>

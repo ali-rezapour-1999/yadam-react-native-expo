@@ -27,7 +27,7 @@ export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, error
       <Controller
         name="title"
         control={control}
-        render={({ field }) => <AddTodoForm autoFocus style={{ height: 40 }} value={field.value} placeholder={t('event.title')} onChange={field.onChange} error={errors.title?.message} />}
+        render={({ field }) => <AddTodoForm autoFocus style={{ height: 40 }} value={field.value} placeholder={t('common.placeholder.title_place_holder')} onChange={field.onChange} error={errors.title?.message} />}
       />
 
       <VStack style={styles.fieldsContainer}>

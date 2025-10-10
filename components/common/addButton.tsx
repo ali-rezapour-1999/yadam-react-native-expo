@@ -88,8 +88,8 @@ const AddButton: React.FC = memo(() => {
     transition: { type: 'spring' as 'spring', damping: 30, stiffness: 400 },
   };
 
-  const addTaskText = useMemo(() => t('button.add_task'), []);
-  const addByAiText = useMemo(() => t('activity.create_topics'), []);
+  const addTaskText = useMemo(() => t('event.create_task'), []);
+  const addByAiText = useMemo(() => t('event.create_topics'), []);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);

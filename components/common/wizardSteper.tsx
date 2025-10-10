@@ -12,10 +12,10 @@ const WizardStepper = () => {
   const { t } = useTranslation();
   const { language } = useAppStore();
   const stepLabels = [
-    t('onboarding.Information'),
-    t('onboarding.Goal'),
-    t('onboarding.Lifestyle'),
-    t('onboarding.Priority'),
+    t('onboarding.information'),
+    t('onboarding.goals'),
+    t('onboarding.lifestyle'),
+    t('onboarding.priority'),
   ];
   const { step: currentStep } = useWizardStore();
 

@@ -177,7 +177,7 @@ const Home = () => {
 
   const handleGenerateTasks = useCallback(async (description?: string) => {
 
-    await createWithAi();
+    await createWithAi(description as string);
   }, [createWithAi]);
 
   const handleRequireLogin = useCallback(() => {

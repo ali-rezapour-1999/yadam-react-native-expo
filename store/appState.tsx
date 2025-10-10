@@ -17,13 +17,13 @@ export const useAppStore = create<AuthStateType>()(
       language: 'en',
       user: null,
       token: null,
-      hideTabBar: false,
+      hideScroll: false,
       addInTimeTodoDrawer: false,
       isSendCode: false,
       calender: 'jalali',
 
       setIsSendCode: (isSendCode) => set({ isSendCode }),
-      setHideTabBar: (bool) => set({ hideTabBar: bool }),
+      setHideTabBar: (bool) => set({ hideScroll: bool }),
       setCalender: (calender) => set({ calender }),
       setAddInTimeTodoDrawer: (bool) => set({ addInTimeTodoDrawer: bool }),
 
@@ -84,7 +84,6 @@ export const useAppStore = create<AuthStateType>()(
       sendMassage: async (identifier: string): Promise<Result> => {
         set({ isLoading: true });
         const result = await sendMassageAction(identifier);
-        console.log(result);
         if (result.success) {
           set({ isSendCode: true });
         }

@@ -47,7 +47,7 @@ const TimeDeffrence = ({ startTime, endTime }: { startTime: string; endTime: str
           }}
         >
           <Text className="text-sm " style={{ color: Colors.main.primary }}>
-            {t('event.time_deffrence')}: {timeDifference}
+            {t('todos.time_deffrence')}: {timeDifference}
           </Text>
         </Box>
       </Box>

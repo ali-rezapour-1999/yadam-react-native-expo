@@ -22,9 +22,9 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const profileItem = [
-  { title: 'button.edit_account', icon: EditIcon, path: '/tabs/(wizardForm)/stepOne' },
+  { title: 'profile.edit_account', icon: EditIcon, path: '/tabs/(wizardForm)/stepOne' },
   { title: 'profile.setting', icon: Settings, path: '/tabs/(wizardForm)' },
-  { title: 'profile.about_cocheck', icon: Info, path: '/tabs/(profile)/aboutMe' },
+  { title: 'profile.about_yadam', icon: Info, path: '/tabs/(profile)/aboutMe' },
 ];
 
 const Profile = () => {
@@ -52,10 +52,10 @@ const Profile = () => {
 
         {
           isLogin ?
-            <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.lightBlue, height: 50, width: 50 }} onCloseProps={() => setIsSyncOpen(!isSyncOpen)} modalBodyStyle={{ paddingHorizontal: 20 }} isOpenProps={isSyncOpen}>
+            <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.lightBlue, height: 50, width: 50 }} onChangeVisible={() => setIsSyncOpen(!isSyncOpen)} modalBodyStyle={{ paddingHorizontal: 20 }} visible={isSyncOpen}>
               <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('todos.sync_data_description')}</Text>
               <Button onPress={syncDataHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-md mt-5'>
-                {isLoading ? <Loading /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('button.accept')}</ButtonText>}
+                {isLoading ? <Loading /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('common.button.confirm')}</ButtonText>}
               </Button>
             </AppModal>
             : null
@@ -106,7 +106,7 @@ const Profile = () => {
           ))}
 
           {isLogin ?
-            <AppModal title={t("event.logout")} onCloseProps={setIsOpen} isOpenProps={isOpen} buttonContent={
+            <AppModal title={t("event.logout")} onChangeVisible={setIsOpen} visible={isOpen} buttonContent={
               <>
                 <Text className="text-xl" style={{ color: Colors.main.textPrimary }}>
                   {t('event.logout')}

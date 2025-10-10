@@ -57,7 +57,7 @@ function SelectDrawer({ selectedValue, setSelectedValue }: { selectedValue: stri
                 onPress={() => handleSelect(option.value)}
                 className="mt-1 h-14 rounded-xl gap-3"
                 style={{
-                  backgroundColor: selectedValue === option.value ? Colors.main.button : Colors.main.textSecondary,
+                  backgroundColor: selectedValue === option.value ? Colors.main.button : Colors.main.border,
                 }}
               >
                 <ButtonText className={`text-lg ${selectedValue === option.value ? 'text-white' : 'text-black'}`}>{t(option.label)}</ButtonText>

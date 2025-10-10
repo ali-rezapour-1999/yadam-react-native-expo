@@ -1,148 +1,203 @@
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Pressable } from '../ui/pressable';
-import { Colors } from '@/constants/Colors';
-import React, { useCallback, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { MotiView, motify } from 'moti';
-import { interpolateColor, useSharedValue, withTiming } from 'react-native-reanimated';
-import AddButton from './addButton';
-import { Box } from '../ui/box';
+import React, { useCallback, useMemo, useEffect } from "react";
+import { View, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { MotiView, motify } from "moti";
+import {
+  interpolateColor,
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+
+import { Colors } from "@/constants/Colors";
+import { Pressable } from "../ui/pressable";
+import { Box } from "../ui/box";
+import AddButton from "./addButton";
+import { useAppStore } from "@/store/appState";
+
+const ANIMATION_DURATION = 150;
+const TAB_HEIGHT = 60;
+
+const MotiPressable = motify(Pressable)();
 
 interface TabBarIconProps {
   focused: boolean;
   color: string;
   size: number;
 }
-
 type TabBarIcon = React.ComponentType<TabBarIconProps>;
 
-const MotiPressable = motify(Pressable)();
+/* ---------------------- Tab Button Component ---------------------- */
+const TabButton = React.memo(
+  ({
+    route,
+    isFocused,
+    onPress,
+    IconComponent,
+  }: {
+    route: any;
+    isFocused: boolean;
+    onPress: () => void;
+    IconComponent?: TabBarIcon;
+  }) => {
+    const animatedValue = useSharedValue(isFocused ? 1 : 0);
 
-const ANIMATION_DURATION = 150;
-const TAB_HEIGHT = 60;
+    useEffect(() => {
+      animatedValue.value = withTiming(isFocused ? 1 : 0, {
+        duration: ANIMATION_DURATION,
+      });
+    }, [isFocused]);
 
-const TabButton = React.memo<{
-  route: any;
-  index: number;
-  isFocused: boolean;
-  onPress: () => void;
-  IconComponent?: TabBarIcon;
-}>(({ route, isFocused, onPress, IconComponent }) => {
-  const animatedValue = useSharedValue(isFocused ? 1 : 0);
+    const color = interpolateColor(
+      animatedValue.value,
+      [0, 1],
+      [Colors.main.primaryLight, Colors.main.primary]
+    );
 
-  React.useEffect(() => {
-    animatedValue.value = withTiming(isFocused ? 1 : 0, {
-      duration: ANIMATION_DURATION,
-    });
-  }, [isFocused, animatedValue]);
+    return (
+      <MotiPressable
+        key={route.key}
+        onPress={onPress}
+        style={styles.tabButton}
+        animate={{ scale: isFocused ? 1.1 : 1 }}
+        transition={{ type: "timing", duration: ANIMATION_DURATION }}
+      >
+        {IconComponent && (
+          <IconComponent focused={isFocused} color={color} size={28} />
+        )}
+      </MotiPressable>
+    );
+  }
+);
 
-  const animatedStyle = useMemo(
-    () => ({
-      color: interpolateColor(animatedValue.value, [0, 1], [Colors.main.primaryLight, Colors.main.primary]),
-    }),
-    [animatedValue],
-  );
+TabButton.displayName = "TabButton";
 
-  return (
-    <MotiPressable key={route.key} onPress={onPress} style={styles.tabButton} animate={{ scale: isFocused ? 1.1 : 1 }} transition={{ type: 'timing', duration: ANIMATION_DURATION }}>
-      {IconComponent && <IconComponent focused={isFocused} color={animatedStyle.color} size={28} />}
-    </MotiPressable>
-  );
-});
-
-TabButton.displayName = 'TabButton';
-
-export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+/* ---------------------- Main Custom TabBar ---------------------- */
+export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
+  state,
+  descriptors,
+  navigation,
+}) => {
   const insets = useSafeAreaInsets();
+  const { hideScroll } = useAppStore();
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: withTiming(hideScroll ? 100 : 0, { duration: 150 }) },
+    ],
+    opacity: withTiming(hideScroll ? 0 : 1, { duration: 150 }),
+  }));
   const visibleRoutes = useMemo(
     () =>
       state.routes.filter(
         (route) =>
-          route.name !== 'addTodoAi' &&
-          route.name !== 'tasks/createTask' &&
-          route.name !== 'tasks/detail/[id]' &&
-          route.name !== 'tasks/edit/[id]' &&
-          route.name !== 'topics/createTopics' &&
-          route.name !== 'topics/edit/[id]' &&
-          route.name !== 'topics/detail/[id]',
+          ![
+            "addTodoAi",
+            "tasks/createTask",
+            "tasks/detail/[id]",
+            "tasks/edit/[id]",
+            "topics/createTopics",
+            "topics/edit/[id]",
+            "topics/detail/[id]",
+          ].includes(route.name)
       ),
-    [state.routes],
+    [state.routes]
   );
+
   const hideTabBar = useMemo(
     () =>
-      state.routes[state.index].name === 'tasks/detail/[id]' ||
-      state.routes[state.index].name === 'tasks/createTask' ||
-      state.routes[state.index].name === 'tasks/edit/[id]' ||
-      state.routes[state.index].name === 'topics/createTopics' ||
-      state.routes[state.index].name === 'topics/detail/[id]' ||
-      state.routes[state.index].name === 'topics/edit/[id]',
-    [state.routes, state.index],
+      [
+        "tasks/detail/[id]",
+        "tasks/createTask",
+        "tasks/edit/[id]",
+        "topics/createTopics",
+        "topics/detail/[id]",
+        "topics/edit/[id]",
+      ].includes(state.routes[state.index].name),
+    [state.routes, state.index]
   );
 
   const handleTabPress = useCallback(
     (routeName: string, isFocused: boolean) => {
-      if (!isFocused) {
-        navigation.navigate(routeName);
-      }
+      if (!isFocused) navigation.navigate(routeName);
     },
-    [navigation],
+    [navigation]
   );
 
   const containerStyle = useMemo(
     () => ({
       bottom: insets.bottom + 14,
-      backgroundColor: Colors.main.cardBackground,
+      backgroundColor: Colors.main.border,
       borderRadius: 16,
     }),
-    [insets.bottom],
+    [insets.bottom]
   );
 
 
   return (
-    <Box className="relative" style={{ backgroundColor: Colors.main.background, direction: 'ltr' }}>
+    <Box
+      className="relative"
+      style={{
+        backgroundColor: Colors.main.background,
+        direction: "ltr",
+        display: hideTabBar ? "none" : "flex",
+      }}
+    >
       <MotiView
-        style={[styles.container, containerStyle, { display: hideTabBar ? 'none' : 'flex', direction: 'ltr' }]}
-        animate={{ translateY: 0 }}
-        from={{ translateY: 100 }}
-        transition={{ type: 'timing', duration: 300 }}
+        style={[styles.container, containerStyle, animatedStyle]}
+        transition={{ type: "timing", duration: 300 }}
       >
         <View style={styles.tabContainer}>
-          {visibleRoutes.map((route, index) => {
+          {visibleRoutes.map((route) => {
             const { options } = descriptors[route.key];
             const isFocused = state.index === state.routes.indexOf(route);
             const IconComponent = options.tabBarIcon;
 
-            return <TabButton key={route.key} route={route} index={index} isFocused={isFocused} onPress={() => handleTabPress(route.name, isFocused)} IconComponent={IconComponent} />;
+            return (
+              <TabButton
+                key={route.key}
+                route={route}
+                isFocused={isFocused}
+                onPress={() => handleTabPress(route.name, isFocused)}
+                IconComponent={IconComponent}
+              />
+            );
           })}
         </View>
 
-        <Box style={{ display: hideTabBar ? 'none' : 'flex', marginRight: -14 }}>
+        <Box
+          style={{
+            display: hideTabBar ? "none" : "flex",
+            marginRight: -14,
+          }}
+        >
           <AddButton />
         </Box>
-      </MotiView >
-    </Box >
+      </MotiView>
+    </Box>
   );
 };
 
+/* ---------------------- Styles ---------------------- */
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     height: TAB_HEIGHT,
     marginHorizontal: 50,
   },
   tabContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 17,
     paddingHorizontal: 10,
     flex: 1,
   },
   tabButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 16,
     height: TAB_HEIGHT,
   },

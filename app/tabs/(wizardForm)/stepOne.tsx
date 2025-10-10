@@ -82,14 +82,14 @@ const StepOne = () => {
       <KeyboardAvoidingView className="flex-1" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Controller
           render={({ field, fieldState }) => (
-            <StepForm title={t('profile.first_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('profile.first_name_placeholder')} />
+            <StepForm title={t('profile.first_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.first_name_placeholder')} />
           )}
           name="firstname"
           control={control}
         />
         <Controller
           render={({ field, fieldState }) => (
-            <StepForm title={t('profile.last_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('profile.last_name_placeholder')} />
+            <StepForm title={t('profile.last_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.last_name_placeholder')} />
           )}
           name="lastname"
           control={control}
@@ -99,7 +99,7 @@ const StepOne = () => {
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
-                <StepForm title={t('profile.weight')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('profile.weight_placeholder')} />
+                <StepForm title={t('profile.weight')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.weight_placeholder')} />
               )}
               name="weight"
               control={control}
@@ -108,7 +108,7 @@ const StepOne = () => {
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
-                <StepForm title={t('profile.height')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('profile.height_placeholder')} />
+                <StepForm title={t('profile.height')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.height_placeholder')} />
               )}
               name="height"
               control={control}
@@ -119,7 +119,7 @@ const StepOne = () => {
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
-                <StepForm title={t('profile.age')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('profile.age_placeholder')} />
+                <StepForm title={t('profile.age')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.age_placeholder')} />
               )}
               name="age"
               control={control}
@@ -153,7 +153,7 @@ const StepOne = () => {
                 <TextareaInput
                   value={field.value}
                   onChangeText={field.onChange}
-                  placeholder={t('profile.write_description_placeholder')}
+                  placeholder={t('common.placeholder.write_description_placeholder')}
                   className="h-10 items-start text-[12]"
                   style={{ textAlignVertical: 'top', color: Colors.main.textPrimary }}
                   placeholderTextColor={Colors.main.textSecondary}

@@ -38,7 +38,7 @@ const NoTopicsImage = () => (
   <Box className="items-center justify-center overflow-hidden">
     <Image source={noTopics} contentFit="contain" style={{ width: 300, height: 300 }} />
     <Text className="text-center text-lg mt-5" style={{ color: Colors.main.textPrimary }}>
-      {t('activity.not_topics')}
+      {t('activity.no_topics')}
     </Text>
   </Box>
 );
