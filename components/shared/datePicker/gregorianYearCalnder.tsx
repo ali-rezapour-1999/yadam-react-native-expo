@@ -130,13 +130,11 @@ const GregorianYearCalendar: React.FC<GregorianYearCalendarProps> = ({ selectedD
 
   return (
     <>
-      <Button onPress={handleDrawerOpen} className="rounded-lg w-full flex items-center justify-between h-12" style={{ backgroundColor: Colors.main.cardBackground }}>
-        <ButtonText
-          className="text-md"
-          style={{
-            color: selectedDate ? Colors.main.textSecondary : Colors.main.primaryLight,
-          }}
-        >
+      <Button onPress={handleDrawerOpen}
+        style={{ backgroundColor: Colors.main.primary + 30, borderColor: Colors.main.primary, borderWidth: 2 }}
+        className="rounded-lg h-[48px] w-full justify-between px-8 mt-3"
+      >
+        <ButtonText className='text-lg'>
           {buttonText}
         </ButtonText>
         <CalenderIcon />
