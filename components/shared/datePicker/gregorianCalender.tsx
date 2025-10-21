@@ -28,8 +28,8 @@ const getDateStr = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-const generateWeekDays = (): DayItem[] => {
-  const today = new Date();
+const generateWeekDays = (newDate: string): DayItem[] => {
+  const today = newDate ? new Date(newDate) : new Date();
   const todayStr = getDateStr(today);
   const currentDayOfWeek = today.getDay();
   const daysToMonday = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
@@ -55,7 +55,7 @@ const generateWeekDays = (): DayItem[] => {
 };
 
 const GregorianWeekCalendar: React.FC<Props> = ({ selectedDate, setSelectedDate }) => {
-  const days = useMemo(() => generateWeekDays(), []);
+  const days = useMemo(() => generateWeekDays(selectedDate!), [selectedDate]);
   const flatListRef = useRef<FlatList>(null);
 
 

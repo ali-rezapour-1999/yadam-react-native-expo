@@ -19,12 +19,12 @@ import { Colors } from '@/constants/Colors';
 import AppModal from '@/components/common/appModal';
 import { Loading } from '@/components/common/loading';
 import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
-import JalaliYearCalendar from '@/components/shared/datePicker/jalaliYearCalnder';
 
 // Stores & Hooks
 import { useTodoStore } from '@/store/todoState';
 import { useAppStore } from '@/store/appState';
 import { useDateTime } from '@/hooks/useDateTime';
+import YearCalendar from '@/components/shared/forms/yearCalender';
 
 // Lazy Load Components
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
@@ -85,9 +85,7 @@ const HeaderComponent = React.memo(
 
         {/* Year / Month Selectors */}
         <VStack className="mt-5">
-          <HStack className="items-center">
-            <JalaliYearCalendar selectedDate={selectedDate as string} setSelectedDate={setDateTimeSelectedDate} />
-          </HStack>
+          <YearCalendar selectedDate={selectedDate as string} setSelectedDate={setDateTimeSelectedDate} />
 
           {/* Weekly Picker */}
           <WeeklyDatePicker
@@ -103,12 +101,6 @@ const HeaderComponent = React.memo(
             </Box>
           )}
         </VStack>
-
-        {/* Date Summary */}
-        <HStack className="items-center justify-between mt-5 pb-3">
-          <Text>{isToday ? t('todos.today') : t('todos.select_date')}</Text>
-          <Text>{displayDate}</Text>
-        </HStack>
       </SafeAreaView>
     );
   }

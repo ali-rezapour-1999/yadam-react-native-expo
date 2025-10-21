@@ -9,9 +9,9 @@ interface Props {
 }
 
 const WeeklyDatePicker = memo(({ selectedDate, setSelectedDate }: Props) => {
-  const { language } = useAppStore();
+  const { calender } = useAppStore();
 
-  if (language == 'fa') {
+  if (calender == 'jalali') {
     return <JalaliCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
   }
 
