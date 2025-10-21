@@ -1,17 +1,15 @@
-import React, { memo, useMemo, useRef, useCallback, useEffect } from 'react';
+import React, { memo, useMemo, useCallback } from 'react';
 import { Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import jalaliMoment from 'jalali-moment';
 import { Text } from '@/components/Themed';
 
-const ITEM_WIDTH = 55;
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const ITEM_WIDTH = SCREEN_WIDTH / 8.2;
 
 interface Props {
   selectedDate: string | null;
   setSelectedDate: (date: string) => void;
-  year: string;
-  month: number | string;
 }
 
 interface DayItem {
@@ -21,49 +19,64 @@ interface DayItem {
   isToday: boolean;
 }
 
-const getDayName = (date: Date) => {
-  return date.toLocaleDateString('fa-IR', { weekday: 'short' });
+const getDayName = (date: jalaliMoment.Moment) => {
+  return date.locale('fa').format('ddd');
 };
 
-const generateMonthDays = (year: number, month: number): DayItem[] => {
-  const daysInMonth = jalaliMoment(`${year}-${month}-01`, 'jYYYY-jMM-jDD').jDaysInMonth();
-  const todayStr = jalaliMoment().format('YYYY-MM-DD');
+const generateWeekDays = (newDate: string): DayItem[] => {
+  const today = jalaliMoment(newDate);
+
+  const currentDayOfWeek = today.day();
+
+  const daysToSaturday = (currentDayOfWeek + 1) % 7;
+
+  const startOfWeek = today.clone().subtract(daysToSaturday, 'days');
 
   const days: DayItem[] = [];
-  for (let d = 1; d <= daysInMonth; d++) {
-    const m = jalaliMoment(`${year}-${month}-${d}`, 'jYYYY-jMM-jDD');
+
+  for (let i = 0; i < 7; i++) {
+    const m = startOfWeek.clone().add(i, 'day');
     days.push({
       date: m.format('YYYY-MM-DD'),
-      dayNumber: d,
-      dayName: getDayName(m.toDate()),
-      isToday: m.format('YYYY-MM-DD') === todayStr,
+      dayNumber: parseInt(m.format('jD')),
+      dayName: getDayName(m),
+      isToday: m.isSame(today, 'day'),
     });
   }
+
   return days;
 };
 
-const JalaliCalendar = memo(({ selectedDate, setSelectedDate, year, month }: Props) => {
-  const days = useMemo(() => generateMonthDays(parseInt(year), parseInt(month.toString())), [year, month]);
+const JalaliWeekCalendar = memo(({ selectedDate, setSelectedDate }: Props) => {
+  const days = useMemo(() => generateWeekDays(selectedDate!), [selectedDate]);
 
-  const selectedIndex = useMemo(() => days.findIndex((d) => d.date === selectedDate), [days, selectedDate]);
-  const flatListRef = useRef<FlatList>(null);
-  useEffect(() => {
-    if (selectedIndex >= 0 && flatListRef.current) {
-      flatListRef.current.scrollToIndex({
-        index: selectedIndex,
-        animated: true,
-        viewPosition: -0.3,
-      });
-    }
-  }, [selectedIndex]);
 
   const renderItem = useCallback(
     ({ item }: { item: DayItem }) => {
       const isSelected = item.date === selectedDate;
       return (
-        <TouchableOpacity onPress={() => setSelectedDate(item.date)} style={[styles.dayItem, isSelected && styles.selectedDay, item.isToday && !isSelected && styles.todayDay]} activeOpacity={0.6}>
-          <Text style={[styles.dayName, isSelected ? styles.selectedText : item.isToday ? styles.todayText : styles.dayNameText]}>{item.dayName}</Text>
-          <Text style={[styles.dayNumber, isSelected ? styles.selectedText : styles.dayNumberText]}>{item.dayNumber}</Text>
+        <TouchableOpacity
+          onPress={() => setSelectedDate(item.date)}
+          style={[
+            styles.dayItem,
+            isSelected && styles.selectedDay,
+            item.isToday && !isSelected && styles.todayDay,
+          ]}
+          activeOpacity={0.7}>
+          <Text
+            style={[
+              styles.dayName,
+              isSelected ? styles.selectedText : item.isToday ? styles.todayText : styles.dayNameText,
+            ]}>
+            {item.dayName}
+          </Text>
+          <Text
+            style={[
+              styles.dayNumber,
+              isSelected ? styles.selectedText : styles.dayNumberText,
+            ]}>
+            {item.dayNumber}
+          </Text>
           {item.isToday && !isSelected && <View style={styles.todayDot} />}
         </TouchableOpacity>
       );
@@ -74,30 +87,22 @@ const JalaliCalendar = memo(({ selectedDate, setSelectedDate, year, month }: Pro
   return (
     <View style={styles.container}>
       <FlatList
-        ref={flatListRef}
         horizontal
         data={days}
         renderItem={renderItem}
         keyExtractor={(item) => item.date}
         showsHorizontalScrollIndicator={false}
-        getItemLayout={(_, index) => ({
-          length: ITEM_WIDTH,
-          offset: ITEM_WIDTH * index,
-          index,
-        })}
-        initialScrollIndex={selectedIndex >= 0 ? selectedIndex : 0}
+        scrollEnabled={false}
         contentContainerStyle={{
-          paddingHorizontal: (SCREEN_WIDTH - ITEM_WIDTH) / 2,
+          justifyContent: 'space-between',
+          width: "100%",
         }}
       />
-      <View style={styles.progressBarBackground}>
-        <View style={[styles.progressBarFill, { width: `${((selectedIndex + 1) / days.length) * 100}%` }]} />
-      </View>
     </View>
   );
 });
 
-export default JalaliCalendar;
+export default JalaliWeekCalendar;
 
 const styles = StyleSheet.create({
   container: {
@@ -107,10 +112,9 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   dayItem: {
-    width: ITEM_WIDTH,
-    height: 64,
-    borderRadius: 12,
-    marginHorizontal: 2,
+    width: ITEM_WIDTH - 2,
+    height: 60,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.main.border,
@@ -122,11 +126,11 @@ const styles = StyleSheet.create({
   },
   todayDay: {
     borderColor: Colors.main.background,
-    borderWidth: 1.5,
+    borderWidth: 1,
     backgroundColor: Colors.main.primaryDark + 60,
   },
   dayName: {
-    fontSize: 10,
+    fontSize: 11,
     marginBottom: 2,
   },
   dayNameText: {
@@ -137,9 +141,10 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     color: Colors.main.textPrimary,
+    fontWeight: 'bold',
   },
   dayNumber: {
-    fontSize: 17,
+    fontSize: 16,
   },
   dayNumberText: {
     color: Colors.main.textSecondary,
@@ -150,17 +155,5 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 2.5,
     backgroundColor: Colors.main.info,
-  },
-  progressBarBackground: {
-    height: 4,
-    backgroundColor: '#DDD',
-    borderRadius: 2,
-    marginTop: 8,
-    marginHorizontal: 8,
-  },
-  progressBarFill: {
-    height: 4,
-    backgroundColor: Colors.main.primaryDark,
-    borderRadius: 2,
   },
 });

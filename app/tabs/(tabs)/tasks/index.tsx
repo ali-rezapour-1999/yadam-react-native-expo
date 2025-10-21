@@ -19,7 +19,7 @@ import { Colors } from '@/constants/Colors';
 import AppModal from '@/components/common/appModal';
 import { Loading } from '@/components/common/loading';
 import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
-import SelectYearWithMonth from '@/components/shared/forms/selectYearWithMonth';
+import JalaliYearCalendar from '@/components/shared/datePicker/jalaliYearCalnder';
 
 // Stores & Hooks
 import { useTodoStore } from '@/store/todoState';
@@ -37,10 +37,6 @@ const TaskListView = React.lazy(() => import('@/components/shared/taskListView')
 
 const HeaderComponent = React.memo(
   ({
-    selectedYear,
-    setSelectedYear,
-    selectedMonth,
-    setSelectedMonth,
     selectedDate,
     setDateTimeSelectedDate,
     shouldShowTodayButton,
@@ -69,7 +65,7 @@ const HeaderComponent = React.memo(
           {token && (
             <AppModal
               title={t('todos.sync_data')}
-              buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.lightBlue} />}
+              buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.info} />}
               buttonStyle={styles.syncButton}
               modalBodyStyle={{ paddingHorizontal: 10 }}
               visible={isOpen}
@@ -89,22 +85,14 @@ const HeaderComponent = React.memo(
 
         {/* Year / Month Selectors */}
         <VStack className="mt-5">
-          <HStack className="items-center justify-between mb-2">
-            <Text className='text-xl'>{t('todos.day_of_week')}</Text>
-            <SelectYearWithMonth
-              selectedYear={selectedYear}
-              setSelectedYear={setSelectedYear}
-              selectedMonth={selectedMonth}
-              setSelectedMonth={setSelectedMonth}
-            />
+          <HStack className="items-center">
+            <JalaliYearCalendar selectedDate={selectedDate as string} setSelectedDate={setDateTimeSelectedDate} />
           </HStack>
 
           {/* Weekly Picker */}
           <WeeklyDatePicker
             selectedDate={selectedDate as string}
             setSelectedDate={setDateTimeSelectedDate}
-            year={selectedYear}
-            month={selectedMonth}
           />
 
           {shouldShowTodayButton && (
@@ -134,17 +122,7 @@ const HeaderComponent = React.memo(
 
 const Todos = () => {
   const { loadTasks } = useTodoStore();
-  const {
-    selectedYear,
-    setSelectedYear,
-    selectedMonth,
-    setSelectedMonth,
-    selectedDate,
-    setSelectedDate,
-    isCurrentMonth,
-    isToday,
-    goToToday,
-  } = useDateTime();
+  const { setSelectedMonth, selectedDate, setSelectedDate, isCurrentMonth, isToday, goToToday, } = useDateTime();
   const { calender } = useAppStore();
 
   useEffect(() => {
@@ -169,9 +147,6 @@ const Todos = () => {
   return (
     <Box style={styles.pageContainer}>
       <HeaderComponent
-        selectedYear={selectedYear}
-        setSelectedYear={setSelectedYear}
-        selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
         selectedDate={selectedDate}
         setDateTimeSelectedDate={setSelectedDate}
@@ -182,9 +157,9 @@ const Todos = () => {
       />
 
       {/* Task List */}
-        <Suspense fallback={<Loading />}>
-          <TaskListView mode="grouped" />
-        </Suspense>
+      <Suspense fallback={<Loading />}>
+        <TaskListView mode="grouped" />
+      </Suspense>
     </Box>
   );
 };
@@ -227,7 +202,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   syncConfirmButton: {
-    backgroundColor: Colors.main.lightBlue,
+    backgroundColor: Colors.main.info,
     borderRadius: 8,
     marginTop: 20,
   },

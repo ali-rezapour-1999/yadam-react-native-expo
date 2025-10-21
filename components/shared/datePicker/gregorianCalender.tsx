@@ -1,13 +1,11 @@
 import { Colors } from '@/constants/Colors';
-import React, { useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
-const ITEM_WIDTH = 55;
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const ITEM_WIDTH = SCREEN_WIDTH / 8.2;
 
 interface Props {
-  year: number | string;
-  month: number | string;
   selectedDate: string | null;
   setSelectedDate: (date: string) => void;
 }
@@ -30,52 +28,66 @@ const getDateStr = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-const generateMonthDays = (year: number, month: number): DayItem[] => {
-  const daysCount = new Date(year, month, 0).getDate();
+const generateWeekDays = (): DayItem[] => {
   const today = new Date();
   const todayStr = getDateStr(today);
+  const currentDayOfWeek = today.getDay();
+  const daysToMonday = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - daysToMonday);
+
   const days: DayItem[] = [];
 
-  for (let d = 1; d <= daysCount; d++) {
-    const dateObj = new Date(year, month - 1, d);
+  for (let i = 0; i < 7; i++) {
+    const dateObj = new Date(startOfWeek);
+    dateObj.setDate(startOfWeek.getDate() + i);
     const dateStr = getDateStr(dateObj);
+
     days.push({
       date: dateStr,
-      dayNumber: d,
+      dayNumber: dateObj.getDate(),
       dayName: getDayName(dateObj),
       isToday: dateStr === todayStr,
     });
   }
+
   return days;
 };
 
-const GregorianCalendar: React.FC<Props> = ({ year, month, selectedDate, setSelectedDate }) => {
-  const days = useMemo(() => generateMonthDays(parseInt(year.toString()), parseInt(month.toString())), [year, month]);
-  const selectedIndex = useMemo(() => days.findIndex((d) => d.date === selectedDate), [days, selectedDate]);
+const GregorianWeekCalendar: React.FC<Props> = ({ selectedDate, setSelectedDate }) => {
+  const days = useMemo(() => generateWeekDays(), []);
   const flatListRef = useRef<FlatList>(null);
-  useEffect(() => {
-    if (selectedIndex >= 0 && flatListRef.current) {
-      setTimeout(() => {
-        flatListRef.current?.scrollToIndex({
-          index: selectedIndex,
-          animated: true,
-          viewPosition: -0.2,
-        });
-      }, 100);
-    }
-  }, [selectedIndex]);
+
 
   const renderItem = useCallback(
-    ({ item }: { item: DayItem; index: number }) => {
+    ({ item }: { item: DayItem }) => {
       const isSelected = item.date === selectedDate;
       return (
         <TouchableOpacity
           onPress={() => setSelectedDate(item.date)}
-          style={[styles.dayItem, isSelected ? styles.selectedDay : null, item.isToday && !isSelected ? styles.todayDay : null]}
-          activeOpacity={0.5}
+          style={[
+            styles.dayItem,
+            isSelected && styles.selectedDay,
+            item.isToday && !isSelected && styles.todayDay,
+          ]}
+          activeOpacity={0.7}
         >
-          <Text style={[styles.dayName, isSelected ? styles.selectedText : item.isToday ? styles.todayText : styles.dayNameText]}>{item.dayName.toUpperCase()}</Text>
-          <Text style={[styles.dayNumber, isSelected ? styles.selectedText : styles.dayNumberText]}>{item.dayNumber}</Text>
+          <Text
+            style={[
+              styles.dayName,
+              isSelected ? styles.selectedText : item.isToday ? styles.todayText : styles.dayNameText,
+            ]}
+          >
+            {item.dayName.toUpperCase()}
+          </Text>
+          <Text
+            style={[
+              styles.dayNumber,
+              isSelected ? styles.selectedText : styles.dayNumberText,
+            ]}
+          >
+            {item.dayNumber}
+          </Text>
           {item.isToday && !isSelected && <View style={styles.todayDot} />}
         </TouchableOpacity>
       );
@@ -85,22 +97,19 @@ const GregorianCalendar: React.FC<Props> = ({ year, month, selectedDate, setSele
 
   return (
     <View style={styles.container}>
-      <View style={styles.controls}>
-        <FlatList
-          ref={flatListRef}
-          horizontal
-          data={days}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.date}
-          showsHorizontalScrollIndicator={false}
-          getItemLayout={(_, index) => ({ length: ITEM_WIDTH, offset: ITEM_WIDTH * index, index })}
-          initialScrollIndex={selectedIndex >= 0 ? selectedIndex : 0}
-          contentContainerStyle={{ paddingHorizontal: (SCREEN_WIDTH - ITEM_WIDTH) / 2 }}
-        />
-      </View>
-      <View style={styles.progressBarBackground}>
-        <View style={[styles.progressBarFill, { width: `${((selectedIndex + 1) / days.length) * 100}%` }]} />
-      </View>
+      <FlatList
+        ref={flatListRef}
+        horizontal
+        data={days}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.date}
+        showsHorizontalScrollIndicator={false}
+        scrollEnabled={false}
+        contentContainerStyle={{
+          justifyContent: 'space-between',
+          width: "100%",
+        }}
+      />
     </View>
   );
 };
@@ -109,22 +118,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.main.background,
     borderRadius: 16,
-    paddingVertical: 8,
-    marginVertical: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  controls: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    padding: 4,
   },
   dayItem: {
-    width: ITEM_WIDTH,
-    height: 64,
-    borderRadius: 12,
-    marginHorizontal: 2,
+    width: ITEM_WIDTH - 2,
+    height: 60,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.main.border,
@@ -133,17 +132,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main.primaryDark,
     shadowOpacity: 0.4,
     shadowRadius: 6,
-    elevation: 8,
   },
   todayDay: {
-    borderColor: Colors.main.lightBlue,
-    borderWidth: 1.5,
+    borderColor: Colors.main.background,
+    borderWidth: 1,
     backgroundColor: Colors.main.primaryDark + 60,
   },
   dayName: {
-    fontSize: 10,
+    fontSize: 11,
     marginBottom: 2,
-    fontWeight: '600',
   },
   dayNameText: {
     color: Colors.main.textPrimary,
@@ -153,10 +150,10 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     color: Colors.main.textPrimary,
+    fontWeight: 'bold',
   },
   dayNumber: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontSize: 16,
   },
   dayNumberText: {
     color: Colors.main.textSecondary,
@@ -168,18 +165,6 @@ const styles = StyleSheet.create({
     borderRadius: 2.5,
     backgroundColor: Colors.main.info,
   },
-  progressBarBackground: {
-    height: 4,
-    backgroundColor: '#DDD',
-    borderRadius: 2,
-    marginTop: 8,
-    marginHorizontal: 8,
-  },
-  progressBarFill: {
-    height: 4,
-    backgroundColor: Colors.main.primaryDark,
-    borderRadius: 2,
-  },
 });
 
-export default GregorianCalendar;
+export default GregorianWeekCalendar;

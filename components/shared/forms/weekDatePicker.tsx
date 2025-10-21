@@ -6,18 +6,16 @@ import { useAppStore } from '@/store/appState';
 interface Props {
   selectedDate: string;
   setSelectedDate: (date: string) => void;
-  year: string;
-  month: number | string;
 }
 
-const WeeklyDatePicker = memo(({ selectedDate, setSelectedDate, year, month }: Props) => {
+const WeeklyDatePicker = memo(({ selectedDate, setSelectedDate }: Props) => {
   const { language } = useAppStore();
 
-  if (language === 'fa') {
-    return <JalaliCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={year} month={month} />;
+  if (language == 'fa') {
+    return <JalaliCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
   }
 
-  return <GregorianCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={year} month={month} />;
+  return <GregorianCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
 });
 
 WeeklyDatePicker.displayName = 'WeeklyDatePicker';
