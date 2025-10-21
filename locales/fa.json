@@ -41,7 +41,7 @@
         "boost_energy": "افزایش انرژی",
         "improve_sleep": "بهبود خواب",
         "reduce_stress": "کاهش استرس",
-        "build_habits": "ساخت عادت‌های سالم",
+        "build_habits": "اضافه کردن عادت‌های سالم",
         "just_curios": "فقط کنجکاوم",
         "gain_muscle": "عضله سازی و قدرت",
         "improve_nutrition": "بهبود تغذیه",
@@ -117,7 +117,7 @@
     "sub_tasks": "زیر‌فعالیت‌ها"
   },
   "event": {
-    "create_task": "ساخت فعالیت",
+    "create_task": "افزودن فعالیت",
     "select_reminder_days": "انتخاب روزهای یادآوری (اختیاری)",
     "options": "گزینه‌ها بیشتر",
     "clear_storage": "پاک کردن داده‌ها",
@@ -130,7 +130,7 @@
     "logout": "خروج از حساب",
     "edit_email": "ویرایش ایمیل",
     "select_language": "زبان رو انتخاب کن",
-    "create_topics": "ساخت دسته بندی"
+    "create_topics": "افزودن دسته بندی"
   },
   "activity": {
     "title": "موضوع‌ها",
@@ -179,7 +179,8 @@
       "no_data": "چیزی برای نمایش نیست",
       "cancelled_successfully": "فعالیت لغو شد",
       "completed_successfully": "فعالیت انجام شد",
-      "pending_successfully": "فعالیت در انتظار ثبت شد"
+      "pending_successfully": "فعالیت در انتظار ثبت شد",
+      "delete_item" : "از حذف ایتم مربوطه اطمینان دارید؟"
     },
     "placeholder": {
       "first_name_placeholder": "اسمت رو وارد کن",

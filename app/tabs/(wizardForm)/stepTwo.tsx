@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
-import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/Themed';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
@@ -58,7 +57,7 @@ const StepTwo = () => {
 
     <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background, position: 'relative' }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <Box>
+        <Box className='px-2'>
           <WizardStepper />
           <HeaderTitle title={t('onboarding.goal.what_do_you_want_from_cocheck')} />
           <Text className="px-3 mt-3 text-md" style={{ color: Colors.main.textPrimary }}>

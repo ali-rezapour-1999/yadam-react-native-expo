@@ -9,7 +9,6 @@ import DatePicker from '@/components/common/datePicker';
 import { TimePicker } from '@/components/common/timePicker';
 import TimeDeffrence from '@/components/common/timeDeffrence';
 import { AddTodoForm } from './addTodo/todoForm';
-import { Colors } from '@/constants/Colors';
 import { StyleSheet } from 'react-native';
 
 interface TodoBasicFieldsProps {

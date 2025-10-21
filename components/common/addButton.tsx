@@ -71,8 +71,8 @@ const AddButton: React.FC = memo(() => {
   const containerStyle = useMemo(() => [styles.container, isHidden && styles.hidden], [isHidden]);
   const gradientButtonStyle = useMemo(() => [styles.gradientButton, shadowStyles.shadow], []);
 
-  const gradientColors = useMemo(() => [Colors.main.button, Colors.main.lightBlue] as const, []);
-  const gradientColorsIsOpen = useMemo(() => [Colors.main.button, Colors.main.accent] as const, []);
+  const gradientColors = useMemo(() => [Colors.main.button, Colors.main.accent] as const, []);
+  const gradientColorsIsOpen = useMemo(() => [Colors.main.button, Colors.main.border] as const, []);
   const gradientStart = useMemo(() => ({ x: 0, y: 0 }), []);
   const gradientEnd = useMemo(() => ({ x: 1, y: 1 }), []);
 

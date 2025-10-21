@@ -64,7 +64,7 @@ const TabButton = React.memo(
         transition={{ type: "timing", duration: ANIMATION_DURATION }}
       >
         {IconComponent && (
-          <IconComponent focused={isFocused} color={color} size={28} />
+          <IconComponent focused={isFocused} color={color} size={20} />
         )}
       </MotiPressable>
     );
@@ -127,8 +127,8 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
 
   const containerStyle = useMemo(
     () => ({
-      bottom: insets.bottom + 14,
-      backgroundColor: Colors.main.border,
+      bottom: insets.bottom + 5,
+      backgroundColor: Colors.main.cardBackground,
       borderRadius: 16,
     }),
     [insets.bottom]
@@ -146,7 +146,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
     >
       <MotiView
         style={[styles.container, containerStyle, animatedStyle]}
-        transition={{ type: "timing", duration: 300 }}
+        transition={{ type: "timing", duration: 200 }}
       >
         <View style={styles.tabContainer}>
           {visibleRoutes.map((route) => {
@@ -164,16 +164,8 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
               />
             );
           })}
-        </View>
-
-        <Box
-          style={{
-            display: hideTabBar ? "none" : "flex",
-            marginRight: -14,
-          }}
-        >
           <AddButton />
-        </Box>
+        </View>
       </MotiView>
     </Box>
   );
@@ -191,14 +183,13 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 17,
-    paddingHorizontal: 10,
-    flex: 1,
+    justifyContent: "space-between",
+    width: "100%",
+    gap: 14,
+    paddingLeft: 30,
   },
   tabButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 16,
     height: TAB_HEIGHT,
+    justifyContent: "center",
   },
 });

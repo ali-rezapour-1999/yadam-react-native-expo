@@ -13,7 +13,7 @@ const ActiveIcon = ({ focused }: ActiveIconProps) => {
   const animation = useIconAnimation(focused);
 
   const fillColor = getAnimatedColors(animation, Colors.main.primary, 'transparent');
-  const strokeColor = getAnimatedColors(animation, 'transparent', Colors.main.primaryLight);
+  const strokeColor = getAnimatedColors(animation, 'transparent', Colors.main.button);
 
   return (
     <Svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -27,11 +27,11 @@ const ActiveIcon = ({ focused }: ActiveIconProps) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <Path d="M6.14697 14.0231L9.30353 9.92155L12.9041 12.748L15.9932 8.76144" stroke={focused ? Colors.main.primaryLight : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M6.14697 14.0231L9.30353 9.92155L12.9041 12.748L15.9932 8.76144" stroke={focused ? Colors.main.button : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
 
       <Path
         d="M19.5938 0.834955C20.7138 0.834955 21.6208 1.74195 21.6208 2.86199C21.6208 3.98097 20.7138 4.88902 19.5938 4.88902C18.4738 4.88902 17.5668 3.98097 17.5668 2.86199C17.5668 1.74195 18.4738 0.834955 19.5938 0.834955Z"
-        stroke={focused ? Colors.main.primaryLight : Colors.main.textPrimary}
+        stroke={focused ? Colors.main.button : Colors.main.textPrimary}
         strokeWidth="1.58197"
         strokeLinecap="round"
         strokeLinejoin="round"

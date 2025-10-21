@@ -1,5 +1,4 @@
 import { Colors } from '@/constants/Colors';
-import { t } from 'i18next';
 import { router } from 'expo-router';
 import { Text } from '../Themed';
 import { Pressable } from 'react-native';
@@ -12,7 +11,7 @@ const EmptySlot = ({ route, placeholder }: { route?: any; placeholder?: string }
       borderRadius: 12,
       padding: 16,
       borderWidth: 1,
-      borderColor: Colors.main.primaryLight,
+      borderColor: Colors.main.textPrimary,
       borderStyle: 'dashed',
       alignItems: 'center',
       justifyContent: 'center',
@@ -22,7 +21,7 @@ const EmptySlot = ({ route, placeholder }: { route?: any; placeholder?: string }
     <Text
       style={{
         fontSize: 14,
-        color: Colors.main.primaryLight,
+        color: Colors.main.textDisabled,
       }}
     >
       {placeholder}

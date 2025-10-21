@@ -22,7 +22,7 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
   title,
   path,
   isLight = false,
-  size = '2xl',
+  size = 'xl',
   center = false,
 }) => {
   const { language } = useAppStore();
@@ -76,7 +76,6 @@ export default HeaderTitle;
  */
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.main.background,
     width: '100%',
     paddingBottom: 8,
   },
@@ -91,18 +90,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.main.cardBackground,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
   },
   title: {
     flex: 1,

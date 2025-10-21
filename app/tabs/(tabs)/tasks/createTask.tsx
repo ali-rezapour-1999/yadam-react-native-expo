@@ -32,10 +32,7 @@ const CreateTask: React.FC = () => {
   const { selectedDate } = useTodoStore();
   const { user } = useAppStore();
   const { userTopics, loadUserTopics } = useTopicStore();
-  const { topicId: topicIdFromRoute } = useLocalSearchParams<{
-    topicId?: string;
-  }>();
-
+  const { topicId: topicIdFromRoute } = useLocalSearchParams<{ topicId?: string; }>();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isTopicModalVisible, setIsTopicModalVisible] = useState(false);
 

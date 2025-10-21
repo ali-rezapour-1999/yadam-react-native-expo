@@ -82,7 +82,7 @@ const StepTwo = () => {
   return (
     <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <Box>
+        <Box className='px-2'>
           <WizardStepper />
           <HeaderTitle title={t('priorities.title')} />
           <Heading size="lg" className="px-2 mt-4" style={{ color: Colors.main.textPrimary }}>

@@ -3,7 +3,7 @@ import { Result, User } from '@/types/auth-type';
 
 export const updateUserInformationAction = async (data: User, token: string): Promise<Result> => {
   try {
-    const response = await Api.patch('auth/user-update/', data, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await Api.patch('user/update-user/', data, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 200) {
       return {
         success: true,

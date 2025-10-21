@@ -55,7 +55,7 @@ export const TimePicker = memo(({ field, placeholder = '00:00', label, onTimeCha
         style={{
           borderWidth: field.value ? 2 : 0,
           borderColor: field.value ? Colors.main.primary : Colors.main.primaryLight,
-          backgroundColor: field.value ? Colors.main.primary + '40' : Colors.main.lightBlue,
+          backgroundColor: field.value ? Colors.main.primary + '40' : Colors.main.button,
           borderRadius: 12,
         }}
         disabled={disabled}
@@ -69,7 +69,7 @@ export const TimePicker = memo(({ field, placeholder = '00:00', label, onTimeCha
           <Text
             className="text-lg font-medium"
             style={{
-              color: field.value ? Colors.main.primary : Colors.main.textPrimary,
+              color: field.value ? Colors.main.textPrimary : Colors.main.button,
             }}
           >
             {field.value || placeholder}

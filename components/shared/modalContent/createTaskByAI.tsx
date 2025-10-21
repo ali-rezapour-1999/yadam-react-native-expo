@@ -1,10 +1,10 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Colors } from '@/constants/Colors';
 import { t } from 'i18next';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea, TextareaInput } from '@/components/ui/textarea';
 import { Loading } from '@/components/common/loading';
 
 interface Props {
@@ -28,18 +28,23 @@ export const GenerateTaskByAi: React.FC<Props> = ({ onSubmit, isLoading }) => {
         control={control}
         render={({ field }) => (
           <Textarea
-            className="mt-2"
-            style={[styles.textArea]}
-            size="md"
+            className="my-1 w-full rounded-xl h-[130px] px-1"
+            style={{
+              backgroundColor: Colors.main.cardBackground,
+              borderWidth: 1,
+              borderColor: Colors.main.border,
+
+            }}
+            size="sm"
           >
-            <TextInput
+            <TextareaInput
               value={field.value}
               onChangeText={field.onChange}
-              placeholder={t('todos.write_description_todo')}
+              placeholder={t('common.placeholder.write_description_placeholder')}
               placeholderTextColor={Colors.main.textSecondary}
+              style={{ textAlignVertical: 'top', color: Colors.main.textPrimary }}
               multiline
               numberOfLines={4}
-              style={styles.textarea}
             />
           </Textarea>
         )}
@@ -64,23 +69,12 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     flex: 1,
   },
-  textarea: {
-    borderWidth: 1,
-    borderColor: Colors.main.border,
-    borderRadius: 10,
-    padding: 12,
-    color: Colors.main.textPrimary,
-    fontSize: 16,
-    backgroundColor: Colors.main.cardBackground,
-    textAlignVertical: 'top',
-    minHeight: 140,
-  },
   button: {
-    backgroundColor: Colors.main.success,
+    backgroundColor: Colors.main.textPrimary,
     borderRadius: 10,
-    marginTop: 50,
+    marginTop: 20,
     height: 50,
     justifyContent: 'center',
   },
-  buttonText: { color: Colors.main.textPrimary, fontSize: 16 },
+  buttonText: { color: Colors.main.background, fontSize: 16 },
 });

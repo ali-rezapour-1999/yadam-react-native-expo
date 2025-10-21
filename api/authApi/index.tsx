@@ -3,7 +3,7 @@ import api from '../baseApi';
 
 export const sendMassageAction = async (email: string): Promise<Result> => {
   try {
-    const response = await api.post('auth/request-otp/', { email });
+    const response = await api.post('user/request-otp/', { email });
 
     if (response.status === 200) {
       return {
@@ -35,7 +35,7 @@ export const sendMassageAction = async (email: string): Promise<Result> => {
 
 export const sendOtpAction = async (email: string, otp: string): Promise<Result> => {
   try {
-    const response = await api.post('auth/verify-otp/', { email, otp });
+    const response = await api.post('user/verify-otp/', { email, otp });
     if (response.status === 200) {
       return {
         success: true,

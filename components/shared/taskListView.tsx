@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { FlatList } from "react-native";
 import { useGroupedTodos } from "@/hooks/useGroupedTodos";
 import ScheduleCard from "./card/scheduleCard";
 import HiddenItem from "../common/hiddenItem";
@@ -27,10 +26,8 @@ const TaskListView = ({
   const { isLoading, updateTask, todayTasks, tasks } = useTodoStore();
   const groupedTodos = useGroupedTodos(mode === "grouped" ? tasks : []);
   const [swipedRows, setSwipedRows] = useState<Set<string>>(new Set());
-  const [cardSizes, setCardSizes] = useState<
-    Record<string, { width: number; height: number }>
-  >({});
-  const { handleScroll, scrollEventThrottle } = useScrollHandler();
+  const [cardSizes, setCardSizes] = useState<Record<string, { width: number; height: number }>>({});
+  const { handleScroll } = useScrollHandler();
   const { hideScroll } = useAppStore();
 
   const handleUpdateTaskStatus = useCallback(
@@ -73,12 +70,12 @@ const TaskListView = ({
         onPress={() => router.push(`/tabs/(tabs)/tasks/detail/${item.id}`)}
         onLayoutChange={handleCardLayout}
         style={{
-          marginVertical: 3,
-          borderRadius: 0,
+          marginVertical: 2,
+          borderRadius: 10,
         }}
       />
     ),
-    [cardSizes]
+    [handleCardLayout]
   );
 
   const renderHiddenItemWrapper = useCallback(
@@ -127,6 +124,7 @@ const TaskListView = ({
         renderHiddenItem={
           enableSwipeActions ? renderHiddenItemWrapper : undefined
         }
+        className="px-4"
         leftOpenValue={100}
         rightOpenValue={-100}
         keyExtractor={(item) => item.id}

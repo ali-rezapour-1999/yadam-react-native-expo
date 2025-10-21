@@ -10,8 +10,8 @@ import { Button } from '../ui/button';
 
 const Search = ({ onChange, search }: { onChange: any; search: string }) => {
   return (
-    <Box style={styles.container} className="mb-7 mt-3">
-      <Input style={styles.inputContainer} className="rounded-lg h-16 px-3">
+    <Box style={styles.container} className="w-[85%] ">
+      <Input style={styles.inputContainer} className="rounded-lg h-14 px-3">
         <Box className="h-7 w-7">
           <SearchIcons />
         </Box>

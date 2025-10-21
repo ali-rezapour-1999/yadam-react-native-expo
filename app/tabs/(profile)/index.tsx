@@ -1,5 +1,7 @@
 import EditIcon from '@/assets/Icons/EditIcon';
+import HomeIcon from '@/assets/Icons/Home';
 import AppModal from '@/components/common/appModal';
+import HeaderTitle from '@/components/common/headerTitle';
 import { Loading } from '@/components/common/loading';
 import SelectLanguage from '@/components/common/selectLanguage';
 import UserImage from '@/components/common/userImage';
@@ -17,7 +19,7 @@ import { useAppStore } from '@/store/appState';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
-import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon, HomeIcon, FolderSync } from 'lucide-react-native';
+import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon, FolderSync } from 'lucide-react-native';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -45,21 +47,26 @@ const Profile = () => {
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
       {isLogin ? <UsernameInput /> : null}
-      <HStack className="mx-auto my-6 w-[90%]" style={{ justifyContent: 'space-between', alignItems: 'center', direction: 'ltr' }}>
-        <Button style={{ backgroundColor: Colors.main.button, width: 50, height: 50 }} onPress={() => router.push('/tabs/(tabs)')} className="rounded-xl">
-          <HomeIcon color={Colors.main.textPrimary} size={25} />
-        </Button>
 
-        {
-          isLogin ?
-            <AppModal title={t("todos.sync_data")} buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.textPrimary} />} buttonStyle={{ backgroundColor: Colors.main.lightBlue, height: 50, width: 50 }} onChangeVisible={() => setIsSyncOpen(!isSyncOpen)} modalBodyStyle={{ paddingHorizontal: 20 }} visible={isSyncOpen}>
-              <Text style={{ color: Colors.main.textPrimary, fontSize: 18, textAlign: 'center' }}>{t('todos.sync_data_description')}</Text>
-              <Button onPress={syncDataHandler} style={{ backgroundColor: Colors.main.button }} className='rounded-md mt-5'>
-                {isLoading ? <Loading /> : <ButtonText style={{ color: Colors.main.textPrimary, fontSize: 14 }}>{t('common.button.confirm')}</ButtonText>}
+      <HStack className="w-full items-center justify-between px-5">
+        <Box className="w-4/5 flex-1">
+          <HeaderTitle size="lg" />
+        </Box>
+
+        {isLogin ?
+          <AppModal title={t("event.logout")} onChangeVisible={setIsOpen} visible={isOpen} buttonContent={<Icon as={LogOutIcon} size={24} color={Colors.main.background} />}
+            buttonStyle={{ backgroundColor: Colors.main.accent, width: 50, height: 50 }}
+            modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, height: 240, width: "90%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
+            <VStack className='gap-5 justify-between'>
+              <Text className="text-center text-2xl ">{t("profile.logout_message")}</Text>
+              <Button className="w-full h-12 rounded-xl mt-3" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
+                <ButtonText>
+                  <Text>{t("event.logout")}</Text>
+                </ButtonText>
               </Button>
-            </AppModal>
-            : null
-
+            </VStack>
+          </AppModal>
+          : null
         }
       </HStack>
 
@@ -105,29 +112,9 @@ const Profile = () => {
             </Button>
           ))}
 
-          {isLogin ?
-            <AppModal title={t("event.logout")} onChangeVisible={setIsOpen} visible={isOpen} buttonContent={
-              <>
-                <Text className="text-xl" style={{ color: Colors.main.textPrimary }}>
-                  {t('event.logout')}
-                </Text>
-                <Icon as={LogOutIcon} size={28} color={Colors.main.textPrimary} />
-              </>
-            } buttonStyle={{ height: 50, backgroundColor: Colors.main.accent, marginTop: 50 }} modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, height: 240, width: "90%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
-              <VStack className='gap-5 justify-between'>
-                <Text className="text-center text-2xl ">{t("profile.logout_message")}</Text>
-                <Button className="w-full h-12 rounded-xl mt-3" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
-                  <ButtonText>
-                    <Text>{t("event.logout")}</Text>
-                  </ButtonText>
-                </Button>
-              </VStack>
-            </AppModal>
-            : null
-          }
         </VStack>
       </Box>
-      <Button style={{ backgroundColor: Colors.main.border + 80 }} className="h-24 flex-col">
+      <Box style={{ backgroundColor: Colors.main.border + 80 }} className="h-20 items-center flex-col">
         <HStack className="gap-3">
           <Headset size={32} color={Colors.main.textPrimary} />
           <Text className="text-2xl" style={{ color: Colors.main.textPrimary }}>
@@ -139,7 +126,7 @@ const Profile = () => {
             version 0.0.1
           </Text>
         </Center>
-      </Button>
+      </Box>
     </SafeAreaView>
   );
 };

@@ -41,7 +41,7 @@ const DatePicker = <T extends Record<string, any>>({ field, setShowDatePicker, s
         style={{ backgroundColor: Colors.main.primary + 30, borderColor: Colors.main.primary, borderWidth: 2 }}
         className="rounded-lg h-[48px] w-full justify-between px-8 mt-3"
       >
-        <ButtonText style={{ color: Colors.main.primary }}>{field.value ? getDisplayDate(field.value) : t('todos.select_date')}</ButtonText>
+        <ButtonText style={{ color: Colors.main.textPrimary }}>{field.value ? getDisplayDate(field.value) : t('todos.select_date')}</ButtonText>
         <Icon as={CalenderIcon} color={Colors.main.primary} />
       </Button>
       {showDatePicker && (

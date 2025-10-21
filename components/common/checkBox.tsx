@@ -17,11 +17,9 @@ export const Checkbox = ({ checked, onPress }: CheckboxProps) => {
           width: 26,
           height: 26,
           borderRadius: 8,
-          borderWidth: 2,
-          borderColor: checked ? '' : Colors.main.background,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: checked ? Colors.main.primary : 'transparent',
+          backgroundColor: checked ? Colors.main.button : 'transparent',
         }}
         from={{ scale: 0.8, opacity: 0 }}
         animate={{
@@ -44,7 +42,7 @@ export const Checkbox = ({ checked, onPress }: CheckboxProps) => {
             height: 26,
             borderRadius: 8,
             borderWidth: 2,
-            borderColor: Colors.main.primary,
+            borderColor: Colors.main.button,
           }}
           from={{ opacity: 1 }}
           animate={{ opacity: checked ? 0 : 1 }}

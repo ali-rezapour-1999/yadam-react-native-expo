@@ -222,7 +222,7 @@ const TaskDetail = () => {
     );
   }
 
-  const isOwned = user?.id === task.userId;
+  const isOwned = user?.id == task.userId;
 
   return (
     <SafeAreaView style={styles.screenContainer}>
@@ -240,7 +240,7 @@ const TaskDetail = () => {
               </Box>
               {isOwned && (
                 <AppModal
-                  title={t("event.delete")}
+                  title={`${t("common.button.delete")} ${task.title}`}
                   buttonContent={<TrashIcon size={48} />}
                   buttonStyle={{ backgroundColor: "transparent", width: 45 }}
                   modalContentStyle={{ height: 280 }}
@@ -249,7 +249,7 @@ const TaskDetail = () => {
                   visible={isOpen}
                 >
                   <Text style={styles.modalText}>
-                    {t("common.button.delete")}
+                    {t("common.messages.delete_item")}
                   </Text>
 
                   <Button
@@ -274,7 +274,7 @@ const TaskDetail = () => {
                       style={{ color: Colors.main.button }}
                       className="text-xl"
                     >
-                      {t("event.cancel")}
+                      {t("common.button.cancel")}
                     </ButtonText>
                   </Button>
                 </AppModal>
