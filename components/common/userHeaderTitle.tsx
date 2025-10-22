@@ -20,7 +20,7 @@ const capitalizeWords = (str: string) => {
 const UserHeaderTitle = memo(() => {
   const { user } = useAppStore();
 
-  const displayName = user?.first_name && user?.first_name.length > 0 ? `${capitalizeWords(user.first_name)} ${capitalizeWords(user.last_name || '')}`.trim() : t('home.welcome_to_yadam');
+  const displayName = user?.first_name && user?.first_name.length > 0 ? `${capitalizeWords(user.first_name)} ${capitalizeWords(user.last_name || '')}`.trim() : t('home.welcome_to_ding');
   return (
     <HStack className="mb-5 justify-between items-center px-5 mt-12">
       <VStack>

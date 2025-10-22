@@ -1,31 +1,30 @@
 {
   "expo": {
-    "name": "cocheck",
-    "slug": "cocheck",
+    "name": "ding",
+    "slug": "ding",
     "owner": "alirg1999",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
-    "scheme": "cocheck",
+    "scheme": "ding",
     "userInterfaceStyle": "dark",
     "androidStatusBar": {
       "backgroundColor": "#121212"
     },
     "newArchEnabled": true,
     "updates": {
-      "enabled": true,
-      "url": "https://u.expo.dev/YOUR-PROJECT-ID"
+      "enabled": true
     },
     "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.alirg1999.cocheck"
+      "bundleIdentifier": "com.alirg1999.ding"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#121212"
       },
-      "package": "com.alirg1999.cocheck"
+      "package": "com.alirg1999.ding"
     },
     "plugins": [
       "expo-router",
@@ -42,7 +41,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "d4a7b479-8066-4967-8eae-ff37de3596ea"
+        "projectId": "da7b479-8066-4967-8eae-ff37de3596ea"
       }
     }
   }

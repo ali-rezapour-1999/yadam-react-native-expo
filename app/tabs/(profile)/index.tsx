@@ -1,8 +1,6 @@
 import EditIcon from '@/assets/Icons/EditIcon';
-import HomeIcon from '@/assets/Icons/Home';
 import AppModal from '@/components/common/appModal';
 import HeaderTitle from '@/components/common/headerTitle';
-import { Loading } from '@/components/common/loading';
 import SelectLanguage from '@/components/common/selectLanguage';
 import UserImage from '@/components/common/userImage';
 import UsernameInput from '@/components/shared/forms/userNameInput';
@@ -19,30 +17,26 @@ import { useAppStore } from '@/store/appState';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
-import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon, FolderSync } from 'lucide-react-native';
+import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon } from 'lucide-react-native';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const profileItem = [
   { title: 'profile.edit_account', icon: EditIcon, path: '/tabs/(wizardForm)/stepOne' },
   { title: 'profile.setting', icon: Settings, path: '/tabs/(wizardForm)' },
-  { title: 'profile.about_yadam', icon: Info, path: '/tabs/(profile)/aboutMe' },
+  { title: 'profile.about_ding', icon: Info, path: '/tabs/(profile)/aboutMe' },
 ];
 
 const Profile = () => {
-  const { user, language, isLogin, logout, syncDataFromServer, isLoading } = useAppStore();
+  const { user, language, isLogin, logout } = useAppStore();
   const { description } = useWizardStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [isSyncOpen, setIsSyncOpen] = useState(false);
 
   const logoutHandler = () => {
     logout();
     router.push('/tabs/(profile)');
   };
 
-  const syncDataHandler = async () => {
-    await syncDataFromServer().then(() => setIsSyncOpen(false));
-  }
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>

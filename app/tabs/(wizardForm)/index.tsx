@@ -24,7 +24,7 @@ const WizardForm = () => {
           {t("onboarding.getting_started")}
         </Heading>
         <Heading className="text-white mt-.5" size="xl">
-          {t("onboarding.start_your_journey_with_yadam")}
+          {t("onboarding.start_your_journey_with_ding")}
         </Heading>
         <Text className="mt-3 text-background text-lg">
           {t("onboarding.intro_message")}

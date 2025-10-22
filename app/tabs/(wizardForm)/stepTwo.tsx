@@ -59,7 +59,7 @@ const StepTwo = () => {
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         <Box className='px-2'>
           <WizardStepper />
-          <HeaderTitle title={t('onboarding.goal.what_do_you_want_from_cocheck')} />
+          <HeaderTitle title={t('onboarding.goal.what_do_you_want_from_ding')} />
           <Text className="px-3 mt-3 text-md" style={{ color: Colors.main.textPrimary }}>
             {t('onboarding.goal.main_goal_guidance_text')}
           </Text>

@@ -123,7 +123,7 @@ const StepTwo = () => {
         onPress={onSubmit}
         disabled={isButtonDisabled}
       >
-        <ButtonText>{t('button.cocheck_will_start_from_here')}</ButtonText>
+        <ButtonText>{t('button.ding_will_start_from_here')}</ButtonText>
       </Button>
     </SafeAreaView>
   );
