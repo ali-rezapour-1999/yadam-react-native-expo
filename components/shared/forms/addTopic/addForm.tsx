@@ -31,16 +31,14 @@ export const AddForm = ({ value, onChange, error, placeholder, style, autoFocus 
         },
       ]}
     >
-      <Box className="">
-        <Text>{t('common.form.title')}</Text>
-      </Box>
+      <Text>{t('common.form.title')}</Text>
       <Input style={[styles.inputContainer, style]}>
         <InputField
           type="text"
           placeholder={placeholder}
           value={value}
           onChangeText={onChange}
-          className="text-xl text-slate-50"
+          className="text-xl "
           autoFocus={autoFocus}
           placeholderTextColor={Colors.main.textSecondary}
         />
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: 'transparent',
     borderWidth: 0,
-    borderBottomColor: Colors.main.primaryLight,
+    borderBottomColor: Colors.main.textPrimary,
     borderBottomWidth: 1,
   },
 });
