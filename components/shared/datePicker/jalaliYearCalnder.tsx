@@ -47,9 +47,10 @@ const generateMonthDays = (year: number, month: number) => {
   const daysInMonth = firstDay.jDaysInMonth();
   const startDayOfWeek = firstDay.day();
 
+  const iranianDayOfWeek = (startDayOfWeek + 1) % 7;
   const days: (number | null)[] = [];
 
-  for (let i = 0; i < startDayOfWeek; i++) {
+  for (let i = 0; i < iranianDayOfWeek; i++) {
     days.push(null);
   }
 
