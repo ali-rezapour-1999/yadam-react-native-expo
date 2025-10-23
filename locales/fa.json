@@ -121,22 +121,22 @@
     "select_reminder_days": "انتخاب روزهای یادآوری (اختیاری)",
     "options": "گزینه‌ها بیشتر",
     "clear_storage": "پاک کردن داده‌ها",
-    "add_topic": "افزودن موضوع",
+    "add_topic": "افزودن گروه بندی",
     "is_public": "برای همه قابل دیدنه؟",
-    "edit_topic": "ویرایش موضوع",
+    "edit_topic": "ویرایش گروه بندی",
     "swip": "بکشید",
     "need_to_login": "برای ادامه ادامه این بخش باید ورود کنید",
-    "select_topics": "انتخاب موضوع",
+    "select_topics_type": "نوع گروه بندی گروه بندی",
     "logout": "خروج از حساب",
     "edit_email": "ویرایش ایمیل",
     "select_language": "زبان رو انتخاب کن",
-    "create_topics": "افزودن دسته بندی"
+    "create_topics": "افزودن گروه بندی"
   },
   "activity": {
-    "title": "موضوع‌ها",
+    "title": "گروه بندی‌ها",
     "is_public": "عمومی",
-    "no_topics": "دسته بندی فعالی نداری",
-    "my_topics": "موضوع‌های من",
+    "no_topics": "گروه بندی فعالی نداری",
+    "my_topics": "گروه بندی‌های من",
     "explore_topics": "گروه بندی منتشر شده",
     "search": "جوستجو برای ...",
     "any_topics_sub_task": "شما هیچ فعالیت ندارید"
@@ -185,7 +185,7 @@
     "placeholder": {
       "first_name_placeholder": "اسمت رو وارد کن",
       "last_name_placeholder": "نام خانوادگیت رو وارد کن (اختیاری)",
-      "placeholder_topic": "توضیح کوتاهی درباره موضوع بنویس",
+      "placeholder_topic": "توضیح کوتاهی درباره گروه بندی بنویس",
       "placeholder_activity": "توضیح کوتاهی درباره این فعالیت بنویس",
       "write_description_placeholder": "یه توضیح کوتاه درباره خودت بنویس (علایق، هدف‌ها، مهارت‌ها و ...)",
       "email_placeholder": "ایمیل خود را وارد کن",

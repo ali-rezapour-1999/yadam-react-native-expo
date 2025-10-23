@@ -32,8 +32,9 @@ const CreateTask: React.FC = () => {
   const { selectedDate } = useTodoStore();
   const { user } = useAppStore();
   const { userTopics, loadUserTopics } = useTopicStore();
-  const { topicId: topicIdFromRoute } = useLocalSearchParams<{ topicId?: string; }>();
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const { topicId: topicIdFromRoute } = useLocalSearchParams<{
+    topicId?: string;
+  }>();
   const [isTopicModalVisible, setIsTopicModalVisible] = useState(false);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const CreateTask: React.FC = () => {
   const selectedCategoryId = watch("topicId");
   const selectedTopic = useMemo(
     () => userTopics.find((topic) => topic.id === selectedCategoryId),
-    [selectedCategoryId, userTopics]
+    [selectedCategoryId, userTopics],
   );
 
   const handleTopicPress = useCallback(() => {
@@ -84,8 +85,6 @@ const CreateTask: React.FC = () => {
               errors={errors}
               startTime={startTime}
               endTime={endTime}
-              showDatePicker={showDatePicker}
-              setShowDatePicker={setShowDatePicker}
             />
           </View>
 
