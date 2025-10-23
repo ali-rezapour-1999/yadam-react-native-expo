@@ -79,7 +79,7 @@ const StepOne = () => {
     <SafeAreaView className="flex-1 px-4" style={{ backgroundColor: Colors.main.background }} >
       <WizardStepper />
       <HeaderTitle title={t('profile.base_information')} />
-      <KeyboardAvoidingView className="flex-1" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView className="flex-1 px-5 gap-4" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Controller
           render={({ field, fieldState }) => (
             <StepForm title={t('profile.first_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.first_name_placeholder')} />
@@ -95,7 +95,7 @@ const StepOne = () => {
           control={control}
         />
 
-        <HStack className="justify-center gap-5 px-3">
+        <HStack className="justify-center items-center gap-5 px-3">
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
@@ -115,7 +115,7 @@ const StepOne = () => {
             />
           </Box>
         </HStack>
-        <HStack className="justify-center gap-5 px-3">
+        <HStack className="justify-center gap-5 px-3 items-center">
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
@@ -135,11 +135,11 @@ const StepOne = () => {
           name="description"
           render={({ field, fieldState }) => (
             <VStack>
-              <Text style={{ color: Colors.main.textPrimary }} className="mt-5">
+              <Text style={{ color: Colors.main.textPrimary }}>
                 {t('profile.description')}
               </Text>
               <Textarea
-                className="my-1 w-full rounded-xl px-4 h-[130px]"
+                className="w-full rounded-xl px-4 h-[130px]"
                 style={{
                   backgroundColor: Colors.main.cardBackground,
                   borderWidth: 1,
@@ -154,7 +154,7 @@ const StepOne = () => {
                   value={field.value}
                   onChangeText={field.onChange}
                   placeholder={t('common.placeholder.write_description_placeholder')}
-                  className="h-10 items-start text-[12]"
+                  className="h-10 items-start text-lg"
                   style={{ textAlignVertical: 'top', color: Colors.main.textPrimary }}
                   placeholderTextColor={Colors.main.textSecondary}
                 />
