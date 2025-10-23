@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import BackIcon from '@/assets/Icons/Back';
@@ -37,8 +37,8 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
       <HStack style={styles.innerContainer}>
         <Button
           onPress={handleBackPress}
-          style={styles.backButton}
           accessibilityLabel="Back"
+          className='w-16 h-16'
         >
           <Box
             style={{
@@ -56,9 +56,9 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
             {
               color: isLight ? Colors.main.background : Colors.main.textPrimary,
               textAlign: center ? 'center' : 'left',
+              width: '80%',
             },
           ]}
-          numberOfLines={2}
         >
           {title}
         </Heading>
@@ -77,24 +77,14 @@ export default HeaderTitle;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingBottom: 8,
+    marginBottom: 14,
   },
   innerContainer: {
-    alignItems: 'center',
     flexDirection: 'row',
-    gap: 10
-  },
-  backButton: {
-    height: 52,
-    width: 52,
-    borderRadius: 12,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
-    flex: 1,
-    fontWeight: '600',
-    marginLeft: 16,
+    marginLeft: 10,
     includeFontPadding: false,
   },
 });
