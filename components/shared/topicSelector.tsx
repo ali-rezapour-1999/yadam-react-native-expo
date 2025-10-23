@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  I18nManager,
-  Platform,
-  StyleSheet,
-} from 'react-native';
+import { View, FlatList, TouchableOpacity, I18nManager, Platform, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { Colors } from '@/constants/Colors';
 import { t } from 'i18next';
 import { Text } from '../Themed';
 import { Box } from '../ui/box';
 import { Topic } from '@/types/database-type';
+import { Button } from '../ui/button';
 
 interface TopicItemProps {
   item: Topic;
@@ -31,7 +25,6 @@ interface TopicSelectorProps {
 const TopicItem: React.FC<TopicItemProps> = ({ item, onSelect, isSelected }) => (
   <TouchableOpacity
     onPress={onSelect}
-    activeOpacity={0.8}
     style={[styles.topicItem, isSelected && styles.topicItemSelected]}
   >
     <Text style={[styles.topicText, isSelected && styles.topicTextSelected]}>
@@ -40,13 +33,7 @@ const TopicItem: React.FC<TopicItemProps> = ({ item, onSelect, isSelected }) => 
   </TouchableOpacity>
 );
 
-const TopicSelector: React.FC<TopicSelectorProps> = ({
-  visible,
-  onClose,
-  topics,
-  selectedTopicId,
-  onSelectTopic,
-}) => {
+const TopicSelector: React.FC<TopicSelectorProps> = ({ visible, onClose, topics, selectedTopicId, onSelectTopic, }) => {
   return (
     <Modal
       isVisible={visible}
@@ -58,16 +45,11 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({
       style={styles.modalWrapper}
     >
       <Box style={styles.sheetContainer}>
-        {/* Header */}
-        <View style={styles.handleContainer}>
-          <View style={styles.handleBar} />
-        </View>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={onClose}>
-            <Text style={styles.cancelText}>{t('common.button.cancel')}</Text>
-          </TouchableOpacity>
-          <Text style={styles.titleText}>{t('category.select_category')}</Text>
-          <View style={{ width: 60 }} />
+          <Text style={styles.titleText}>{t('event.select_topics')}</Text>
+          <Button onPress={onClose}>
+            <Text style={styles.cancelText}>{t('common.button.confirm')}</Text>
+          </Button>
         </View>
 
         {/* Topic List */}
@@ -162,7 +144,7 @@ const styles = StyleSheet.create({
   },
   topicItemSelected: {
     borderColor: Colors.main.primary,
-    backgroundColor: `${Colors.main.primary}20`,
+    backgroundColor: `${Colors.main.primary}10`,
   },
   topicText: {
     fontSize: 16,

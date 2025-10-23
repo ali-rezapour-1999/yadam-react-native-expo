@@ -67,8 +67,8 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCat
   return (
     <View style={style}>
       <ModalOption
-        title={error ? error.message : t('category.select_category')}
-        buttonTitle={selectedCategory ? categoryNameAndIcons() : t('category.select_category')}
+        title={error ? error.message : t('category.select_category_type')}
+        buttonTitle={selectedCategory ? categoryNameAndIcons() : t('category.select_category_type')}
         onCloseProps={setIsOpen}
         isOpenProps={isOpen}
         buttonStyle={{

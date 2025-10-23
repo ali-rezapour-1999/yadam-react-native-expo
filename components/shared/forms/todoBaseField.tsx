@@ -16,11 +16,9 @@ interface TodoBasicFieldsProps {
   errors: any;
   startTime: string;
   endTime: string;
-  showDatePicker: boolean;
-  setShowDatePicker: Dispatch<SetStateAction<boolean>>;
 }
 
-export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, errors, startTime, endTime, showDatePicker, setShowDatePicker }) => {
+export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, errors, startTime, endTime }) => {
   return (
     <>
       <Controller
@@ -30,7 +28,7 @@ export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, error
       />
 
       <VStack style={styles.fieldsContainer}>
-        <Controller name="date" control={control} render={({ field }) => <DatePicker field={field} setShowDatePicker={setShowDatePicker} showDatePicker={showDatePicker} />} />
+        <Controller name="date" control={control} render={({ field }) => <DatePicker field={field} />} />
 
         <HStack className="justify-center items-center gap-2 w-full">
           <Box style={{ alignItems: 'center' }}>

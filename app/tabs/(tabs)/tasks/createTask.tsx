@@ -95,11 +95,7 @@ const CreateTask: React.FC = () => {
             disabled={userTopics.length === 0}
           >
             <Text style={styles.selectorValue}>
-              {selectedTopic
-                ? selectedTopic.title
-                : userTopics.length === 0
-                  ? t("activity.no_topics")
-                  : t("event.select_topics")}
+              {selectedTopic ? selectedTopic.title : userTopics.length === 0 ? t("activity.no_topics") : t("event.select_topics")}
             </Text>
             <Icon
               as={ArrowRightFromLine}

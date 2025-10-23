@@ -126,7 +126,7 @@
     "edit_topic": "ویرایش گروه بندی",
     "swip": "بکشید",
     "need_to_login": "برای ادامه ادامه این بخش باید ورود کنید",
-    "select_topics_type": "نوع گروه بندی گروه بندی",
+    "select_topics": "انتخاب گروه فعالیت",
     "logout": "خروج از حساب",
     "edit_email": "ویرایش ایمیل",
     "select_language": "زبان رو انتخاب کن",
@@ -142,7 +142,7 @@
     "any_topics_sub_task": "شما هیچ فعالیت ندارید"
   },
   "category": {
-    "select_category": "انتخاب دسته‌بندی",
+    "select_category_type": "انتخاب نوع گروه بندی",
     "add_category": "افزودن دسته",
     "new_category": "دسته جدید",
     "category_name": "نام دسته",

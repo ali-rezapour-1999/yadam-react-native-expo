@@ -142,7 +142,7 @@
     "any_topics_sub_task": "You have no active topics"
   },
   "category": {
-    "select_category": "Select category",
+    "select_category_type": "Select topics type",
     "add_category": "Add category",
     "new_category": "New category",
     "category_name": "Category name",
