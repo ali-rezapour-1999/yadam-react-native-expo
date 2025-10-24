@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { updateUserAction } from '@/api/authApi/userUpdate';
 import { User, UserStateType } from '@/types/auth-type';
-import { LanguageEnum } from '@/enums/base';
+import { LanguageEnum } from '@/constants/enums/base';
 
 export const useUserState = create<UserStateType>()(
   persist(
@@ -43,6 +43,10 @@ export const useUserState = create<UserStateType>()(
           set({ isLoading: false });
         }
       },
+
+      logout: async () => {
+        await useUserState.setState({ token: null, user: {} as Pick<User, 'id' | 'language' | 'firstName'>, isLogin: false });
+      },
     }),
     {
       name: 'user-config',
@@ -50,6 +54,7 @@ export const useUserState = create<UserStateType>()(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
+        isLogin: state.isLogin,
       }),
     },
   ),

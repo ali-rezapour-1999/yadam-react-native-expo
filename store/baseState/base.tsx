@@ -22,7 +22,7 @@ export const useBaseStore = create<BaseStateType>()(
       setLanguage: (lang) => {
         set({
           language: lang,
-          calender: lang === 'fa' ? CalenderEnum.JALALI : CalenderEnum.GREGORIAN,
+          calender: lang == LanguageEnum.FA ? CalenderEnum.JALALI : CalenderEnum.GREGORIAN,
         });
       },
     }),
@@ -36,5 +36,4 @@ export const useBaseStore = create<BaseStateType>()(
       }),
     },
   ),
-
 );

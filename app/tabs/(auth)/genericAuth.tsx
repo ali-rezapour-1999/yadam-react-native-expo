@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { t } from 'i18next';
 import { Button, ButtonText } from '@/components/ui/button';
-import { View } from '@/components/Themed';
+import { Text, View } from '@/components/Themed';
 import { Colors } from '@/constants/Colors';
 import { CodeForm } from '@/components/shared/forms/auth/codeForm';
 import { router } from 'expo-router';
@@ -13,11 +13,13 @@ import GoogleIcon from '@/assets/Icons/Google';
 import { Heading } from '@/components/ui/heading';
 import { useAuthState } from '@/store/authState/authState';
 import { CodeSchema, EmailSchema, PhoneSchema } from '@/components/schema/authSchema';
+import { Box } from '@/components/ui/box';
 
-export const DynamicLogin = () => {
+const DynamicLogin = () => {
   const { sendMassage, sendOtp, isSendCode, setIsSendCode, isLoading } = useAuthState();
   const [authMethod, setAuthMethod] = useState<'email' | 'phone'>('email');
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<String>('');
 
   const schema = authMethod === 'email' ? EmailSchema : PhoneSchema;
   const combinedSchema = schema.merge(CodeSchema);
@@ -45,6 +47,9 @@ export const DynamicLogin = () => {
         reset({ identifier: data.identifier, code: '' });
         setIsSendCode(true);
       }
+      else {
+        setErrorMessage(res.message);
+      }
     } catch {
       setHasError(true);
     }
@@ -53,7 +58,7 @@ export const DynamicLogin = () => {
   const handleVerify = async (data: any) => {
     try {
       const res = await sendOtp(identifier, data.code);
-      if (res?.success) {
+      if (res) {
         reset();
         setIsSendCode(false);
         router.push('/tabs/(profile)');
@@ -73,7 +78,6 @@ export const DynamicLogin = () => {
       style={styles.wrapper}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      {/* ------------- TOP AREA (text + input) ------------- */}
       <View style={styles.topSection}>
         <Heading style={styles.title}>
           {t(isSendCode ? 'auth.we_send_code' : 'home.welcome_to_ding')}
@@ -82,25 +86,32 @@ export const DynamicLogin = () => {
         {!isSendCode ? (
           <Controller
             name="identifier"
+            key="identifier"
             control={control}
             render={({ field }) => (
-              <TextInput
-                value={field.value}
-                onChangeText={field.onChange}
-                placeholder="Enter your email"
-                keyboardType={authMethod === 'phone' ? 'phone-pad' : 'email-address'}
-                autoCapitalize="none"
-                placeholderTextColor={Colors.main.textSecondary}
-                style={[
-                  styles.input, { textAlign: 'left', writingDirection: 'ltr' },
-                  errors.identifier && { borderColor: Colors.main.accent },
-                ]}
-              />
+              <Box>
+                <TextInput
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  placeholder="Enter your email"
+                  keyboardType={authMethod === 'phone' ? 'phone-pad' : 'email-address'}
+                  autoCapitalize="none"
+                  placeholderTextColor={Colors.main.textSecondary}
+                  style={[
+                    styles.input, { textAlign: 'left', writingDirection: 'ltr' },
+                    errors.identifier && { borderColor: Colors.main.accent },
+                    errorMessage.length > 0 && { borderColor: Colors.main.accent },
+                  ]}
+
+                />
+                <Text className="text-xs" style={{ color: Colors.main.accent }}>{errorMessage}</Text>
+              </Box>
             )}
           />
         ) : (
           <Controller
             name="code"
+            key="code"
             control={control}
             render={({ field }) => (
               <CodeForm
@@ -155,6 +166,8 @@ export const DynamicLogin = () => {
   );
 };
 
+export default DynamicLogin;
+
 /* -------------------------------- Styles -------------------------------- */
 const styles = StyleSheet.create({
   wrapper: {
@@ -185,7 +198,7 @@ const styles = StyleSheet.create({
     height: 60,
     fontSize: 18,
     color: Colors.main.textPrimary,
-    backgroundColor: Colors.main.cardBackground + 30,
+    backgroundColor: Colors.main.cardBackground,
   },
   switchText: {
     fontSize: 15,
@@ -232,3 +245,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+

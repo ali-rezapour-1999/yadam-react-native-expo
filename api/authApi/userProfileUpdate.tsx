@@ -1,6 +1,5 @@
-import { UserProfile } from '@/types/user-profile';
+import { ProfileResult, UserProfile } from '@/types/user-profile';
 import Api from '../baseApi';
-import { ProfileResult } from '@/types/auth-type';
 
 export const userProfileUpdate = async (data: UserProfile, token: string): Promise<ProfileResult> => {
   try {

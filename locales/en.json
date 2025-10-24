@@ -19,8 +19,7 @@
     "enter_code": "Enter the code to log in to your account",
     "enter_your_account": "Log in to your account",
     "privacy_message": "By logging into Ding, you agree to our Terms and Privacy Policy. Your information is only used to make your experience better.",
-    "we_send_code":"Confirm send code",
-    "enter_your_first_and_last_name" :"Enter you first name and lanst name to best use in app"
+    "we_send_code": "Confirm send code"
   },
   "onboarding": {
     "getting_started": "Let's get started!",
@@ -71,7 +70,9 @@
     "about_ding": "About Ding",
     "no_description": "You haven’t written a description yet. You can add one using the edit button.",
     "logout_message": "Do you want to log out of your account?",
-    "edit_account": "Edit profile"
+    "edit_account": "Edit profile",
+    "enter_your_first_and_last_name": "Enter you first name and lanst name to best use in app",
+    "set_your_name": "Enter your name"
   },
   "home": {
     "hi": "Hi 👋",

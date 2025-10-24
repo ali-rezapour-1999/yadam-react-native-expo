@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Colors } from '@/constants/Colors';
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader, DrawerFooter } from '@/components/ui/drawer';
 import { t } from 'i18next';
@@ -12,19 +12,16 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { router } from 'expo-router';
 import { useUserState } from '@/store/authState/userState';
 import { UsernameSchema } from '@/components/schema/userSchema';
+import { LanguageEnum } from '@/constants/enums/base';
 
-const UsernameInput = () => {
+interface UsernameInputProps {
+  showDrawer: boolean;
+  setShowDrawer: (val: boolean) => void;
+}
+
+const UsernameInput: React.FC<UsernameInputProps> = ({ showDrawer, setShowDrawer }) => {
   const { user, updateUser } = useUserState();
-  const [showDrawer, setShowDrawer] = useState(false);
   type usernameSchema = z.infer<typeof UsernameSchema>;
-
-  useEffect(() => {
-    if (!user?.firstName || user.firstName.length === 0) {
-      setShowDrawer(true);
-    } else {
-      setShowDrawer(false);
-    }
-  }, [user]);
 
   const { control, handleSubmit } = useForm<usernameSchema>({
     resolver: zodResolver(UsernameSchema),
@@ -36,31 +33,21 @@ const UsernameInput = () => {
     await updateUser({
       id: user?.id as string,
       firstName: data?.firstName,
-      lastName: data?.lastName,
-      language: user?.language ?? 'en',
+      lastName: data?.lastName ?? '',
+      language: user?.language ?? LanguageEnum.FA,
       role: user?.role,
-      level: user?.level,
       isVerified: user?.isVerified,
-      createdAt: user?.createdAt,
-      updatedAt: user?.updatedAt,
       email: user?.email,
     }).then(() => router.replace('/tabs/(profile)'));
   };
 
-  const handlerCloseDrawer = () => {
-    if (showDrawer) {
-      router.replace('/tabs/(tabs)');
-    }
-    setShowDrawer(false);
-  };
-
   return (
-    <Drawer className="bg-black/60 border-0" isOpen={showDrawer} onClose={handlerCloseDrawer} size="sm" anchor="bottom" >
+    <Drawer className="bg-black/60 border-0" isOpen={showDrawer} onClose={setShowDrawer} size="sm" anchor="bottom" >
       <DrawerBackdrop />
-      <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-[30px] h-[40%]">
-        <DrawerHeader className='justify-center'>
-          <Text className="text-[24px] text-center " style={{ color: Colors.main.textPrimary }}>
-            {t('profile.enter_your_first_and_lastName')}
+      <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-[30px] h-2/5">
+        <DrawerHeader className='justify-start px-3'>
+          <Text className="text-xl text-end " style={{ color: Colors.main.textPrimary }}>
+            {t('profile.enter_your_first_and_last_name')}
           </Text>
         </DrawerHeader>
         <DrawerBody>
@@ -68,12 +55,9 @@ const UsernameInput = () => {
             name="firstName"
             control={control}
             render={({ field, formState }) => (
-              <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-8">
-                <Input
-                  className="my-1 h-16 rounded-xl px-4"
-                  style={{ backgroundColor: Colors.main.border }}
-                >
-                  <InputField type="text" placeholder={t('profile.firstName_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
+              <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-3">
+                <Input className="h-16 rounded-xl px-4 border-0" style={{ backgroundColor: Colors.main.border }} >
+                  <InputField type="text" placeholder={t('common.placeholder.first_name_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
                 </Input>
               </FormControl>
             )}
@@ -85,10 +69,10 @@ const UsernameInput = () => {
             render={({ field, formState }) => (
               <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-8">
                 <Input
-                  className="my-1 h-16 rounded-xl px-4"
+                  className="h-16 rounded-xl px-4 border-0"
                   style={{ backgroundColor: Colors.main.border }}
                 >
-                  <InputField type="text" placeholder={t('profile.lastName_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
+                  <InputField type="text" placeholder={t('common.placeholder.last_name_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
                 </Input>
               </FormControl>
             )}

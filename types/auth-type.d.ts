@@ -8,7 +8,6 @@ export type User = {
   lastName?: string;
   email?: string;
   isVerified?: boolean;
-  level?: string;
   role?: string;
   language: 'fa' | 'en';
   createdAt?: string;
@@ -25,7 +24,6 @@ export type AuthResponseResult = {
 };
 
 export type AuthStateType = {
-  isLogin: boolean;
   isLoading: boolean;
   isSendCode: boolean;
 
@@ -33,10 +31,10 @@ export type AuthStateType = {
   sendMassage: (identifier: string) => Promise<Result>;
   sendOtp: (identifier: string, code: string) => Promise<Result>;
   googleLogin: () => Promise<Result>;
-  logout: () => Promise<void>;
 };
 
 export type UserStateType = {
+  isLogin: boolean;
   isLoading: boolean;
   user: User | null;
   token: string | null;
@@ -45,5 +43,6 @@ export type UserStateType = {
   setUser: (user: User) => void;
 
   updateUser: (data: User) => Promise<Result>;
+  logout: () => Promise<void>;
 };
 

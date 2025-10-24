@@ -1,12 +1,11 @@
 import { create } from 'zustand';
 import { googleLoginAction, sendMassageAction, sendOtpAction } from '@/api/authApi';
-import { AuthStateType, AuthResponseResult, User } from '@/types/auth-type';
+import { AuthStateType, AuthResponseResult } from '@/types/auth-type';
 import { useUserState } from './userState';
 
 
 export const useAuthState = create<AuthStateType>()(
   (set) => ({
-    isLogin: false,
     isLoading: false,
     isSendCode: false,
 
@@ -17,8 +16,7 @@ export const useAuthState = create<AuthStateType>()(
       try {
         const result = await googleLoginAction();
         if (result.success && result.data && result.access_token) {
-          set({ isLogin: true });
-          useUserState.setState({ token: result.access_token, user: result.data });
+          useUserState.setState({ token: result.access_token, user: result.data, isLogin: result.success });
         }
         return result;
       }
@@ -39,7 +37,6 @@ export const useAuthState = create<AuthStateType>()(
         if (result.success) {
           set({ isSendCode: true });
         }
-        return result;
       } catch (error) {
         console.error('Send massage error:', error);
         throw error;
@@ -49,28 +46,22 @@ export const useAuthState = create<AuthStateType>()(
       }
     },
 
-    sendOtp: async (identifier: string, code: string): Promise<AuthResponseResult | null> => {
+    sendOtp: async (identifier: string, code: string): Promise<boolean | null> => {
       set({ isLoading: true });
       const result = await sendOtpAction(identifier, code);
       try {
         if (result.success && result.data) {
-          set({ isLogin: true });
-          useUserState.setState({ token: result.data.access_token, user: result.data.user });
+          useUserState.setState({ token: result.access_token, user: result.data, isLogin: result.success });
+          return result.success;
         }
+        return false
       } catch (error) {
         console.error('Send otp error:', error);
         throw error;
       }
       finally {
         set({ isLoading: false });
-        return null;
       }
     },
-
-    logout: async () => {
-      useUserState.setState({ token: null, user: {} as Pick<User, 'id' | 'language'> });
-      set({ isLogin: false, });
-    },
   }),
-
 );

@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { MotiView, motify } from "moti";
-import {
+import Animated, {
   interpolateColor,
   useSharedValue,
   withTiming,
   useAnimatedStyle,
+  useDerivedValue,
 } from "react-native-reanimated";
+import { MotiView, motify } from "moti";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 import { Colors } from "@/constants/Colors";
@@ -21,13 +22,6 @@ const TAB_HEIGHT = 60;
 
 const MotiPressable = motify(Pressable)();
 
-interface TabBarIconProps {
-  focused: boolean;
-  color: string;
-  size: number;
-}
-type TabBarIcon = React.ComponentType<TabBarIconProps>;
-
 /* ---------------------- Tab Button Component ---------------------- */
 const TabButton = React.memo(
   ({
@@ -39,7 +33,7 @@ const TabButton = React.memo(
     route: any;
     isFocused: boolean;
     onPress: () => void;
-    IconComponent?: TabBarIcon;
+    IconComponent?: React.ComponentType<{ focused: boolean; color: string; size: number }>;
   }) => {
     const animatedValue = useSharedValue(isFocused ? 1 : 0);
 
@@ -49,11 +43,14 @@ const TabButton = React.memo(
       });
     }, [isFocused]);
 
-    const color = interpolateColor(
-      animatedValue.value,
-      [0, 1],
-      [Colors.main.primaryLight, Colors.main.primary]
-    );
+    const animatedColor = useDerivedValue(() => {
+      return interpolateColor(
+        animatedValue.value,
+        [0, 1],
+        [Colors.main.primaryLight, Colors.main.primary]
+      );
+    });
+
 
     return (
       <MotiPressable
@@ -64,7 +61,9 @@ const TabButton = React.memo(
         transition={{ type: "timing", duration: ANIMATION_DURATION }}
       >
         {IconComponent && (
-          <IconComponent focused={isFocused} color={color} size={20} />
+          <Animated.View style={{ transform: [{ scale: isFocused ? 1.1 : 1 }] }}>
+            <IconComponent focused={isFocused} color={animatedColor.value} size={20} />
+          </Animated.View>
         )}
       </MotiPressable>
     );
@@ -74,7 +73,7 @@ const TabButton = React.memo(
 TabButton.displayName = "TabButton";
 
 /* ---------------------- Main Custom TabBar ---------------------- */
-export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
+export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY?: any }> = ({
   state,
   descriptors,
   navigation,
@@ -88,6 +87,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
     ],
     opacity: withTiming(hideScroll ? 0 : 1, { duration: 150 }),
   }));
+
   const visibleRoutes = useMemo(
     () =>
       state.routes.filter(
@@ -132,7 +132,6 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
     }),
     [insets.bottom]
   );
-
 
   return (
     <Box

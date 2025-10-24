@@ -57,7 +57,6 @@ const StepOne = () => {
       lastName: data?.lastname,
       language: user?.language ?? 'en',
       role: user?.role,
-      level: user?.level,
       isVerified: user?.isVerified,
       createdAt: user?.createdAt,
       updatedAt: user?.updatedAt,

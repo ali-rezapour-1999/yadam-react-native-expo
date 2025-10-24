@@ -13,14 +13,14 @@ import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
-import { useAuthState } from '@/store/authState/authState';
+import { LanguageEnum } from '@/constants/enums/base';
 import { useUserState } from '@/store/authState/userState';
 import { useBaseStore } from '@/store/baseState/base';
 import { useWizardStore } from '@/store/wizardFormState';
-import { Link, router } from 'expo-router';
+import { Link, router, useFocusEffect } from 'expo-router';
 import { t } from 'i18next';
 import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon } from 'lucide-react-native';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 
 const profileItem = [
@@ -30,36 +30,46 @@ const profileItem = [
 ];
 
 const Profile = () => {
-  const { isLogin, logout } = useAuthState();
-  const user = useUserState().user
+  const { user, isLogin, logout } = useUserState()
+  const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const language = useBaseStore().language
   const { description } = useWizardStore();
   const [isOpen, setIsOpen] = useState(false);
 
-  const logoutHandler = () => {
-    logout();
-    router.push('/tabs/(profile)');
+  useFocusEffect(useCallback(() => {
+    setShowDrawer(user?.firstName?.length === 0);
+  }, [user?.firstName]))
+
+  const logoutHandler = async () => {
+    await logout().then(() => {
+      setIsOpen(false);
+      router.push('/tabs/(tabs)');
+    });
   };
 
-
   return (
-    <View className="flex-1 pt-10" style={{ backgroundColor: Colors.main.background }}>
-      {/* {isLogin ? <UsernameInput /> : null} */}
+    <View className="flex-1 pt-12" style={{ backgroundColor: Colors.main.background }}>
+      {isLogin ? <UsernameInput showDrawer={showDrawer} setShowDrawer={setShowDrawer} /> : null}
 
       <HStack className="w-full items-center justify-between px-5">
         <Box className="w-4/5 flex-1">
-          <HeaderTitle size="lg" />
+          <HeaderTitle size="lg" path="/tabs/(tabs)" />
         </Box>
 
         {isLogin ?
           <AppModal title={t("event.logout")} onChangeVisible={setIsOpen} visible={isOpen} buttonContent={<Icon as={LogOutIcon} size={24} color={Colors.main.background} />}
             buttonStyle={{ backgroundColor: Colors.main.accent, width: 50, height: 50 }}
-            modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, height: 240, width: "90%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
-            <VStack className='gap-5 justify-between'>
+            modalContentStyle={{ borderColor: Colors.main.border, borderWidth: 1, width: "90%" }} modalBodyStyle={{ paddingHorizontal: 10 }}>
+            <VStack className='gap-3 justify-between'>
               <Text className="text-center text-2xl ">{t("profile.logout_message")}</Text>
-              <Button className="w-full h-12 rounded-xl mt-3" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
+              <Button className="w-full h-12 rounded-lg mt-3" style={{ backgroundColor: Colors.main.accent }} onPress={logoutHandler}>
                 <ButtonText>
-                  <Text>{t("event.logout")}</Text>
+                  {t("event.logout")}
+                </ButtonText>
+              </Button>
+              <Button className="w-full h-12 rounded-lg" style={{ backgroundColor: Colors.main.border }} onPress={() => setIsOpen(false)}>
+                <ButtonText>
+                  {t("common.button.cancel")}
                 </ButtonText>
               </Button>
             </VStack>
@@ -69,13 +79,15 @@ const Profile = () => {
       </HStack>
 
       <Box className="flex-1 rounded-t-[50px] pt-4 px-6" style={{ backgroundColor: Colors.main.border + 80 }}>
-        <HStack className="mt-5 gap-4 items-center" style={{ direction: 'ltr', flexDirection: isLogin ? 'row' : 'column' }}>
+        <HStack className="mt-5 gap-4 items-center" style={{ flexDirection: isLogin ? 'row' : 'column' }}>
           <UserImage width={70} height={70} />
           {isLogin ? (
             <VStack>
-              <Heading style={{ color: Colors.main.textPrimary }}>{user?.firstName + ' ' + user?.lastName || 'Set your username'}</Heading>
+              <Heading style={{ color: Colors.main.textPrimary }}>{user?.firstName ?? t("profile.set_your_name")}
+                {user?.lastName ?? ''}
+              </Heading>
               <Text className="text-lg" style={{ color: Colors.main.textPrimary }}>
-                {user?.email || 'Set your Email'}
+                {user?.email || t("profile.set_your_email")}
               </Text>
             </VStack>
           ) : (
@@ -106,7 +118,7 @@ const Profile = () => {
                   {t(item.title)}
                 </Text>
               </HStack>
-              {language === 'fa' ? <ChevronLeft size={24} color={Colors.main.textPrimary} /> : <ChevronRight size={24} color={Colors.main.textPrimary} />}
+              {language == LanguageEnum.FA ? <ChevronLeft size={24} color={Colors.main.textPrimary} /> : <ChevronRight size={24} color={Colors.main.textPrimary} />}
             </Button>
           ))}
 
@@ -125,7 +137,8 @@ const Profile = () => {
           </Text>
         </Center>
       </Box>
-    </View>
+    </View >
   );
 };
+
 export default Profile;
