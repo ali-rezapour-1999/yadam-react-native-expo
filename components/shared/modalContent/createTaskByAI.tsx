@@ -10,8 +10,7 @@ import { VStack } from '@/components/ui/vstack';
 import { Center } from '@/components/ui/center';
 import lockImage from '@/assets/images/lockImage.png';
 import { Image } from 'expo-image';
-import { Drawer, DrawerBackdrop, DrawerContent, DrawerHeader, DrawerBody } from '@/components/ui/drawer';
-import { Text } from '@/components/Themed';
+import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody } from '@/components/ui/drawer';
 
 interface Props {
   onSubmit: (description?: string) => void;
@@ -102,7 +101,7 @@ export const GenerateTaskByAi: React.FC<Props> = ({
                   className="rounded-lg"
                 >
                   <ButtonText style={{ color: Colors.main.textSecondary }}>
-                    {t('common.cancel')}
+                    {t('common.button.cancel')}
                   </ButtonText>
                 </Button>
 
@@ -119,8 +118,8 @@ export const GenerateTaskByAi: React.FC<Props> = ({
                   {isLoading ? (
                     <Loading style={{ backgroundColor: 'transparent' }} />
                   ) : (
-                    <ButtonText style={{ color: '#FFFFFF' }}>
-                      {t('common.generate_tasks')}
+                    <ButtonText style={{ color: Colors.main.textPrimary }}>
+                      {t('event.generate_by_ai')}
                     </ButtonText>
                   )}
                 </Button>

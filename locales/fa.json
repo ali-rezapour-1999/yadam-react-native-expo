@@ -133,7 +133,8 @@
     "logout": "خروج از حساب",
     "edit_email": "ویرایش ایمیل",
     "select_language": "زبان رو انتخاب کن",
-    "create_topics": "افزودن گروه بندی"
+    "create_topics": "افزودن گروه بندی",
+    "generate_by_ai": "ایجاد تسک با هوش مصنوعی"
   },
   "activity": {
     "title": "گروه بندی‌ها",

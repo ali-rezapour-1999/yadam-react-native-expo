@@ -133,7 +133,8 @@
     "logout": "Log out",
     "edit_email": "Edit email",
     "select_language": "Choose language",
-    "create_topics": "Create category"
+    "create_topics": "Create category",
+    "generate_by_ai" : "Generate tasks by AI"
   },
   "activity": {
     "title": "Topics",

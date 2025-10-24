@@ -23,10 +23,6 @@ const UserHeaderTitle = React.lazy(() => import('@/components/common/userHeaderT
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
 const TopicFilter = React.lazy(() => import('@/components/shared/topicFilterList'));
 
-// ============================================================
-// Memoized Components
-// ============================================================
-
 
 interface TopicListSectionProps {
   selectedTopicId: string;
@@ -70,14 +66,7 @@ interface EmptyStateSectionProps {
   onRequireLogin: () => void;
 }
 
-const EmptyStateSection = memo(function EmptyStateSection({
-  isOpen,
-  setOpen,
-  token,
-  isLoading,
-  onGenerate,
-  onRequireLogin,
-}: EmptyStateSectionProps) {
+const EmptyStateSection = memo(function EmptyStateSection({ isOpen, setOpen, token, isLoading, onGenerate, onRequireLogin }: EmptyStateSectionProps) {
   return (
     <Center style={styles.emptyStateContainer}>
       <VStack style={styles.emptyState}>
@@ -105,7 +94,6 @@ const EmptyStateSection = memo(function EmptyStateSection({
   );
 });
 
-// ============================================================
 // Home Screen
 // ============================================================
 
@@ -119,14 +107,12 @@ const Home = () => {
   const [selectedTopicId, setSelectedTopicId] = useState<string>('0');
   const [isOpen, setIsOpen] = useState(false);
 
-  // Load user topics on mount
   useEffect(() => {
     if (user?.id) {
       loadUserTopics(user.id);
     }
   }, [user?.id, loadUserTopics]);
 
-  // Reload tasks when screen is focused or topic changes
   useFocusEffect(
     useCallback(() => {
       if (selectedTopicId && selectedTopicId !== '0') {
@@ -137,7 +123,6 @@ const Home = () => {
     }, [selectedTopicId, getTaskByTopicIdAndDate, getTodayAllTask])
   );
 
-  // Check if there are tasks to display
   const hasTasks = useMemo(() => {
     if (Array.isArray(todayTasks)) {
       return todayTasks.length > 0;
@@ -145,7 +130,6 @@ const Home = () => {
     return Boolean(todayTasks && Object.keys(todayTasks).length > 0);
   }, [todayTasks]);
 
-  // Handlers
   const handleTopicSelect = useCallback((topicId: string) => {
     setSelectedTopicId(topicId);
   }, []);
@@ -199,10 +183,6 @@ const Home = () => {
 };
 
 export default memo(Home);
-
-// ============================================================
-// Styles
-// ============================================================
 
 const styles = StyleSheet.create({
   container: {
