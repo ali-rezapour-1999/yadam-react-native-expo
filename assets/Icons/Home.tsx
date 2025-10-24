@@ -27,7 +27,7 @@ const HomeIcon = ({ focused }: HomeIconProps) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <Path d="M8.04329 15.9103H14.1761" stroke={focused ? Colors.main.button : Colors.main.textPrimary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M8.04329 15.9103H14.1761" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 };

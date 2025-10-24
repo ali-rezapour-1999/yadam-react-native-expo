@@ -28,11 +28,11 @@ const TodoIcon = ({ focused }: TodoIconProps) => {
         strokeLinejoin="round"
       />
 
-      <Path d="M12.837 14.027H5.17972" stroke={focused ? Colors.main.button : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M12.837 14.027H5.17972" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
 
-      <Path d="M12.837 10.0372H5.17972" stroke={focused ? Colors.main.button : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M12.837 10.0372H5.17972" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
 
-      <Path d="M8.10156 6.05273H5.17972" stroke={focused ? Colors.main.button : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M8.10156 6.05273H5.17972" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 };
