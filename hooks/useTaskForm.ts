@@ -99,6 +99,7 @@ export const useTaskForm = ({ selectedDate, task, topicNumber }: Props) => {
           isDeleted: data.isDeleted || false,
         };
 
+        console.log('todoData', todoData);
         if (isEditMode) {
           await updateTask(todoData);
         } else {

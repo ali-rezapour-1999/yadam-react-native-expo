@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     shadowRadius: 2,
-    elevation: 3,
     marginBottom: 20,
   },
 });

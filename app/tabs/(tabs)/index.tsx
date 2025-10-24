@@ -147,37 +147,28 @@ const Home = () => {
 
   return (
     <Box style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          styles.scrollContent,
-          !hasTasks && styles.scrollContentEmpty
-        ]}
-      >
-        {/* Header */}
-        <UserHeaderTitle />
+      {/* Header */}
+      <UserHeaderTitle />
 
-        {/* Topic Filter */}
-        <TopicListSection
-          selectedTopicId={selectedTopicId}
-          topics={userTopics}
-          onSelect={handleTopicSelect}
+      {/* Topic Filter */}
+      <TopicListSection
+        selectedTopicId={selectedTopicId}
+        topics={userTopics}
+        onSelect={handleTopicSelect}
+      />
+
+      {hasTasks ? (
+        <TodoListSection />
+      ) : (
+        <EmptyStateSection
+          isOpen={isOpen}
+          setOpen={setIsOpen}
+          token={token}
+          isLoading={isLoading}
+          onGenerate={handleGenerateTasks}
+          onRequireLogin={handleRequireLogin}
         />
-
-        {/* Task List or Empty State */}
-        {hasTasks ? (
-          <TodoListSection />
-        ) : (
-          <EmptyStateSection
-            isOpen={isOpen}
-            setOpen={setIsOpen}
-            token={token}
-            isLoading={isLoading}
-            onGenerate={handleGenerateTasks}
-            onRequireLogin={handleRequireLogin}
-          />
-        )}
-      </ScrollView>
+      )}
     </Box>
   );
 };

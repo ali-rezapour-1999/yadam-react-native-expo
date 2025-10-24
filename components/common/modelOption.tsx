@@ -19,7 +19,7 @@ interface ModalOptionProps {
   buttonStyle?: StyleProp<ViewStyle>;
 }
 
-const ModalOption = ({ children, title, buttonTitle = t('event.options'), style, onCloseProps, isOpenProps, modalHeight = '80%', buttonStyle }: ModalOptionProps) => {
+const ModalOption = ({ children, title, buttonTitle = t('event.options'), style, onCloseProps, isOpenProps, modalHeight, buttonStyle }: ModalOptionProps) => {
   const [internalOpen, setInternalOpen] = useState(false);
 
   const isOpen = isOpenProps !== undefined ? isOpenProps : internalOpen;
@@ -49,7 +49,7 @@ const ModalOption = ({ children, title, buttonTitle = t('event.options'), style,
         <Icon as={isOpen ? ChevronUpIcon : ChevronDownIcon} size="md" color={Colors.main.textSecondary} />
       </Button>
 
-      <Modal isVisible={isOpen} onBackdropPress={toggleOpen} onSwipeComplete={toggleOpen} swipeDirection="down" style={{ justifyContent: 'flex-end', margin: 0 }}>
+      <Modal isVisible={isOpen} onBackdropPress={toggleOpen} onSwipeComplete={toggleOpen} swipeDirection="down" style={{ justifyContent: 'flex-end', margin: 0 }} >
         <Box style={{ backgroundColor: Colors.main.background, height: modalHeight }}>
           <Box style={styles.modalHeader}>
             <TouchableOpacity onPress={toggleOpen}>

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';
 import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { Task } from '@/types/database-type';
 import { CheckCheck, X } from 'lucide-react-native';
 import { Icon } from '../ui/icon';
 import { useBaseStore } from '@/store/baseState/base';
+import { LanguageEnum } from '@/constants/enums/base';
+import { View } from 'react-native';
 
 interface HiddenItemProps {
   item: Task;
@@ -24,15 +25,14 @@ const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask,
     return null;
   }
 
-  const isFa = language === 'fa';
+  const isFa = language === LanguageEnum.FA
 
   return (
-    <HStack
-      className="items-center justify-between"
+    <View
+      className="items-center justify-between mx-auto w-full"
       style={{
         flexDirection: isFa ? 'row' : 'row-reverse',
         marginVertical: 4,
-        width: size?.width || "100%",
         height: size?.height - 5,
       }}
     >
@@ -59,7 +59,7 @@ const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask,
       >
         <Icon as={X} size="3xl" color={Colors.main.background} />
       </Button>
-    </HStack>
+    </View>
   );
 });
 

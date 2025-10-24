@@ -182,11 +182,6 @@ const styles = StyleSheet.create({
   modalOption: {
     padding: 16,
     borderRadius: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 1,
   },
   fabButton: {
     position: "absolute",

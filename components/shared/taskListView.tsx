@@ -19,10 +19,7 @@ interface TaskListViewProps {
 
 const ROW_HEIGHT = 80;
 
-const TaskListView = ({
-  mode,
-  enableSwipeActions = true,
-}: TaskListViewProps) => {
+const TaskListView = ({ mode, enableSwipeActions = true }: TaskListViewProps) => {
   const { isLoading, updateTask, todayTasks, tasks } = useLocalChangeTaskStore();
   const groupedTodos = useGroupedTodos(mode === "grouped" ? tasks : []);
   const [swipedRows, setSwipedRows] = useState<Set<string>>(new Set());
@@ -140,7 +137,6 @@ const TaskListView = ({
         onScroll={handleScroll}
         contentContainerStyle={{
           marginBottom: 20,
-          paddingRight: 16,
           paddingBottom: hideScroll ? 120 : 70,
         }}
       />
@@ -151,7 +147,7 @@ const TaskListView = ({
   if (mode === "grouped") {
     return (
       <Animated.FlatList
-        nestedScrollEnabled
+        scrollEnabled
         scrollEventThrottle={16}
         data={groupedTodos}
         renderItem={renderGroupedItem}
