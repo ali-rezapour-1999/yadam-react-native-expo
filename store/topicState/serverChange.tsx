@@ -7,7 +7,7 @@ import { ServerChangeTopicStateType } from '@/types/topics-type';
 import { useUserState } from '../authState/userState';
 import { useLocalChangeTopicStore } from './localChange';
 
-export const useServerChangeTypeState = create<ServerChangeTopicStateType>((set) => ({
+export const useServerChangeTopicState = create<ServerChangeTopicStateType>((set) => ({
   isLoading: false,
 
   getTopicsByApi: async () => {

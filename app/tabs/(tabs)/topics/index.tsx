@@ -16,9 +16,6 @@ import { Colors } from "@/constants/Colors";
 import { Icon } from "@/components/ui/icon";
 import { User2, Wifi } from "lucide-react-native";
 
-// Stores
-import { useAppStore } from "@/store/authState/authState";
-import { useTopicStore } from "@/store/topcisState";
 
 // Components
 import Search from "@/components/common/search";
@@ -28,6 +25,8 @@ import TopicExploreList from "@/components/shared/topicExploreList";
 // Assets
 import noTopics from "@/assets/images/noTopicImage.png";
 import searchNotFoundData from "@/assets/images/notFoundData.png";
+import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
+import { useUserState } from "@/store/authState/userState";
 
 // Lazy import
 const TopicListView = React.lazy(() => import("@/components/shared/topicListView"));
@@ -60,9 +59,9 @@ const NotFoundDataBySearch = () => (
  * ------------------------------------------------------------ */
 
 const SearchInTopics = ({ onSwitchTab, tab }: { onSwitchTab: () => void, tab: TopicTab }) => {
-  const { searchTopics, loadUserTopics } = useTopicStore();
+  const { searchTopics, loadUserTopics } = useLocalChangeTopicStore();
   const [search, setSearch] = useState("");
-  const { user } = useAppStore();
+  const user = useUserState().user;
 
   const debouncedSearch = useMemo(
     () =>
@@ -103,7 +102,7 @@ const SearchInTopics = ({ onSwitchTab, tab }: { onSwitchTab: () => void, tab: To
  * ------------------------------------------------------------ */
 
 const MyTopicsSection = () => {
-  const { userTopics } = useTopicStore();
+  const userTopics = useLocalChangeTopicStore().userTopics;
 
   const NoData = useMemo(
     () => (userTopics.length == 0 ? <NotFoundDataBySearch /> : <NoTopicsImage />),

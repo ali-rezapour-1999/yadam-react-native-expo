@@ -35,12 +35,12 @@ import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Colors } from "@/constants/Colors";
 import { TaskStatus } from "@/constants/enums/TaskEnum";
-import { useTodoStore } from "@/store/todoState";
-import { useAppStore } from "@/store/authState/authState";
 import { Loading } from "@/components/common/loading";
 import AppModal from "@/components/common/appModal";
 import TrashIcon from "@/assets/Icons/TrushIcon";
 import EditIcon from "@/assets/Icons/EditIcon";
+import { useUserState } from "@/store/authState/userState";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
 
 /* ---------------------- Constants ---------------------- */
 const { width: screenWidth } = Dimensions.get("window");
@@ -51,16 +51,8 @@ const SWIPE_THRESHOLD = screenWidth * 0.4;
 ========================================================== */
 const TaskDetail = () => {
   const { id } = useLocalSearchParams();
-  const { user } = useAppStore();
-
-  const {
-    task,
-    getTaskById,
-    updateTask,
-    isLoading,
-    removeTask,
-    getTodayAllTask,
-  } = useTodoStore();
+  const user = useUserState().user;
+  const { task, getTaskById, updateTask, isLoading, removeTask, getTodayAllTask } = useLocalChangeTaskStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const translateX = useSharedValue(0);

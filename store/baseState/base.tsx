@@ -13,6 +13,7 @@ export const useBaseStore = create<BaseStateType>()(
       language: LanguageEnum.FA,
       calender: CalenderEnum.JALALI,
       selectedDate: getCurrentDate(),
+      hideScroll: false,
       today: getCurrentDate(),
 
       setSelectedDate: async (date: string) => { set({ selectedDate: date }) },

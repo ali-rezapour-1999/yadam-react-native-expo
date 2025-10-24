@@ -14,7 +14,7 @@ import { Colors } from "@/constants/Colors";
 import { Pressable } from "../ui/pressable";
 import { Box } from "../ui/box";
 import AddButton from "./addButton";
-import { useAppStore } from "@/store/authState/authState";
+import { useBaseStore } from "@/store/baseState/base";
 
 const ANIMATION_DURATION = 150;
 const TAB_HEIGHT = 60;
@@ -80,7 +80,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const { hideScroll } = useAppStore();
+  const hideScroll = useBaseStore().hideScroll;
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -93,7 +93,6 @@ export const CustomTabBar: React.FC<BottomTabBarProps & { scrollY: any }> = ({
       state.routes.filter(
         (route) =>
           ![
-            "addTodoAi",
             "tasks/createTask",
             "tasks/detail/[id]",
             "tasks/edit/[id]",

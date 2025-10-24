@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  I18nManager,
-  TouchableOpacity,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpacity } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Colors } from "@/constants/Colors";
-import { useTodoStore } from "@/store/todoState";
 import { t } from "i18next";
 import { useTodoForm } from "@/hooks/useTodoForm";
 import { Box } from "@/components/ui/box";
@@ -16,24 +9,24 @@ import { TodoBasicFields } from "@/components/shared/forms/todoBaseField";
 import TaskAdvancedFields from "@/components/shared/forms/taskAdvancedField";
 import HeaderTitle from "@/components/common/headerTitle";
 import { Text } from "@/components/Themed";
-import { ChevronUpIcon, CloseIcon, Icon } from "@/components/ui/icon";
-import { useTopicStore } from "@/store/topcisState";
+import { ChevronUpIcon, Icon } from "@/components/ui/icon";
 import { Controller } from "react-hook-form";
 import DaySelector from "@/components/common/daySelecter";
 import TopicSelector from "@/components/shared/topicSelector";
 import { CancelIcon } from "@/assets/Icons/Cancel";
-import { useAppStore } from "@/store/authState/authState";
 import ModalOption from "@/components/common/modelOption";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ArrowRightFromLine } from "lucide-react-native";
-import { router } from "expo-router";
+import { useBaseStore } from "@/store/baseState/base";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
+import { useUserState } from "@/store/authState/userState";
+import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
 
 const EditTask: React.FC = () => {
-  const { selectedDate, task } = useTodoStore();
-  const { user } = useAppStore();
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const selectedDate = useBaseStore().selectedDate;
+  const task = useLocalChangeTaskStore().task;
+  const user = useUserState().user;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { userTopics, loadUserTopics } = useTopicStore();
+  const { userTopics, loadUserTopics } = useLocalChangeTopicStore();
 
   useEffect(() => {
     loadUserTopics(user?.id as string);
@@ -74,8 +67,6 @@ const EditTask: React.FC = () => {
             errors={errors}
             startTime={startTime}
             endTime={endTime}
-            showDatePicker={showDatePicker}
-            setShowDatePicker={setShowDatePicker}
           />
         </Box>
 
@@ -143,15 +134,15 @@ const EditTask: React.FC = () => {
           </ModalOption>
         </Box>
       </KeyboardAvoidingView>
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          style={styles.fabButton}
-          className="rounded-xl shadow-lg"
-        >
-          <ButtonText style={styles.fabText}>
-            {t("common.button.edit")}
-          </ButtonText>
-        </Button>
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        style={styles.fabButton}
+        className="rounded-xl shadow-lg"
+      >
+        <ButtonText style={styles.fabText}>
+          {t("common.button.edit")}
+        </ButtonText>
+      </Button>
     </SafeAreaView>
   );
 };

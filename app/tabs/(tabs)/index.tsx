@@ -11,15 +11,14 @@ import { Text } from '@/components/Themed';
 import { Image } from 'expo-image';
 import { Colors } from '@/constants/Colors';
 
-// Stores
-import { useTodoStore } from '@/store/todoState';
-import { useTopicStore } from '@/store/topcisState';
-import { useAppStore } from '@/store/authState/authState';
-
 // Assets & Async Components
 import emptyTask from '@/assets/images/emptyHome.png';
 import { GenerateTaskByAi } from '@/components/shared/modalContent/createTaskByAI';
 import { Button, ButtonText } from '@/components/ui/button';
+import { useUserState } from '@/store/authState/userState';
+import { useLocalChangeTaskStore } from '@/store/taskState/localChange';
+import { useLocalChangeTopicStore } from '@/store/topicState/localChange';
+import { useServerChangeTaskStore } from '@/store/taskState/serverChange';
 const UserHeaderTitle = React.lazy(() => import('@/components/common/userHeaderTitle'));
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
 const TopicFilter = React.lazy(() => import('@/components/shared/topicFilterList'));
@@ -28,13 +27,6 @@ const TopicFilter = React.lazy(() => import('@/components/shared/topicFilterList
 // Memoized Components
 // ============================================================
 
-const HeaderSection = memo(function HeaderSection() {
-  return (
-    <Suspense fallback={null}>
-      <UserHeaderTitle />
-    </Suspense>
-  );
-});
 
 interface TopicListSectionProps {
   selectedTopicId: string;
@@ -42,11 +34,7 @@ interface TopicListSectionProps {
   onSelect: (id: string) => void;
 }
 
-const TopicListSection = memo(function TopicListSection({
-  selectedTopicId,
-  topics,
-  onSelect
-}: TopicListSectionProps) {
+const TopicListSection = memo(function TopicListSection({ selectedTopicId, topics, onSelect }: TopicListSectionProps) {
   return (
     <Suspense fallback={<Loading />}>
       <TopicFilter
@@ -122,16 +110,11 @@ const EmptyStateSection = memo(function EmptyStateSection({
 // ============================================================
 
 const Home = () => {
-  const {
-    getTodayAllTask,
-    todayTasks,
-    getTaskByTopicIdAndDate,
-    createWithAi,
-    isLoading
-  } = useTodoStore();
+  const { getTodayAllTask, todayTasks, getTaskByTopicIdAndDate, isLoading } = useLocalChangeTaskStore();
+  const createWithAi = useServerChangeTaskStore().createWithAi;
 
-  const { userTopics, loadUserTopics } = useTopicStore();
-  const { user, token } = useAppStore();
+  const { userTopics, loadUserTopics } = useLocalChangeTopicStore();
+  const { user, token } = useUserState();
 
   const [selectedTopicId, setSelectedTopicId] = useState<string>('0');
   const [isOpen, setIsOpen] = useState(false);
@@ -188,7 +171,7 @@ const Home = () => {
         ]}
       >
         {/* Header */}
-        <HeaderSection />
+        <UserHeaderTitle />
 
         {/* Topic Filter */}
         <TopicListSection

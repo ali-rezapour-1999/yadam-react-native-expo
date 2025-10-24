@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { t } from "i18next";
 import { Controller } from "react-hook-form";
@@ -22,16 +17,16 @@ import DaySelector from "@/components/common/daySelecter";
 import TopicSelector from "@/components/shared/topicSelector";
 import ModalOption from "@/components/common/modelOption";
 
-import { useTodoStore } from "@/store/todoState";
-import { useTopicStore } from "@/store/topcisState";
-import { useAppStore } from "@/store/authState/authState";
-import { useTodoForm } from "@/hooks/useTodoForm";
 import HeaderTitle from "@/components/common/headerTitle";
+import { useBaseStore } from "@/store/baseState/base";
+import { useUserState } from "@/store/authState/userState";
+import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
+import { useTodoForm } from "@/hooks/useTodoForm";
 
 const CreateTask: React.FC = () => {
-  const { selectedDate } = useTodoStore();
-  const { user } = useAppStore();
-  const { userTopics, loadUserTopics } = useTopicStore();
+  const selectedDate = useBaseStore().selectedDate;
+  const user = useUserState().user;
+  const { userTopics, loadUserTopics } = useLocalChangeTopicStore();
   const { topicId: topicIdFromRoute } = useLocalSearchParams<{
     topicId?: string;
   }>();
@@ -42,23 +37,15 @@ const CreateTask: React.FC = () => {
   }, [user?.id, loadUserTopics]);
 
   const { form, onSubmit } = useTodoForm({
-    selectedDate,
-    topicNumber: topicIdFromRoute,
+    selectedDate, topicNumber: topicIdFromRoute,
   });
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = form;
+
+  const { control, handleSubmit, formState: { errors }, watch } = form;
 
   const startTime = watch("startTime");
   const endTime = watch("endTime");
   const selectedCategoryId = watch("topicId");
-  const selectedTopic = useMemo(
-    () => userTopics.find((topic) => topic.id === selectedCategoryId),
-    [selectedCategoryId, userTopics],
-  );
+  const selectedTopic = useMemo(() => userTopics.find((topic) => topic.id === selectedCategoryId), [selectedCategoryId, userTopics]);
 
   const handleTopicPress = useCallback(() => {
     if (userTopics.length > 0) setIsTopicModalVisible(true);

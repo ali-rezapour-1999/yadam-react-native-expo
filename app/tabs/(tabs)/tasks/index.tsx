@@ -21,10 +21,12 @@ import { Loading } from '@/components/common/loading';
 import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
 
 // Stores & Hooks
-import { useTodoStore } from '@/store/todoState';
-import { useAppStore } from '@/store/authState/authState';
 import { useDateTime } from '@/hooks/useDateTime';
 import YearCalendar from '@/components/shared/forms/yearCalender';
+import { useBaseStore } from '@/store/baseState/base';
+import { useSyncWithServerState } from '@/store/baseState/syncWithService';
+import { useUserState } from '@/store/authState/userState';
+import { useLocalChangeTaskStore } from '@/store/taskState/localChange';
 
 // Lazy Load Components
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
@@ -35,75 +37,68 @@ const TaskListView = React.lazy(() => import('@/components/shared/taskListView')
  * ------------------------------------------------------------
  */
 
-const HeaderComponent = React.memo(
-  ({
-    selectedDate,
-    setDateTimeSelectedDate,
-    shouldShowTodayButton,
-    goToToday,
-    isToday,
-    displayDate,
-  }: any) => {
-    const { setSelectedDate } = useTodoStore();
-    const { syncDataFromServer, isLoading, token } = useAppStore();
-    const [isOpen, setIsOpen] = useState(false);
+const HeaderComponent = React.memo(({ selectedDate, setDateTimeSelectedDate, shouldShowTodayButton, goToToday }: any) => {
+  const setSelectedDate = useBaseStore().setSelectedDate;
+  const { isLoading, token } = useUserState();
+  const syncDataFromServer = useSyncWithServerState().syncDataFromServer;
+  const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-      setSelectedDate(selectedDate);
-    }, [selectedDate, setSelectedDate]);
+  useEffect(() => {
+    setSelectedDate(selectedDate);
+  }, [selectedDate, setSelectedDate]);
 
-    const handleSync = useCallback(async () => {
-      await syncDataFromServer();
-      setIsOpen(false);
-    }, [syncDataFromServer]);
+  const handleSync = useCallback(async () => {
+    await syncDataFromServer();
+    setIsOpen(false);
+  }, [syncDataFromServer]);
 
-    return (
-      <SafeAreaView style={styles.headerContainer}>
-        {/* Header Title and Sync */}
-        <HStack className="justify-between items-center">
-          <Heading style={styles.headerTitle}>{t('todos.todo_list')}</Heading>
-          {token && (
-            <AppModal
-              title={t('todos.sync_data')}
-              buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.info} />}
-              buttonStyle={styles.syncButton}
-              modalBodyStyle={{ paddingHorizontal: 10 }}
-              visible={isOpen}
-              onChangeVisible={setIsOpen}
-            >
-              <Text style={styles.syncDescription}>{t('todos.sync_data_description')}</Text>
-              <Button onPress={handleSync} style={styles.syncConfirmButton}>
-                {isLoading ? (
-                  <Loading style={{ backgroundColor: 'transparent' }} />
-                ) : (
-                  <ButtonText style={styles.syncConfirmText}>{t('common.button.confirm')}</ButtonText>
-                )}
-              </Button>
-            </AppModal>
-          )}
-        </HStack>
+  return (
+    <SafeAreaView style={styles.headerContainer}>
+      {/* Header Title and Sync */}
+      <HStack className="justify-between items-center">
+        <Heading style={styles.headerTitle}>{t('todos.todo_list')}</Heading>
+        {token && (
+          <AppModal
+            title={t('todos.sync_data')}
+            buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.info} />}
+            buttonStyle={styles.syncButton}
+            modalBodyStyle={{ paddingHorizontal: 10 }}
+            visible={isOpen}
+            onChangeVisible={setIsOpen}
+          >
+            <Text style={styles.syncDescription}>{t('todos.sync_data_description')}</Text>
+            <Button onPress={handleSync} style={styles.syncConfirmButton}>
+              {isLoading ? (
+                <Loading style={{ backgroundColor: 'transparent' }} />
+              ) : (
+                <ButtonText style={styles.syncConfirmText}>{t('common.button.confirm')}</ButtonText>
+              )}
+            </Button>
+          </AppModal>
+        )}
+      </HStack>
 
-        {/* Year / Month Selectors */}
-        <VStack className="mt-5">
-          <YearCalendar selectedDate={selectedDate as string} setSelectedDate={setDateTimeSelectedDate} />
+      {/* Year / Month Selectors */}
+      <VStack className="mt-5">
+        <YearCalendar selectedDate={selectedDate as string} setSelectedDate={setDateTimeSelectedDate} />
 
-          {/* Weekly Picker */}
-          <WeeklyDatePicker
-            selectedDate={selectedDate as string}
-            setSelectedDate={setDateTimeSelectedDate}
-          />
+        {/* Weekly Picker */}
+        <WeeklyDatePicker
+          selectedDate={selectedDate as string}
+          setSelectedDate={setDateTimeSelectedDate}
+        />
 
-          {shouldShowTodayButton && (
-            <Box className="items-center mt-3">
-              <Button onPress={goToToday} style={styles.todayButton} className='rounded-lg'>
-                <ButtonText style={styles.todayButtonText}>{t('todos.go_to_today')}</ButtonText>
-              </Button>
-            </Box>
-          )}
-        </VStack>
-      </SafeAreaView>
-    );
-  }
+        {shouldShowTodayButton && (
+          <Box className="items-center mt-3">
+            <Button onPress={goToToday} style={styles.todayButton} className='rounded-lg'>
+              <ButtonText style={styles.todayButtonText}>{t('todos.go_to_today')}</ButtonText>
+            </Button>
+          </Box>
+        )}
+      </VStack>
+    </SafeAreaView>
+  );
+}
 );
 
 /**
@@ -113,9 +108,9 @@ const HeaderComponent = React.memo(
  */
 
 const Todos = () => {
-  const { loadTasks } = useTodoStore();
+  const loadTasks = useLocalChangeTaskStore().loadTasks;
   const { setSelectedMonth, selectedDate, setSelectedDate, isCurrentMonth, isToday, goToToday, } = useDateTime();
-  const { calender } = useAppStore();
+  const calender = useBaseStore().calender;
 
   useEffect(() => {
     if (selectedDate) loadTasks(selectedDate);

@@ -9,9 +9,6 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Category } from "@/constants/Category";
 import { Colors } from "@/constants/Colors";
-import { useAppStore } from "@/store/authState/authState";
-import { useTopicStore } from "@/store/topcisState";
-import { useTodoStore } from "@/store/todoState";
 import { useFocusEffect, useLocalSearchParams, router } from "expo-router";
 import { t } from "i18next";
 import { ScrollView, StyleSheet } from "react-native";
@@ -19,10 +16,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppModal from "@/components/common/appModal";
 import TrashIcon from "@/assets/Icons/TrushIcon";
+import { useUserState } from "@/store/authState/userState";
+import { useBaseStore } from "@/store/baseState/base";
+import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
+import { useServerChangeTopicState } from "@/store/topicState/serverChange";
 
-const MemoizedTopicSubTaskList = React.lazy(
-  () => import("@/components/shared/topicSubTaskList")
-);
+const MemoizedTopicSubTaskList = React.lazy(() => import("@/components/shared/topicSubTaskList"));
 
 const TopicDetail: React.FC = () => {
   const params = useLocalSearchParams();
@@ -30,9 +30,11 @@ const TopicDetail: React.FC = () => {
   const inExplore = params.inExplore === "true";
 
   const [isOpen, setIsOpen] = useState(false);
-  const { language, user } = useAppStore();
-  const { getTopicById, topic, removeTopic, getTopicByIdApi } = useTopicStore();
-  const { getTaskByTopicId } = useTodoStore();
+  const user = useUserState().user;
+  const language = useBaseStore().language;
+  const { getTopicById, topic, removeTopic } = useLocalChangeTopicStore();
+  const getTaskByTopicId = useLocalChangeTaskStore().getTaskByTopicId;
+  const getTopicByIdApi = useServerChangeTopicState().getTopicByIdApi;
 
   useFocusEffect(
     useCallback(() => {
