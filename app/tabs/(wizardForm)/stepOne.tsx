@@ -16,30 +16,22 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
-import { useAppStore } from '@/store/appState';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/components/Themed';
+import { useUserState } from '@/store/authState/userState';
+import { StepOneSchema } from '@/components/schema/stepSchema';
 
-const stepOneSchema = z.object({
-  firstname: z.string().min(1),
-  lastname: z.string(),
-  height: z.string().min(1),
-  weight: z.string().min(1),
-  age: z.string().min(1),
-  gender: z.string(),
-  description: z.string(),
-});
 
-type stepOneSchemaType = z.infer<typeof stepOneSchema>;
+type stepOneSchemaType = z.infer<typeof StepOneSchema>;
 const StepOne = () => {
   const { setStep, gender, age, weight, height, description, setField } = useWizardStore();
-  const { user, setUserInformation } = useAppStore();
+  const { user, setUser } = useUserState();
   const { control, handleSubmit } = useForm<stepOneSchemaType>({
-    resolver: zodResolver(stepOneSchema),
+    resolver: zodResolver(StepOneSchema),
     defaultValues: {
-      firstname: user?.first_name ?? '',
-      lastname: user?.last_name ?? '',
+      firstname: user?.firstName ?? '',
+      lastname: user?.lastName ?? '',
       height: height > 0 ? String(height) : '',
       weight: weight > 0 ? String(weight) : '',
       age: age > 0 ? String(age) : '',
@@ -57,21 +49,21 @@ const StepOne = () => {
 
   const onSubmit = (data: stepOneSchemaType) => {
     Object.entries(data).forEach(([key, value]) => {
-      setField(key as keyof Omit<WizardStateType, 'setField'>, value);
+      setField(key as keyof Omit<WizardStateType, 'setField' | 'updateProfile' | 'clear'>, value);
     });
-    setUserInformation({
+    setUser({
       id: user?.id as string,
-      first_name: data?.firstname,
-      last_name: data?.lastname,
+      firstName: data?.firstname,
+      lastName: data?.lastname,
       language: user?.language ?? 'en',
       role: user?.role,
       level: user?.level,
-      is_verified: user?.is_verified,
-      created_at: user?.created_at,
-      updated_at: user?.updated_at,
+      isVerified: user?.isVerified,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
       email: user?.email,
     });
-    setField('step', String(2));
+    setField('step', 2);
     router.push('/tabs/(wizardForm)/stepTwo');
   };
 

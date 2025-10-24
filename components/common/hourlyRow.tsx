@@ -8,7 +8,7 @@ import { router } from "expo-router";
 import { Task } from "@/types/database-type";
 import EmptySlot from "../shared/emptySlot";
 import { t } from "i18next";
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import { useScrollHandler } from "@/hooks/useScrollHandler";
 
 interface HourlyRowProps {

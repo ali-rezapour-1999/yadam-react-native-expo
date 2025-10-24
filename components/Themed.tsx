@@ -1,6 +1,6 @@
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { useDynamicFont } from '@/hooks/useDynamicFont';
 
 type ColorName = {

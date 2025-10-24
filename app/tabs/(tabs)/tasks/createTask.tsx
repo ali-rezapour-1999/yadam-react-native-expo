@@ -24,7 +24,7 @@ import ModalOption from "@/components/common/modelOption";
 
 import { useTodoStore } from "@/store/todoState";
 import { useTopicStore } from "@/store/topcisState";
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import { useTodoForm } from "@/hooks/useTodoForm";
 import HeaderTitle from "@/components/common/headerTitle";
 

@@ -17,7 +17,7 @@ import { Icon } from "@/components/ui/icon";
 import { User2, Wifi } from "lucide-react-native";
 
 // Stores
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import { useTopicStore } from "@/store/topcisState";
 
 // Components

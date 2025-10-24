@@ -3,9 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect } from 'react';
 import { useTodoStore } from '@/store/todoState';
 import { addTodoSchema, AddTodoSchemaType } from '@/components/schema/addTodoSchema';
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { router } from 'expo-router';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { Task } from '@/types/database-type';
 import { useGenerateNumericId } from './useGenerateId';
 

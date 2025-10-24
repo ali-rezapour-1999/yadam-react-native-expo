@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ButtonText } from '../ui/button';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { Colors } from '@/constants/Colors';
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader } from '@/components/ui/drawer';
 import { t } from 'i18next';

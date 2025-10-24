@@ -9,7 +9,7 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Category } from "@/constants/Category";
 import { Colors } from "@/constants/Colors";
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import { useTopicStore } from "@/store/topcisState";
 import { useTodoStore } from "@/store/todoState";
 import { useFocusEffect, useLocalSearchParams, router } from "expo-router";

@@ -11,7 +11,7 @@ import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
 import { useDynamicFont } from '@/hooks/useDynamicFont';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 const SCOPE = 'INPUT';
 

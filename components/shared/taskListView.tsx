@@ -5,12 +5,12 @@ import ScheduleCard from "./card/scheduleCard";
 import HiddenItem from "../common/hiddenItem";
 import HourlyRow from "../common/hourlyRow";
 import { useTodoStore } from "@/store/todoState";
-import { TaskStatus } from "@/constants/TaskEnum";
+import { TaskStatus } from "@/constants/enums/TaskEnum";
 import { router } from "expo-router";
 import { Loading } from "../common/loading";
 import { Task } from "@/types/database-type";
 import Animated from "react-native-reanimated";
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import { useScrollHandler } from "@/hooks/useScrollHandler";
 interface TaskListViewProps {
   mode: "flat" | "grouped";

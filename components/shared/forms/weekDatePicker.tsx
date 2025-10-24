@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import GregorianCalendar from '../datePicker/gregorianCalender';
 import JalaliCalendar from '../datePicker/jalaliCalendar';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 interface Props {
   selectedDate: string;

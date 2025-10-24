@@ -4,7 +4,7 @@ import { Drawer, DrawerBackdrop, DrawerContent, DrawerHeader, DrawerBody } from 
 import { t } from 'i18next';
 import { Colors } from '@/constants/Colors';
 import { Box } from '@/components/ui/box';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import CalenderIcon from '@/assets/Icons/CalenderIcon';

@@ -1,4 +1,4 @@
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 
 // Base Entity Interface
 export interface BaseEntity {

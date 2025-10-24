@@ -1,5 +1,5 @@
 import api from '../baseApi';
-import { Result } from '@/types/auth-type';
+import { Result } from '@/types/base-type';
 
 export const getTopicsByUserId = async (userId: string, token: string): Promise<Result> => {
 

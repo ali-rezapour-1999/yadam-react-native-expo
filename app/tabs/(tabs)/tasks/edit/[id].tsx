@@ -22,7 +22,7 @@ import { Controller } from "react-hook-form";
 import DaySelector from "@/components/common/daySelecter";
 import TopicSelector from "@/components/shared/topicSelector";
 import { CancelIcon } from "@/assets/Icons/Cancel";
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import ModalOption from "@/components/common/modelOption";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowRightFromLine } from "lucide-react-native";

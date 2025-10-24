@@ -14,7 +14,7 @@ import { Colors } from "@/constants/Colors";
 import { Pressable } from "../ui/pressable";
 import { Box } from "../ui/box";
 import AddButton from "./addButton";
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 
 const ANIMATION_DURATION = 150;
 const TAB_HEIGHT = 60;

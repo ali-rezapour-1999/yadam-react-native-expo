@@ -3,12 +3,12 @@ import { VStack } from '@/components/ui/vstack';
 import { Pressable, StyleProp, ViewStyle, StyleSheet, View } from 'react-native';
 import { Box } from '../../ui/box';
 import { Colors } from '@/constants/Colors';
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { TaskWithCategory } from '@/types/database-type';
 import { Category } from '@/constants/Category';
 import { Text } from '../../Themed';
 import React, { useRef } from 'react';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 interface ScheduleCardProps {
   task: TaskWithCategory;

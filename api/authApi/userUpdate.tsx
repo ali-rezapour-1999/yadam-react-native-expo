@@ -1,7 +1,7 @@
 import Api from '../baseApi';
-import { Result, User } from '@/types/auth-type';
+import { Result, User } from '@/types/base-type';
 
-export const updateUserInformationAction = async (data: User, token: string): Promise<Result> => {
+export const updateUserAction = async (data: User, token: string): Promise<Result> => {
   try {
     const response = await Api.patch('user/update-user/', data, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 200) {

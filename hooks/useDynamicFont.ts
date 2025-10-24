@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 type DynamicTextStyle = StyleProp<TextStyle>;
 

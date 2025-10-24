@@ -4,7 +4,7 @@ import { Colors } from '@/constants/Colors';
 import { TaskIcon } from '@/assets/Icons/TaskIcon';
 import { Category } from '@/constants/Category';
 import { Link } from 'expo-router';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { Text } from '../../Themed';
 import { TopicWithCount } from '@/types/database-type';
 import { Box } from '@/components/ui/box';

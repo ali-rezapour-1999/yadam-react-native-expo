@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import jalaliMoment from 'jalali-moment';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 const dateCalculationCache = new Map<string, any>();
 

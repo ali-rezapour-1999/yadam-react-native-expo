@@ -1,9 +1,9 @@
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { Text } from '../Themed';
 import { Task } from '@/types/database-type';
 import { CheckCheck, X } from 'lucide-react-native';

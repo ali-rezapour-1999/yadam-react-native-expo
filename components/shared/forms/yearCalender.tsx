@@ -1,4 +1,4 @@
-import { useAppStore } from "@/store/appState";
+import { useAppStore } from "@/store/authState/authState";
 import JalaliYearCalendar from "../datePicker/jalaliYearCalnder";
 import GregorianYearCalendar from "../datePicker/gregorianYearCalnder";
 

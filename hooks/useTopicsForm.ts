@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { router } from 'expo-router';
 import { AddTopicSchemaType, addTopicSchema } from '@/components/schema/addTopicSchema';
 import { useTopicStore } from '@/store/topcisState';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { Topic } from '@/types/database-type';
 import { useFocusEffect } from '@react-navigation/native';
 import { useGenerateNumericId } from './useGenerateId';

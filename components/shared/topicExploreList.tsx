@@ -3,7 +3,7 @@ import { useNetworkStatus } from '@/hooks/networkStatus';
 import NoInternetConnection from '../common/noInternetConnection';
 import NeedLogin from '../common/needLogin';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { TopicWithCount } from '@/types/database-type';
 import { getListOfTopics } from '@/api/topicsApi/getPublicApi';
 import { FlatList } from 'react-native';

@@ -1,6 +1,6 @@
 import { PressableStateCallbackType, StyleProp, ViewStyle } from 'react-native';
 import { useMemo } from 'react';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 type DynamicStyle = StyleProp<ViewStyle> | ((state: PressableStateCallbackType) => StyleProp<ViewStyle>);
 

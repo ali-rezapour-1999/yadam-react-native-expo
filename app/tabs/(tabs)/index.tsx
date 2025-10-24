@@ -14,7 +14,7 @@ import { Colors } from '@/constants/Colors';
 // Stores
 import { useTodoStore } from '@/store/todoState';
 import { useTopicStore } from '@/store/topcisState';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 // Assets & Async Components
 import emptyTask from '@/assets/images/emptyHome.png';
@@ -234,7 +234,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   emptyStateContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: 500,

@@ -13,7 +13,7 @@ import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
@@ -40,7 +40,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
-      {isLogin ? <UsernameInput /> : null}
+      {/* {isLogin ? <UsernameInput /> : null} */}
 
       <HStack className="w-full items-center justify-between px-5">
         <Box className="w-4/5 flex-1">
@@ -69,7 +69,7 @@ const Profile = () => {
           <UserImage width={70} height={70} />
           {isLogin ? (
             <VStack>
-              <Heading style={{ color: Colors.main.textPrimary }}>{user?.first_name + ' ' + user?.last_name || 'Set your username'}</Heading>
+              <Heading style={{ color: Colors.main.textPrimary }}>{user?.firstName + ' ' + user?.lastName || 'Set your username'}</Heading>
               <Text className="text-lg" style={{ color: Colors.main.textPrimary }}>
                 {user?.email || 'Set your Email'}
               </Text>

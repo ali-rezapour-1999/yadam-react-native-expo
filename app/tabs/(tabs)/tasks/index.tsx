@@ -22,7 +22,7 @@ import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
 
 // Stores & Hooks
 import { useTodoStore } from '@/store/todoState';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { useDateTime } from '@/hooks/useDateTime';
 import YearCalendar from '@/components/shared/forms/yearCalender';
 

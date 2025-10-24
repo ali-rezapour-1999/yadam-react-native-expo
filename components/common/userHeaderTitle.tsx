@@ -7,7 +7,7 @@ import { VStack } from '../ui/vstack';
 import { Text } from '../Themed';
 import { Link } from 'expo-router';
 import UserImage from './userImage';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 const capitalizeWords = (str: string) => {
   return str

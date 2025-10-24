@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { Colors } from '@/constants/Colors';
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader, DrawerFooter } from '@/components/ui/drawer';
 import { t } from 'i18next';
@@ -13,8 +13,8 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { router } from 'expo-router';
 
 const usernameSchema = z.object({
-  first_name: z.string().min(1, { message: 'auth.first_name_needed' }),
-  last_name: z.string().optional(),
+  firstName: z.string().min(1, { message: 'auth.first_name_needed' }),
+  lastName: z.string().optional(),
 });
 
 const UsernameInput = () => {
@@ -23,7 +23,7 @@ const UsernameInput = () => {
   type usernameSchema = z.infer<typeof usernameSchema>;
 
   useEffect(() => {
-    if (!user?.first_name || user.first_name.length === 0) {
+    if (!user?.firstName || user.firstName.length === 0) {
       setShowDrawer(true);
     } else {
       setShowDrawer(false);
@@ -32,21 +32,21 @@ const UsernameInput = () => {
 
   const { control, handleSubmit } = useForm<usernameSchema>({
     resolver: zodResolver(usernameSchema),
-    defaultValues: { first_name: user?.first_name || '' },
+    defaultValues: { firstName: user?.firstName || '' },
     mode: 'onChange',
   });
 
   const onSubmit = async (data: usernameSchema) => {
     await updateUserInformation({
       id: user?.id as string,
-      first_name: data?.first_name,
-      last_name: data?.last_name,
+      firstName: data?.firstName,
+      lastName: data?.lastName,
       language: user?.language ?? 'en',
       role: user?.role,
       level: user?.level,
-      is_verified: user?.is_verified,
-      created_at: user?.created_at,
-      updated_at: user?.updated_at,
+      isVerified: user?.isVerified,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
       email: user?.email,
     }).then(() => router.replace('/tabs/(profile)'));
   };
@@ -64,12 +64,12 @@ const UsernameInput = () => {
       <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-[30px] h-[40%]">
         <DrawerHeader className='justify-center'>
           <Text className="text-[24px] text-center " style={{ color: Colors.main.textPrimary }}>
-            {t('profile.enter_your_first_and_last_name')}
+            {t('profile.enter_your_first_and_lastName')}
           </Text>
         </DrawerHeader>
         <DrawerBody>
           <Controller
-            name="first_name"
+            name="firstName"
             control={control}
             render={({ field, formState }) => (
               <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-8">
@@ -79,14 +79,14 @@ const UsernameInput = () => {
                     backgroundColor: Colors.main.textPrimary,
                   }}
                 >
-                  <InputField type="text" placeholder={t('profile.first_name_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
+                  <InputField type="text" placeholder={t('profile.firstName_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
                 </Input>
               </FormControl>
             )}
           />
 
           <Controller
-            name="last_name"
+            name="lastName"
             control={control}
             render={({ field, formState }) => (
               <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-8">
@@ -96,7 +96,7 @@ const UsernameInput = () => {
                     backgroundColor: Colors.main.textPrimary,
                   }}
                 >
-                  <InputField type="text" placeholder={t('profile.last_name_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
+                  <InputField type="text" placeholder={t('profile.lastName_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
                 </Input>
               </FormControl>
             )}

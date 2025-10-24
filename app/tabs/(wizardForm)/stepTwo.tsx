@@ -5,7 +5,6 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { Text } from '@/components/Themed';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
-import { GoalEnumItems } from '@/constants/GoalEnumItems';
 import { useWizardStore } from '@/store/wizardFormState';
 import { t } from 'i18next';
 import { Pressable, ScrollView } from 'react-native';
@@ -14,6 +13,7 @@ import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Checkbox } from '@/components/common/checkBox';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { GoalEnumItems } from '@/constants/enums/GoalEnumItems';
 
 const StepTwo = () => {
   const { setStep } = useWizardStore();
@@ -65,7 +65,7 @@ const StepTwo = () => {
           </Text>
 
           <VStack space="lg" className="mt-8">
-            {GoalEnumItems.map((item) => (
+            {GoalEnumItems.map((item: any) => (
               <Pressable
                 key={item.key}
                 onPress={isCheckHandler.bind(null, item.key)}

@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 export const useScrollHandler = () => {
   const { setHideTabBar } = useAppStore();

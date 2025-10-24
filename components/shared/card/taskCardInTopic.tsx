@@ -6,7 +6,7 @@ import { Colors } from '@/constants/Colors';
 import { Task } from '@/types/database-type';
 import { Icon } from '../../ui/icon';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react-native';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 interface TaskCardInTopicProps {
   data: Task;

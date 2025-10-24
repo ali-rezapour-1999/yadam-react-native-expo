@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { Task, TaskWithCategory, Topic, TopicWithCount } from '@/types/database-type';
 
 export class UnifiedDatabase {

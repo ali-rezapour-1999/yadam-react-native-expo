@@ -13,17 +13,14 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { Text, View } from '@/components/Themed';
 import { Colors } from '@/constants/Colors';
 import { CodeForm } from '@/components/shared/forms/auth/codeForm';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { router } from 'expo-router';
 import { HStack } from '@/components/ui/hstack';
 import GoogleIcon from '@/assets/Icons/Google';
 import { Heading } from '@/components/ui/heading';
 
 const emailSchema = z.object({
-  identifier: z
-    .string()
-    .min(1, { message: t('auth.email_required') })
-    .email({ message: t('auth.email_invalid') }),
+  identifier: z.string().min(1, { message: t('auth.email_required') }).email({ message: t('auth.email_invalid') }),
 });
 const phoneSchema = z.object({
   identifier: z
@@ -51,9 +48,7 @@ export const DynamicLogin = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(isSendCode ? combinedSchema : schema),
-    defaultValues: isSendCode
-      ? { identifier: '', code: '' }
-      : { identifier: '' },
+    defaultValues: isSendCode ? { identifier: '', code: '' } : { identifier: '' },
     mode: 'onChange',
   });
 
@@ -101,10 +96,6 @@ export const DynamicLogin = () => {
         <Heading style={styles.title}>
           {t(isSendCode ? 'auth.we_send_code' : 'home.welcome_to_ding')}
         </Heading>
-        <Text style={styles.subtitle}>
-          {isSendCode ? t('auth.enter_code') : authMethod === 'email' ? t('auth.enter_email') : t('auth.enter_phone')}
-        </Text>
-
 
         {!isSendCode ? (
           <Controller
@@ -151,7 +142,7 @@ export const DynamicLogin = () => {
           ]}
         >
           <ButtonText style={styles.primaryText}>
-            {isSendCode ? t('event.approve') : t('auth.send_code')}
+            {isSendCode ? t('common.button.confirm') : t('auth.send_code')}
           </ButtonText>
         </Button>
 
@@ -164,7 +155,7 @@ export const DynamicLogin = () => {
             style={styles.secondaryBtn}
           >
             <ButtonText style={styles.secondaryText}>
-              {t('auth.edit_email')}
+              {t('event.edit_email')}
             </ButtonText>
           </Button>
         ) : (
@@ -239,11 +230,11 @@ const styles = StyleSheet.create({
   secondaryBtn: {
     height: 50,
     borderRadius: 12,
-    backgroundColor: Colors.main.warning + 98,
+    backgroundColor: Colors.main.textDisabled,
     justifyContent: 'center',
   },
   secondaryText: {
-    color: Colors.main.textPrimary,
+    color: Colors.main.background,
     fontSize: 15,
   },
   googleBtn: {

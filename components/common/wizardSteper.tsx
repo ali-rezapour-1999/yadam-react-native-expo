@@ -3,7 +3,7 @@ import { MotiView } from 'moti';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Box } from '../ui/box';
 import { Text } from '../Themed';

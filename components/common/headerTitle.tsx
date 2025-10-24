@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import BackIcon from '@/assets/Icons/Back';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 
 import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';

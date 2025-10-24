@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { MotiView } from 'moti';
 import { Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import getStartImage from '@/assets/images/getStart.png';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import { VStack } from '@/components/ui/vstack';
 import { router } from 'expo-router';
 import GoogleIcon from '@/assets/Icons/Google';

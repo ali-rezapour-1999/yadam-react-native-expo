@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import { HStack } from '../ui/hstack';
 import { Text } from '../Themed';
 import { Button } from '../ui/button';
-import { useAppStore } from '@/store/appState';
+import { useAppStore } from '@/store/authState/authState';
 import ModalOption from '../common/modelOption';
 
 export interface Category {
