@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import GregorianCalendar from '../datePicker/gregorianCalender';
 import JalaliCalendar from '../datePicker/jalaliCalendar';
-import { useAppStore } from '@/store/authState/authState';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface Props {
   selectedDate: string;
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const WeeklyDatePicker = memo(({ selectedDate, setSelectedDate }: Props) => {
-  const { calender } = useAppStore();
+  const calender = useBaseStore.getState().calender;
 
   if (calender == 'jalali') {
     return <JalaliCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;

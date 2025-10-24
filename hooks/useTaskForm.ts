@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect } from 'react';
-import { useTodoStore } from '@/store/todoState';
 import { addTodoSchema, AddTodoSchemaType } from '@/components/schema/addTodoSchema';
 import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { router } from 'expo-router';
-import { useAppStore } from '@/store/authState/authState';
 import { Task } from '@/types/database-type';
 import { useGenerateNumericId } from './useGenerateId';
+import { useLocalChangeTaskStore } from '@/store/taskState/localChange';
+import { useUserState } from '@/store/authState/userState';
 
 interface Props {
   selectedDate: string;
@@ -15,9 +15,9 @@ interface Props {
   task?: Task | null;
 }
 
-export const useTodoForm = ({ selectedDate, task, topicNumber }: Props) => {
-  const { createTask, updateTask } = useTodoStore();
-  const { user } = useAppStore();
+export const useTaskForm = ({ selectedDate, task, topicNumber }: Props) => {
+  const { createTask, updateTask } = useLocalChangeTaskStore();
+  const user = useUserState().user;
   const id = useGenerateNumericId();
 
   const isEditMode = Boolean(task?.id);

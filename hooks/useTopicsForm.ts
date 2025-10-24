@@ -3,19 +3,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback } from 'react';
 import { router } from 'expo-router';
 import { AddTopicSchemaType, addTopicSchema } from '@/components/schema/addTopicSchema';
-import { useTopicStore } from '@/store/topcisState';
-import { useAppStore } from '@/store/authState/authState';
 import { Topic } from '@/types/database-type';
 import { useFocusEffect } from '@react-navigation/native';
 import { useGenerateNumericId } from './useGenerateId';
+import { useLocalChangeTopicStore } from '@/store/topicState/localChange';
+import { useUserState } from '@/store/authState/userState';
 
 interface Props {
   topic: Topic | null;
 }
 
 export const useTopicsForm = ({ topic }: Props) => {
-  const { createTopic, updateTopic } = useTopicStore();
-  const { user } = useAppStore();
+  const { createTopic, updateTopic } = useLocalChangeTopicStore();
+  const user = useUserState.getState().user;
   const isEditMode = Boolean(topic?.id);
   const id = useGenerateNumericId()
 

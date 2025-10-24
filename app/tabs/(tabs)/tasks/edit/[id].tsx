@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, StyleSheet, I18nManager, TouchableOpaci
 import { Button, ButtonText } from "@/components/ui/button";
 import { Colors } from "@/constants/Colors";
 import { t } from "i18next";
-import { useTodoForm } from "@/hooks/useTodoForm";
+import { useTaskForm } from "@/hooks/useTaskForm";
 import { Box } from "@/components/ui/box";
 import { TodoBasicFields } from "@/components/shared/forms/todoBaseField";
 import TaskAdvancedFields from "@/components/shared/forms/taskAdvancedField";
@@ -32,7 +32,7 @@ const EditTask: React.FC = () => {
     loadUserTopics(user?.id as string);
   }, [loadUserTopics]);
 
-  const { form, onSubmit } = useTodoForm({ selectedDate, task });
+  const { form, onSubmit } = useTaskForm({ selectedDate, task });
   const {
     control,
     handleSubmit,

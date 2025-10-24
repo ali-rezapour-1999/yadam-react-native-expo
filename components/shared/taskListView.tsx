@@ -4,14 +4,14 @@ import { useGroupedTodos } from "@/hooks/useGroupedTodos";
 import ScheduleCard from "./card/scheduleCard";
 import HiddenItem from "../common/hiddenItem";
 import HourlyRow from "../common/hourlyRow";
-import { useTodoStore } from "@/store/todoState";
 import { TaskStatus } from "@/constants/enums/TaskEnum";
 import { router } from "expo-router";
 import { Loading } from "../common/loading";
 import { Task } from "@/types/database-type";
 import Animated from "react-native-reanimated";
-import { useAppStore } from "@/store/authState/authState";
 import { useScrollHandler } from "@/hooks/useScrollHandler";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
+import { useBaseStore } from "@/store/baseState/base";
 interface TaskListViewProps {
   mode: "flat" | "grouped";
   enableSwipeActions?: boolean;
@@ -23,12 +23,12 @@ const TaskListView = ({
   mode,
   enableSwipeActions = true,
 }: TaskListViewProps) => {
-  const { isLoading, updateTask, todayTasks, tasks } = useTodoStore();
+  const { isLoading, updateTask, todayTasks, tasks } = useLocalChangeTaskStore();
   const groupedTodos = useGroupedTodos(mode === "grouped" ? tasks : []);
   const [swipedRows, setSwipedRows] = useState<Set<string>>(new Set());
   const [cardSizes, setCardSizes] = useState<Record<string, { width: number; height: number }>>({});
   const { handleScroll } = useScrollHandler();
-  const { hideScroll } = useAppStore();
+  const hideScroll = useBaseStore().hideScroll;
 
   const handleUpdateTaskStatus = useCallback(
     async (task: Task, newStatus: TaskStatus) => {

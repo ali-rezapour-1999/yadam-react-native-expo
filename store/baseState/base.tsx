@@ -16,6 +16,7 @@ export const useBaseStore = create<BaseStateType>()(
       hideScroll: false,
       today: getCurrentDate(),
 
+      setHideScroll: (hideScroll) => set({ hideScroll }),
       setSelectedDate: async (date: string) => { set({ selectedDate: date }) },
       setCalender: (calender) => set({ calender }),
       setLanguage: (lang) => {

@@ -8,6 +8,7 @@ export type BaseStateType = {
   selectedDate: string;
   today: string;
   hideScroll: boolean;
+  setHideScroll: (hideScroll: boolean) => void;
 
   setSelectedDate: (date: string) => Promise<void>;
   setCalender: (val: CalenderEnum) => void;

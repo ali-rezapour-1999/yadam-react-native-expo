@@ -7,7 +7,7 @@ import { VStack } from '../ui/vstack';
 import { Text } from '../Themed';
 import { Link } from 'expo-router';
 import UserImage from './userImage';
-import { useAppStore } from '@/store/authState/authState';
+import { useUserState } from '@/store/authState/userState';
 
 const capitalizeWords = (str: string) => {
   return str
@@ -18,9 +18,9 @@ const capitalizeWords = (str: string) => {
 };
 
 const UserHeaderTitle = memo(() => {
-  const { user } = useAppStore();
+  const user = useUserState().user;
 
-  const displayName = user?.first_name && user?.first_name.length > 0 ? `${capitalizeWords(user.first_name)} ${capitalizeWords(user.last_name || '')}`.trim() : t('home.welcome_to_ding');
+  const displayName = user?.firstName && user?.firstName.length > 0 ? `${capitalizeWords(user.firstName)} ${capitalizeWords(user.firstName || '')}`.trim() : t('home.welcome_to_ding');
   return (
     <HStack className="mb-5 justify-between items-center px-5 mt-12">
       <VStack>

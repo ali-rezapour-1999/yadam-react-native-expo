@@ -4,7 +4,6 @@ import { Topic } from '@/types/database-type';
 import { LocalChangeTopicStateType } from '@/types/topics-type';
 import { useUserState } from '../authState/userState';
 import { getTopicsByUserId } from '@/api/topicsApi/getTopicsByUserId';
-import { mapTopicFromBackend } from '@/utils/topicConverter';
 
 export const useLocalChangeTopicStore = create<LocalChangeTopicStateType>((set, get) => ({
   // ====== STATE ======
@@ -122,7 +121,7 @@ export const useLocalChangeTopicStore = create<LocalChangeTopicStateType>((set, 
       const localTopics = await topicStorage.searchTopics(userId, search);
       const apiRes = await getTopicsByUserId(userId, token);
 
-      const apiTopics = apiRes.success ? apiRes.data.map(mapTopicFromBackend) : [];
+      const apiTopics = apiRes.success ? apiRes.data : [];
       const mergedTopics = [
         ...(Array.isArray(localTopics) ? localTopics : [localTopics]),
         ...apiTopics,

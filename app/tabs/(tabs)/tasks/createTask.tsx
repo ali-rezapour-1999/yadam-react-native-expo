@@ -21,7 +21,7 @@ import HeaderTitle from "@/components/common/headerTitle";
 import { useBaseStore } from "@/store/baseState/base";
 import { useUserState } from "@/store/authState/userState";
 import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
-import { useTodoForm } from "@/hooks/useTodoForm";
+import { useTaskForm } from "@/hooks/useTaskForm";
 
 const CreateTask: React.FC = () => {
   const selectedDate = useBaseStore().selectedDate;
@@ -36,9 +36,7 @@ const CreateTask: React.FC = () => {
     if (user?.id) loadUserTopics(user.id);
   }, [user?.id, loadUserTopics]);
 
-  const { form, onSubmit } = useTodoForm({
-    selectedDate, topicNumber: topicIdFromRoute,
-  });
+  const { form, onSubmit } = useTaskForm({ selectedDate, topicNumber: topicIdFromRoute });
 
   const { control, handleSubmit, formState: { errors }, watch } = form;
 

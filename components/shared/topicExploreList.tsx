@@ -3,18 +3,18 @@ import { useNetworkStatus } from '@/hooks/networkStatus';
 import NoInternetConnection from '../common/noInternetConnection';
 import NeedLogin from '../common/needLogin';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAppStore } from '@/store/authState/authState';
 import { TopicWithCount } from '@/types/database-type';
 import { getListOfTopics } from '@/api/topicsApi/getPublicApi';
 import { FlatList } from 'react-native';
 import TopicsCard from './card/topicsCard';
 import { Loading } from '../common/loading';
-import { mapTopicFromBackend } from '@/utils/topicConverter';
+import { useUserState } from '@/store/authState/userState';
+import { useAuthState } from '@/store/authState/authState';
 
 const TopicExploreList = () => {
   const connection = useNetworkStatus();
-  const isLogin = useAppStore((state) => state.isLogin);
-  const token = useAppStore((state) => state.token as string);
+  const isLogin = useAuthState().isLogin;
+  const token = useUserState().token;
 
   const [exploreData, setExploreData] = useState<TopicWithCount[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,9 +30,9 @@ const TopicExploreList = () => {
     const fetchTopics = async () => {
       setIsLoading(true);
       try {
-        const res = await getListOfTopics(token);
+        const res = await getListOfTopics(token!!);
         if (res.success) {
-          const topics: TopicWithCount[] = res.data.map(mapTopicFromBackend);
+          const topics: TopicWithCount[] = res.data;
           setExploreData(topics);
         }
       } catch (error) {

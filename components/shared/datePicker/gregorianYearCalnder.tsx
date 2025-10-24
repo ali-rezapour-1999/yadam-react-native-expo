@@ -4,7 +4,6 @@ import { Drawer, DrawerBackdrop, DrawerContent, DrawerHeader, DrawerBody } from 
 import { t } from 'i18next';
 import { Colors } from '@/constants/Colors';
 import { Box } from '@/components/ui/box';
-import { useAppStore } from '@/store/authState/authState';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import CalenderIcon from '@/assets/Icons/CalenderIcon';
@@ -13,6 +12,7 @@ import moment from 'moment';
 import { Icon } from '@/components/ui/icon';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react-native';
 import { Text } from '@/components/Themed';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface MonthOption {
   value: string;
@@ -62,7 +62,7 @@ const generateMonthDays = (year: number, month: number) => {
 };
 
 const GregorianYearCalendar: React.FC<GregorianYearCalendarProps> = ({ selectedDate, setSelectedDate }) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language
   const [showDrawer, setShowDrawer] = React.useState(false);
 
   const currentMonth = moment().month() + 1;

@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { SyincWithServerStateType } from '@/types/base-type';
-import { useAuthState } from '../authState/authState';
 import { pushSyncDataWithServer } from '@/api/syncApi';
-import { mapTopicFromBackend } from '@/utils/topicConverter';
-import { mapTaskFromBackend } from '@/utils/taskConverter';
+import { useUserState } from '../authState/userState';
+import { useLocalChangeTaskStore } from '../taskState/localChange';
+import { useLocalChangeTopicStore } from '../topicState/localChange';
 
 export const useSyncWithServerState = create<SyincWithServerStateType>()((set) => ({
   isLoading: false,
@@ -11,15 +11,15 @@ export const useSyncWithServerState = create<SyincWithServerStateType>()((set) =
   syncDataFromServer: async () => {
     set({ isLoading: true });
 
-    const { user, token } = useAuthState.getState();
+    const { user, token } = useUserState.getState();
     if (!user || !token) {
       set({ isLoading: false });
       return;
     }
-    const todoStore = require('./todoState').useTodoStore.getState();
-    const topicStore = require('./topcisState').useTopicStore.getState();
-    const listTask = await todoStore.getAllTask();
-    const listTopic = await topicStore.getAllTopic();
+    const taskState = useLocalChangeTaskStore.getState()
+    const topicState = useLocalChangeTopicStore.getState()
+    const listTask = await taskState.getAllTask();
+    const listTopic = await topicState.getAllTopic();
 
     try {
       const res = await pushSyncDataWithServer({
@@ -30,10 +30,10 @@ export const useSyncWithServerState = create<SyincWithServerStateType>()((set) =
 
       if (res.success) {
         res.data.topics.forEach((topic: any) => {
-          topicStore.createTopic(mapTopicFromBackend(topic));
+          topicState.createTopic(topic);
         });
         res.data.tasks.forEach((task: any) => {
-          todoStore.createTask(mapTaskFromBackend(task));
+          taskState.createTask(task);
         });
       }
     } catch (error) {

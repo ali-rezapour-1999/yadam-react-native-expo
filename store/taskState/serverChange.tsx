@@ -2,7 +2,6 @@ import { generateTasksWithAi } from '@/api/aiRequest';
 import { ServerChangeStateType } from '@/types/tasks-type';
 import { create } from 'zustand';
 import { useUserState } from '../authState/userState';
-import { mapTaskFromBackend } from '@/utils/taskConverter';
 import { useLocalChangeTaskStore } from './localChange';
 
 export const useServerChangeTaskStore = create<ServerChangeStateType>((set) => ({
@@ -18,7 +17,7 @@ export const useServerChangeTaskStore = create<ServerChangeStateType>((set) => (
       );
       if (tasks.success) {
         tasks.data.forEach((task: any) => {
-          useLocalChangeTaskStore.getState().createTask(mapTaskFromBackend(task));
+          useLocalChangeTaskStore.getState().createTask(task);
         });
       }
     } catch (error) {

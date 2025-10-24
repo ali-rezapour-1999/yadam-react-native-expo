@@ -3,14 +3,15 @@ import { MotiView } from 'moti';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/authState/authState';
-import { useWizardStore } from '@/store/wizardFormState';
+
 import { Box } from '../ui/box';
 import { Text } from '../Themed';
+import { useBaseStore } from '@/store/baseState/base';
+import { useWizardStore } from '@/store/wizardFormState';
 
 const WizardStepper = () => {
   const { t } = useTranslation();
-  const { language } = useAppStore();
+  const language = useBaseStore().language
   const stepLabels = [
     t('onboarding.information'),
     t('onboarding.goals'),

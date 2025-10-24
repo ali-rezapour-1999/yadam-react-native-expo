@@ -16,6 +16,7 @@ import MailIcon from '@/assets/Icons/Mail';
 
 import { useGenerateNumericId } from '@/hooks/useGenerateId';
 import { useUserState } from '@/store/authState/userState';
+import { LanguageEnum } from '@/constants/enums/base';
 
 const LanguageScreen = () => {
   const [selectedLang, setSelectedLang] = useState<'en' | 'fa'>('en');
@@ -56,11 +57,11 @@ const LanguageScreen = () => {
       const idToUse = user?.id || localId;
       if (!user?.id && idToUse) setUserAndLanguage(idToUse, selectedLang);
 
-      if (withEmail && user?.id && user?.language) {
-        await Updates.reloadAsync();
-      }
+      // if (withEmail && user?.id && user?.language) {
+      //   await Updates.reloadAsync();
+      // }
 
-      router.push('/');
+      router.push('/tabs/(tabs)');
     } catch (error) {
       console.error('Error selecting language:', error);
     }
@@ -128,7 +129,7 @@ const LanguageScreen = () => {
                 return (
                   <TouchableOpacity
                     key={code}
-                    onPress={() => setSelectedLang(code as 'en' | 'fa')}
+                    onPress={() => setSelectedLang(code as LanguageEnum)}
                     className="rounded-xl p-2 px-4 flex-row items-center justify-between"
                     style={{
                       backgroundColor: isSelected ? Colors.main.primary + '15' : 'transparent',

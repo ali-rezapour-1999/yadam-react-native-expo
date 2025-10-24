@@ -1,11 +1,11 @@
+import { useBaseStore } from '@/store/baseState/base';
 import { useMemo } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
-import { useAppStore } from '@/store/authState/authState';
 
 type DynamicTextStyle = StyleProp<TextStyle>;
 
 export function useDynamicFont(style?: DynamicTextStyle): DynamicTextStyle {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
 
   const fontStyle: TextStyle = {
     fontFamily: 'DanaReguler',

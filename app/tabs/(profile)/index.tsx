@@ -43,7 +43,7 @@ const Profile = () => {
 
 
   return (
-    <View className="flex-1 py-3" style={{ backgroundColor: Colors.main.background }}>
+    <View className="flex-1 pt-10" style={{ backgroundColor: Colors.main.background }}>
       {/* {isLogin ? <UsernameInput /> : null} */}
 
       <HStack className="w-full items-center justify-between px-5">

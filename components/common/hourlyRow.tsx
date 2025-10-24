@@ -1,15 +1,15 @@
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
-import Animated, { useAnimatedScrollHandler } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { Colors } from "@/constants/Colors";
 import ScheduleCard from "../shared/card/scheduleCard";
 import { router } from "expo-router";
 import { Task } from "@/types/database-type";
 import EmptySlot from "../shared/emptySlot";
 import { t } from "i18next";
-import { useAppStore } from "@/store/authState/authState";
 import { useScrollHandler } from "@/hooks/useScrollHandler";
+import { useBaseStore } from "@/store/baseState/base";
 
 interface HourlyRowProps {
   hour: string;
@@ -30,7 +30,7 @@ const HourlyRow = ({ hour, tasks, isCurrentHour = false }: HourlyRowProps) => {
   const currentHour = new Date().getHours();
   const rowHour = parseInt(hour.split(":")[0]);
   const { handleScroll, scrollEventThrottle } = useScrollHandler();
-  const { hideScroll } = useAppStore();
+  const hideScroll = useBaseStore().hideScroll;
 
   const shouldShowEmptySlot =
     tasks.length === 0 &&
@@ -71,7 +71,7 @@ const HourlyRow = ({ hour, tasks, isCurrentHour = false }: HourlyRowProps) => {
                 />
               )}
               showsHorizontalScrollIndicator={false}
-              onScroll={handleScroll} 
+              onScroll={handleScroll}
               scrollEventThrottle={scrollEventThrottle}
               contentContainerStyle={{
                 marginBottom: 20,

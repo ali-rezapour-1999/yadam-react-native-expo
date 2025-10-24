@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import { useAppStore } from '@/store/authState/authState';
 import { Loading } from '@/components/common/loading';
+import { useBaseStore } from '@/store/baseState/base';
+import { CalenderEnum, LanguageEnum } from './enums/base';
 
 export const LanguageGate = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
-  const { setLanguage, setCalender } = useAppStore();
+  const { setLanguage, setCalender } = useBaseStore();
   const router = useRouter();
   const [shouldNavigate, setShouldNavigate] = useState(false);
 
@@ -15,8 +16,8 @@ export const LanguageGate = ({ children }: { children: React.ReactNode }) => {
       try {
         const lang = await AsyncStorage.getItem('lang');
         if (lang) {
-          setLanguage(lang as 'fa' | 'en');
-          setCalender(lang === 'fa' ? 'jalali' : 'gregorian');
+          setLanguage(lang as LanguageEnum);
+          setCalender(lang === LanguageEnum.FA ? CalenderEnum.JALALI : CalenderEnum.GREGORIAN);
         } else {
           setShouldNavigate(true);
         }

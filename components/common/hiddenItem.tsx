@@ -1,13 +1,12 @@
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/authState/authState';
 import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';
 import { TaskStatus } from '@/constants/enums/TaskEnum';
-import { Text } from '../Themed';
 import { Task } from '@/types/database-type';
 import { CheckCheck, X } from 'lucide-react-native';
 import { Icon } from '../ui/icon';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface HiddenItemProps {
   item: Task;
@@ -18,7 +17,7 @@ interface HiddenItemProps {
 }
 
 const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask, size }: HiddenItemProps) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
   const isRowSwiped = swipedRows.has(item.id);
 
   if (!isRowSwiped) {

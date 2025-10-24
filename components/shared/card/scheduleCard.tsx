@@ -8,7 +8,7 @@ import { TaskWithCategory } from '@/types/database-type';
 import { Category } from '@/constants/Category';
 import { Text } from '../../Themed';
 import React, { useRef } from 'react';
-import { useAppStore } from '@/store/authState/authState';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface ScheduleCardProps {
   task: TaskWithCategory;
@@ -18,7 +18,7 @@ interface ScheduleCardProps {
 }
 
 const ScheduleCard = ({ task, onPress, style, onLayoutChange }: ScheduleCardProps) => {
-  const { language } = useAppStore();
+  const language = useBaseStore.getState().language;
   const cardRef = useRef<View>(null);
 
   const handlePress = () => {

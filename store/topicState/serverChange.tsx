@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { getListOfTopics } from '@/api/topicsApi/getPublicApi';
 import { getTopicId } from '@/api/topicsApi/getTopicId';
-import { mapTopicFromBackend } from '@/utils/topicConverter';
 import { getTopicsByUserId } from '@/api/topicsApi/getTopicsByUserId';
 import { ServerChangeTopicStateType } from '@/types/topics-type';
 import { useUserState } from '../authState/userState';
@@ -28,7 +27,7 @@ export const useServerChangeTopicState = create<ServerChangeTopicStateType>((set
     set({ isLoading: true });
     try {
       const topic = await getTopicId(id);
-      useLocalChangeTopicStore.getState().topic = mapTopicFromBackend(topic.data);
+      useLocalChangeTopicStore.getState().setSelectedTopic(topic.data);
     } catch (error) {
       console.error('Failed to load public topics:', error);
       set({ isLoading: false });
@@ -43,7 +42,7 @@ export const useServerChangeTopicState = create<ServerChangeTopicStateType>((set
     try {
 
       const topics = await getTopicsByUserId(id, useUserState().token as string);
-      useLocalChangeTopicStore.getState().userTopics = [...useLocalChangeTopicStore().userTopics, topics.data.map(mapTopicFromBackend)];
+      useLocalChangeTopicStore.getState().userTopics = [...useLocalChangeTopicStore().userTopics, topics.data];
     } catch (error) {
       console.error('Failed to load public topics:', error);
       set({ isLoading: false });
