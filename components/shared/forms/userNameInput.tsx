@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAppStore } from '@/store/authState/authState';
 import { Colors } from '@/constants/Colors';
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader, DrawerFooter } from '@/components/ui/drawer';
 import { t } from 'i18next';
@@ -11,16 +10,13 @@ import { FormControl } from '@/components/ui/form-control';
 import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from '@/components/ui/button';
 import { router } from 'expo-router';
-
-const usernameSchema = z.object({
-  firstName: z.string().min(1, { message: 'auth.first_name_needed' }),
-  lastName: z.string().optional(),
-});
+import { useUserState } from '@/store/authState/userState';
+import { UsernameSchema } from '@/components/schema/userSchema';
 
 const UsernameInput = () => {
-  const { user, updateUserInformation } = useAppStore();
+  const { user, updateUser } = useUserState();
   const [showDrawer, setShowDrawer] = useState(false);
-  type usernameSchema = z.infer<typeof usernameSchema>;
+  type usernameSchema = z.infer<typeof UsernameSchema>;
 
   useEffect(() => {
     if (!user?.firstName || user.firstName.length === 0) {
@@ -31,13 +27,13 @@ const UsernameInput = () => {
   }, [user]);
 
   const { control, handleSubmit } = useForm<usernameSchema>({
-    resolver: zodResolver(usernameSchema),
+    resolver: zodResolver(UsernameSchema),
     defaultValues: { firstName: user?.firstName || '' },
     mode: 'onChange',
   });
 
   const onSubmit = async (data: usernameSchema) => {
-    await updateUserInformation({
+    await updateUser({
       id: user?.id as string,
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -75,9 +71,7 @@ const UsernameInput = () => {
               <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-8">
                 <Input
                   className="my-1 h-16 rounded-xl px-4"
-                  style={{
-                    backgroundColor: Colors.main.textPrimary,
-                  }}
+                  style={{ backgroundColor: Colors.main.border }}
                 >
                   <InputField type="text" placeholder={t('profile.firstName_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
                 </Input>
@@ -92,9 +86,7 @@ const UsernameInput = () => {
               <FormControl isInvalid={!!formState.errors} isRequired size="lg" className="mt-8">
                 <Input
                   className="my-1 h-16 rounded-xl px-4"
-                  style={{
-                    backgroundColor: Colors.main.textPrimary,
-                  }}
+                  style={{ backgroundColor: Colors.main.border }}
                 >
                   <InputField type="text" placeholder={t('profile.lastName_placeholder')} value={field.value} onChangeText={field.onChange} className="text-xl" />
                 </Input>
@@ -104,7 +96,7 @@ const UsernameInput = () => {
         </DrawerBody>
         <DrawerFooter>
           <Button className="h-14 mb-3 rounded-xl w-full" onPress={handleSubmit(onSubmit)} style={{ backgroundColor: Colors.main.button }}>
-            <ButtonText className="text-lg">{t('event.approve')}</ButtonText>
+            <ButtonText className="text-lg">{t('common.button.confirm')}</ButtonText>
           </Button>
         </DrawerFooter>
       </DrawerContent>

@@ -13,13 +13,15 @@ import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/authState/authState';
+import { useAuthState } from '@/store/authState/authState';
+import { useUserState } from '@/store/authState/userState';
+import { useBaseStore } from '@/store/baseState/base';
 import { useWizardStore } from '@/store/wizardFormState';
 import { Link, router } from 'expo-router';
 import { t } from 'i18next';
 import { Info, Settings, Headset, ChevronRight, ChevronLeft, LogOutIcon } from 'lucide-react-native';
 import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 const profileItem = [
   { title: 'profile.edit_account', icon: EditIcon, path: '/tabs/(wizardForm)/stepOne' },
@@ -28,7 +30,9 @@ const profileItem = [
 ];
 
 const Profile = () => {
-  const { user, language, isLogin, logout } = useAppStore();
+  const { isLogin, logout } = useAuthState();
+  const user = useUserState().user
+  const language = useBaseStore().language
   const { description } = useWizardStore();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -39,7 +43,7 @@ const Profile = () => {
 
 
   return (
-    <SafeAreaView className="flex-1" style={{ backgroundColor: Colors.main.background }}>
+    <View className="flex-1 py-3" style={{ backgroundColor: Colors.main.background }}>
       {/* {isLogin ? <UsernameInput /> : null} */}
 
       <HStack className="w-full items-center justify-between px-5">
@@ -121,7 +125,7 @@ const Profile = () => {
           </Text>
         </Center>
       </Box>
-    </SafeAreaView>
+    </View>
   );
 };
 export default Profile;

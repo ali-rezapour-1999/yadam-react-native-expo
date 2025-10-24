@@ -67,7 +67,7 @@ export const useAuthState = create<AuthStateType>()(
       }
     },
 
-    logOut: async () => {
+    logout: async () => {
       useUserState.setState({ token: null, user: {} as Pick<User, 'id' | 'language'> });
       set({ isLogin: false, });
     },

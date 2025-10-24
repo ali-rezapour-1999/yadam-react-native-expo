@@ -3,12 +3,12 @@ import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import BackIcon from '@/assets/Icons/Back';
-import { useAppStore } from '@/store/authState/authState';
 
 import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';
 import { Box } from '../ui/box';
 import { Heading } from '../ui/heading';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface HeaderTitleProps {
   title?: string;
@@ -25,7 +25,7 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
   size = 'xl',
   center = false,
 }) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
 
   const handleBackPress = () => {
     if (path) router.push(path as any);

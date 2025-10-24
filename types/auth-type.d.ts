@@ -33,7 +33,7 @@ export type AuthStateType = {
   sendMassage: (identifier: string) => Promise<Result>;
   sendOtp: (identifier: string, code: string) => Promise<Result>;
   googleLogin: () => Promise<Result>;
-  logOut: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 export type UserStateType = {
