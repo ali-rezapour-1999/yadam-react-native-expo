@@ -1,44 +1,26 @@
 import React, { useState } from 'react';
-import {
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-} from 'react-native';
-import { z } from 'zod';
+import { TextInput, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { t } from 'i18next';
 import { Button, ButtonText } from '@/components/ui/button';
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { Colors } from '@/constants/Colors';
 import { CodeForm } from '@/components/shared/forms/auth/codeForm';
-import { useAppStore } from '@/store/authState/authState';
 import { router } from 'expo-router';
 import { HStack } from '@/components/ui/hstack';
 import GoogleIcon from '@/assets/Icons/Google';
 import { Heading } from '@/components/ui/heading';
-
-const emailSchema = z.object({
-  identifier: z.string().min(1, { message: t('auth.email_required') }).email({ message: t('auth.email_invalid') }),
-});
-const phoneSchema = z.object({
-  identifier: z
-    .string()
-    .min(10, { message: t('auth.phone_required') })
-    .regex(/^\+?\d{10,14}$/, { message: t('auth.phone_invalid') }),
-});
-const codeSchema = z.object({
-  code: z.string().length(6, { message: t('auth.code_must_be_6') }),
-});
+import { useAuthState } from '@/store/authState/authState';
+import { CodeSchema, EmailSchema, PhoneSchema } from '@/components/schema/authSchema';
 
 export const DynamicLogin = () => {
-  const { sendMassage, sendOtp, isSendCode, setIsSendCode, isLoading } = useAppStore();
+  const { sendMassage, sendOtp, isSendCode, setIsSendCode, isLoading } = useAuthState();
   const [authMethod, setAuthMethod] = useState<'email' | 'phone'>('email');
   const [hasError, setHasError] = useState(false);
 
-  const schema = authMethod === 'email' ? emailSchema : phoneSchema;
-  const combinedSchema = schema.merge(codeSchema);
+  const schema = authMethod === 'email' ? EmailSchema : PhoneSchema;
+  const combinedSchema = schema.merge(CodeSchema);
 
   const {
     control,
