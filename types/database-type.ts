@@ -6,6 +6,7 @@ export interface BaseEntity {
   createdAt: string;
   updatedAt: string;
   userId: string;
+  parentId?: string;
 }
 
 // Category Interface

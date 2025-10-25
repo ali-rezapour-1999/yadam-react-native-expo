@@ -37,7 +37,8 @@ export class UnifiedDatabase {
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL,
             user_id TEXT NOT NULL,
-            is_deleted INTEGER NOT NULL DEFAULT 0
+            is_deleted INTEGER NOT NULL DEFAULT 0,
+            parent_id TEXT DEFAULT NULL
           );
         `);
 
@@ -57,7 +58,8 @@ export class UnifiedDatabase {
             updated_at TEXT NOT NULL,
             user_id TEXT NOT NULL,
             level TEXT not null DEFAULT 'low',
-            is_deleted INTEGER NOT NULL DEFAULT 0
+            is_deleted INTEGER NOT NULL DEFAULT 0,
+            parent_id TEXT DEFAULT NULL,
 
             CHECK (date LIKE '____-__-__'),
             CHECK (start_time LIKE '__:__'),
@@ -101,6 +103,7 @@ export class UnifiedDatabase {
       updated_at: topic.updatedAt,
       user_id: topic.userId,
       is_deleted: topic.isDeleted ? 1 : 0,
+      parent_id: topic.parentId ?? null,
     };
   }
 
@@ -117,6 +120,7 @@ export class UnifiedDatabase {
       updatedAt: row.updated_at,
       userId: row.user_id,
       isDeleted: !!row.is_deleted,
+      parentId: row.parent_id ?? undefined,
     };
   }
 
@@ -142,9 +146,9 @@ export class UnifiedDatabase {
       await this.db.runAsync(
         `
         INSERT OR REPLACE INTO topics (
-          id, title, description, is_public, status, category_id, likes, created_at, updated_at, user_id
+          id, title, description, is_public, status, category_id, likes, created_at, updated_at, user_id , parent_id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [row.id, row.title, row.description, row.is_public, row.status, row.category_id, row.likes, row.created_at, row.updated_at, row.user_id],
+        [row.id, row.title, row.description, row.is_public, row.status, row.category_id, row.likes, row.created_at, row.updated_at, row.user_id, row.parent_id],
       );
     } catch (error) {
       console.error(`Failed to create topic with ID ${topic.id}:`, error);
@@ -161,9 +165,9 @@ export class UnifiedDatabase {
       const result = await this.db.runAsync(
         `
         UPDATE topics SET
-          title = ?, description = ?, is_public = ?, status = ?, category_id = ?, likes = ?, updated_at = ? , is_deleted = ?
+          title = ?, description = ?, is_public = ?, status = ?, category_id = ?, likes = ?, updated_at = ? , is_deleted = ? , parent_id = ?
          WHERE id = ?`,
-        [row.title, row.description, row.is_public, row.status, row.category_id, row.likes, new Date().toISOString(), row.id, row.is_deleted],
+        [row.title, row.description, row.is_public, row.status, row.category_id, row.likes, new Date().toISOString(), row.id, row.is_deleted, row.parent_id],
       );
 
       if (result.changes === 0) {
@@ -300,7 +304,7 @@ export class UnifiedDatabase {
     const safe = (v?: string) => (v && v.trim() ? v.trim() : null);
     return {
       id: task.id,
-      title: task.title.trim(),
+      title: task.title,
       description: task.description?.trim() || '',
       start_time: task.startTime,
       end_time: task.endTime,
@@ -313,6 +317,7 @@ export class UnifiedDatabase {
       updated_at: task.updatedAt,
       user_id: task.userId,
       is_deleted: task.isDeleted ? 1 : 0,
+      parent_id: task.parentId ?? null,
     };
   }
 
@@ -332,6 +337,7 @@ export class UnifiedDatabase {
       updatedAt: row.updated_at,
       userId: row.user_id,
       isDeleted: !!row.is_deleted,
+      parentId: row.parent_id ?? undefined,
     };
   }
 
@@ -367,9 +373,9 @@ export class UnifiedDatabase {
         `
         INSERT OR REPLACE INTO tasks (
           id, title, description, start_time, end_time, date, status, 
-          topic_id, goal_id, created_at, updated_at, reminder_days, user_id , is_deleted
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)`,
-        [row.id, row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, row.created_at, row.updated_at, row.reminder_days, row.user_id, row.is_deleted],
+          topic_id, goal_id, created_at, updated_at, reminder_days, user_id , is_deleted , parent_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ?)`,
+        [row.id, row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, row.created_at, row.updated_at, row.reminder_days, row.user_id, row.is_deleted, row.parent_id]
       );
     } catch (error) {
       console.error(`Failed to create task with ID ${task.id}:`, error);
@@ -387,9 +393,9 @@ export class UnifiedDatabase {
         `
         UPDATE tasks SET
           title = ?, description = ?, start_time = ?, end_time = ?, date = ?, 
-          status = ?, topic_id = ?, goal_id = ?, updated_at = ? , is_deleted = ?
+          status = ?, topic_id = ?, goal_id = ?, updated_at = ? , is_deleted = ? , parent_id = ?
          WHERE id = ?`,
-        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.is_deleted, row.id]
+        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.is_deleted, row.id, row.parent_id]
       );
 
       if (result.changes === 0) {

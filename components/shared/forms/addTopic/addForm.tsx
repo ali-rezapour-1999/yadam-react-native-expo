@@ -1,5 +1,4 @@
 import { Text } from '@/components/Themed';
-import { Box } from '@/components/ui/box';
 import { FormControl } from '@/components/ui/form-control';
 import { Input, InputField } from '@/components/ui/input';
 import { Colors } from '@/constants/Colors';

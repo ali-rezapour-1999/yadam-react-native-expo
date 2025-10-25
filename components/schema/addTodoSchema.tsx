@@ -12,6 +12,7 @@ export const addTodoSchema = z.object({
   description: z.string().optional(),
   createdAt: z.string(),
   reminderDays: z.array(z.string()).optional(),
+  paretnId: z.string().optional(),
   isDeleted: z.boolean().optional(),
 });
 

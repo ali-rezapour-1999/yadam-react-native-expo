@@ -75,6 +75,7 @@ export const useTaskForm = ({ selectedDate, task, topicNumber }: Props) => {
         createdAt: now.toISOString(),
         reminderDays: [],
         isDeleted: false,
+        paretnId: task?.id || '',
       });
     }
   }, [reset, selectedDate, task, isEditMode, topicNumber]);
@@ -97,6 +98,7 @@ export const useTaskForm = ({ selectedDate, task, topicNumber }: Props) => {
           updatedAt: new Date().toISOString(),
           reminderDays: data.reminderDays?.map(String),
           isDeleted: data.isDeleted || false,
+          paretnId: data.paretnId || '',
         };
 
         if (isEditMode) {

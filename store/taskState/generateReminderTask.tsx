@@ -74,6 +74,7 @@ export const generateReminderTasks = async (task: Task) => {
         ...task,
         id: useGenerateNumericId(),
         date: targetDateStr,
+        parentId: task.id,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };

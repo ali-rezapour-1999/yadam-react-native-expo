@@ -80,6 +80,7 @@ export const useTopicsForm = ({ topic }: Props) => {
           isPublic: data.isPublic ?? false,
           status: 'ACTIVE',
           isDeleted: data.isDeleted || false,
+          parentId: data.paretnId || '',
         };
 
         if (isEditMode) {
