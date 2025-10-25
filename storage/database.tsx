@@ -67,6 +67,11 @@ export class UnifiedDatabase {
           );
         `);
 
+        await this.db.runAsync('PRAGMA foreign_keys = ON;');
+        await this.db.runAsync('PRAGMA journal_mode = WAL;');
+        await this.db.runAsync('PRAGMA synchronous = NORMAL;');
+        await this.db.runAsync('CREATE INDEX IF NOT EXISTS idx_tasks_user_date ON tasks(user_id, date);');
+
         console.warn('[Database] Unified database initialized successfully');
         this.isInitialized = true;
         this.initializationPromise = null;
@@ -294,6 +299,8 @@ export class UnifiedDatabase {
   }
 
   private taskToRow(task: Task) {
+
+    const safe = (v?: string) => (v && v.trim() ? v.trim() : null);
     return {
       id: task.id,
       title: task.title.trim(),
@@ -302,9 +309,9 @@ export class UnifiedDatabase {
       end_time: task.endTime,
       date: task.date,
       status: task.status,
-      topic_id: task.topicId ?? null,
+      topic_id: safe(task.topicId),
       reminder_days: JSON.stringify(task.reminderDays || []),
-      goal_id: task.goalId ?? null,
+      goal_id: safe(task.goalId),
       created_at: task.createdAt,
       updated_at: task.updatedAt,
       user_id: task.userId,
