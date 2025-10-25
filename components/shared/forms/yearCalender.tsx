@@ -11,10 +11,10 @@ const YearCalendar: React.FC<Props> = ({ selectedDate, setSelectedDate }) => {
   const calender = useBaseStore().calender;
 
   if (calender == 'jalali') {
-    return <JalaliYearCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
+    return <JalaliYearCalendar selectedDate={selectedDate} setSelectedDateTime={setSelectedDate} />;
   }
 
-  return <GregorianYearCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
+  return <GregorianYearCalendar selectedDate={selectedDate} setSelectedDateTime={setSelectedDate} />;
 };
 
 export default YearCalendar;

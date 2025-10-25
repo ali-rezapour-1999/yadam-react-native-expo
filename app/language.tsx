@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import { Image, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Text } from '@/components/Themed';
 import { Box } from '@/components/ui/box';
 import { VStack } from '@/components/ui/vstack';
 import { MotiView } from 'moti';
 import { useTranslation } from 'react-i18next';
-import { router } from 'expo-router';
-import * as Updates from 'expo-updates';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Colors } from '@/constants/Colors';
 import getStartImage from '@/assets/images/getStart.png';
@@ -18,6 +17,31 @@ import { useGenerateNumericId } from '@/hooks/useGenerateId';
 import { useUserState } from '@/store/authState/userState';
 import { LanguageEnum } from '@/constants/enums/base';
 
+const LOCAL_ID_KEY = 'localUserId';
+
+const ActionButton = ({ label, onPress, icon, bgColor, textColor, }: {
+  label: string;
+  onPress: () => void;
+  icon?: React.ReactNode;
+  bgColor: string;
+  textColor: string;
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    className="rounded-xl p-4 mt-3 flex-row items-center justify-center gap-3"
+    style={{
+      backgroundColor: bgColor,
+      shadowColor: Colors.main.primary,
+      shadowOffset: { width: 0, height: 4 },
+    }}
+  >
+    {icon}
+    <Text className="text-lg font-extrabold" style={{ color: textColor }}>
+      {label}
+    </Text>
+  </TouchableOpacity>
+);
+
 const LanguageScreen = () => {
   const [selectedLang, setSelectedLang] = useState<'en' | 'fa'>('en');
   const [localId, setLocalId] = useState<string | null>(null);
@@ -26,27 +50,34 @@ const LanguageScreen = () => {
   const { i18n } = useTranslation();
   const { setUserAndLanguage, user } = useUserState();
 
-  // ==================== Lifecycle ====================
-  useEffect(() => {
-    const initializeLocalId = async () => {
-      try {
-        const storedId = await AsyncStorage.getItem('localUserId');
-        if (storedId) return setLocalId(storedId);
+  const generateNumericId = useGenerateNumericId();
 
-        const newId = useGenerateNumericId();
-        await AsyncStorage.setItem('localUserId', newId);
-        setLocalId(newId);
+  useEffect(() => {
+    let mounted = true;
+    const initializeLocalData = async () => {
+      setLoading(true);
+      try {
+        const storedId = await AsyncStorage.getItem(LOCAL_ID_KEY);
+
+        if (storedId) {
+          if (mounted) setLocalId(storedId);
+        } else {
+          const newId = typeof generateNumericId === 'function' ? generateNumericId : `${Date.now()}`;
+          await AsyncStorage.setItem(LOCAL_ID_KEY, newId);
+          if (mounted) setLocalId(newId);
+        }
       } catch (error) {
-        console.error('Error getting/creating localId:', error);
+        console.error('Error getting/creating localId :', error);
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
-
-    initializeLocalId();
+    initializeLocalData();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // ==================== Handlers ====================
   const handleLanguageSelection = async (withEmail: boolean) => {
     if (!localId && !user?.id) return;
 
@@ -55,11 +86,9 @@ const LanguageScreen = () => {
       await i18n.changeLanguage(selectedLang);
 
       const idToUse = user?.id || localId;
-      if (!user?.id && idToUse) setUserAndLanguage(idToUse, selectedLang);
-
-      // if (withEmail && user?.id && user?.language) {
-      //   await Updates.reloadAsync();
-      // }
+      if (!user?.id && idToUse) {
+        setUserAndLanguage(idToUse, selectedLang);
+      }
 
       router.push('/tabs/(tabs)');
     } catch (error) {
@@ -67,15 +96,11 @@ const LanguageScreen = () => {
     }
   };
 
-  // ==================== Constants ====================
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
   ];
 
-  // ======================================================
-  //                COMPONENT UI
-  // ======================================================
   return (
     <View
       style={{
@@ -86,7 +111,6 @@ const LanguageScreen = () => {
         paddingBottom: 40,
       }}
     >
-      {/* ===== Header ===== */}
       <MotiView
         from={{ opacity: 0, translateY: -50 }}
         animate={{ opacity: 1, translateY: 0 }}
@@ -101,7 +125,6 @@ const LanguageScreen = () => {
         </Text>
       </MotiView>
 
-      {/* ===== Image ===== */}
       <MotiView
         from={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -111,7 +134,6 @@ const LanguageScreen = () => {
         <Image source={getStartImage} className="h-80 w-80" />
       </MotiView>
 
-      {/* ===== Language Selection ===== */}
       <MotiView
         from={{ opacity: 0, translateY: 50 }}
         animate={{ opacity: 1, translateY: 0 }}
@@ -163,7 +185,6 @@ const LanguageScreen = () => {
           </View>
         </Box>
 
-        {/* ===== Buttons ===== */}
         <MotiView
           from={{ opacity: 0, translateY: 20 }}
           animate={{ opacity: 1, translateY: 0 }}
@@ -202,37 +223,5 @@ const LanguageScreen = () => {
     </View>
   );
 };
-
-// ======================================================
-//               REUSABLE ACTION BUTTON
-// ======================================================
-const ActionButton = ({
-  label,
-  onPress,
-  icon,
-  bgColor,
-  textColor,
-}: {
-  label: string;
-  onPress: () => void;
-  icon?: React.ReactNode;
-  bgColor: string;
-  textColor: string;
-}) => (
-  <TouchableOpacity
-    onPress={onPress}
-    className="rounded-xl p-4 mt-3 flex-row items-center justify-center gap-3"
-    style={{
-      backgroundColor: bgColor,
-      shadowColor: Colors.main.primary,
-      shadowOffset: { width: 0, height: 4 },
-    }}
-  >
-    {icon}
-    <Text className="text-lg font-extrabold" style={{ color: textColor }}>
-      {label}
-    </Text>
-  </TouchableOpacity>
-);
 
 export default LanguageScreen;

@@ -22,7 +22,7 @@ interface MonthOption {
 
 interface JalaliYearCalendarProps {
   selectedDate: string | null;
-  setSelectedDate: (date: string) => void;
+  setSelectedDateTime: (date: string) => void;
 }
 
 const jalaliMonths: MonthOption[] = [
@@ -61,8 +61,8 @@ const generateMonthDays = (year: number, month: number) => {
   return days;
 };
 
-const JalaliYearCalendar: React.FC<JalaliYearCalendarProps> = ({ selectedDate, setSelectedDate }) => {
-  const language = useBaseStore().language;
+const JalaliYearCalendar: React.FC<JalaliYearCalendarProps> = ({ selectedDate, setSelectedDateTime }) => {
+  const { language, setSelectedDate } = useBaseStore()
   const [showDrawer, setShowDrawer] = React.useState(false);
 
   const currentJalaliMonth = jalaliMoment().jMonth() + 1;
@@ -113,9 +113,10 @@ const JalaliYearCalendar: React.FC<JalaliYearCalendarProps> = ({ selectedDate, s
 
   const handleDayPress = React.useCallback((day: number) => {
     const dateStr = jalaliMoment(`${selectedYear}/${selectedMonth}/${day}`, 'jYYYY/jM/jD').format('YYYY-MM-DD');
+    setSelectedDateTime(dateStr);
     setSelectedDate(dateStr);
     setShowDrawer(false);
-  }, [selectedYear, selectedMonth, setSelectedDate]);
+  }, [selectedYear, selectedMonth, setSelectedDate, setSelectedDateTime]);
 
   const buttonText = React.useMemo(() => {
     if (selectedDate) {

@@ -22,9 +22,6 @@ export interface LocalChangeStateType {
   getTodayAllTask: () => Promise<void>;
   getTaskByTopicIdAndDate: (categoryId: string) => Promise<void>;
   getTaskByTopicId: (categoryId: string) => Promise<void>;
-
-  generateReminderTasks: (task: Task) => Promise<void>;
-  reloadTaskLists: (date: string) => Promise<void>;
 }
 
 

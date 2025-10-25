@@ -67,10 +67,7 @@ export class UnifiedDatabase {
           );
         `);
 
-        await this.db.runAsync('PRAGMA foreign_keys = ON;');
-        await this.db.runAsync('PRAGMA journal_mode = WAL;');
-        await this.db.runAsync('PRAGMA synchronous = NORMAL;');
-        await this.db.runAsync('CREATE INDEX IF NOT EXISTS idx_tasks_user_date ON tasks(user_id, date);');
+        await this.db.runAsync('CREATE INDEX IF NOT EXISTS idx_tasks_topic_id ON tasks(topic_id);');
 
         console.warn('[Database] Unified database initialized successfully');
         this.isInitialized = true;

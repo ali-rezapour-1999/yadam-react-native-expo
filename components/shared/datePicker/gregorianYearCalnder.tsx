@@ -22,7 +22,7 @@ interface MonthOption {
 
 interface GregorianYearCalendarProps {
   selectedDate: string | null;
-  setSelectedDate: (date: string) => void;
+  setSelectedDateTime: (date: string) => void;
 }
 
 const gregorianMonths: MonthOption[] = [
@@ -61,8 +61,8 @@ const generateMonthDays = (year: number, month: number) => {
   return days;
 };
 
-const GregorianYearCalendar: React.FC<GregorianYearCalendarProps> = ({ selectedDate, setSelectedDate }) => {
-  const language = useBaseStore().language
+const GregorianYearCalendar: React.FC<GregorianYearCalendarProps> = ({ selectedDate, setSelectedDateTime }) => {
+  const { language, setSelectedDate } = useBaseStore()
   const [showDrawer, setShowDrawer] = React.useState(false);
 
   const currentMonth = moment().month() + 1;
@@ -114,8 +114,9 @@ const GregorianYearCalendar: React.FC<GregorianYearCalendarProps> = ({ selectedD
   const handleDayPress = React.useCallback((day: number) => {
     const dateStr = moment(`${selectedYear}-${selectedMonth}-${day}`, 'YYYY-M-D').format('YYYY-MM-DD');
     setSelectedDate(dateStr);
+    setSelectedDateTime(dateStr);
     setShowDrawer(false);
-  }, [selectedYear, selectedMonth, setSelectedDate]);
+  }, [selectedYear, selectedMonth, setSelectedDate, setSelectedDateTime]);
 
   const buttonText = React.useMemo(() => {
     if (selectedDate) {

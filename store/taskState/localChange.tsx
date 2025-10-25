@@ -5,6 +5,7 @@ import { taskStorage } from "@/storage/database";
 import { LocalChangeStateType } from "@/types/tasks-type";
 import { useUserState } from "../authState/userState";
 import { useBaseStore } from "../baseState/base";
+import { generateReminderTasks } from "./generateReminderTask";
 
 // 🕒 Utility: Get current date in YYYY-MM-DD
 const getCurrentDate = (): string => new Date().toISOString().split("T")[0];
@@ -50,8 +51,9 @@ export const useLocalChangeTaskStore = create<LocalChangeStateType>((set, get) =
     set({ isLoading: true });
     try {
       await taskStorage.createTask(task);
-      await get().generateReminderTasks(task);
-      await get().reloadTaskLists(task.date);
+      await generateReminderTasks(task);
+      await get().loadTasks(task.date);
+      await get().getTodayAllTask();
     } catch (error) {
       console.error("❌ Failed to create task:", error);
       throw error;
@@ -65,7 +67,9 @@ export const useLocalChangeTaskStore = create<LocalChangeStateType>((set, get) =
     set({ isLoading: true });
     try {
       await taskStorage.updateTask(task);
-      await get().reloadTaskLists(task.date);
+      await generateReminderTasks(task);
+      await get().loadTasks(task.date);
+      await get().getTodayAllTask();
     } catch (error) {
       console.error("❌ Failed to update task:", error);
     } finally {
@@ -150,35 +154,4 @@ export const useLocalChangeTaskStore = create<LocalChangeStateType>((set, get) =
     }
   },
 
-
-  // ====== UTIL ======
-  reloadTaskLists: async (date: string) => {
-    const state = get();
-    await state.loadTasks(date);
-    await state.getTodayAllTask();
-  },
-
-  generateReminderTasks: async (task: Task) => {
-    if (!task.reminderDays?.length) return;
-    const baseDate = new Date(task.date);
-
-    for (let i = 1; i <= 7; i++) {
-      const nextDate = new Date(baseDate);
-      nextDate.setDate(baseDate.getDate() + i);
-
-      const weekdayName = nextDate.toLocaleDateString("en-US", { weekday: "long" });
-      const nextDateStr = nextDate.toISOString().split("T")[0];
-
-      if (task.reminderDays.includes(weekdayName) && nextDateStr !== task.date) {
-        const clonedTask: Task = {
-          ...task,
-          id: new Date().toISOString(),
-          date: nextDateStr,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        await taskStorage.createTask(clonedTask);
-      }
-    }
-  }
 }));

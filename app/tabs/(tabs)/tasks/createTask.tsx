@@ -24,7 +24,7 @@ import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
 import { useTaskForm } from "@/hooks/useTaskForm";
 
 const CreateTask: React.FC = () => {
-  const selectedDate = useBaseStore().selectedDate;
+  const selectedDate = useBaseStore((state) => state.selectedDate);
   const user = useUserState().user;
   const { userTopics, loadUserTopics } = useLocalChangeTopicStore();
   const { topicId: topicIdFromRoute } = useLocalSearchParams<{
@@ -108,7 +108,7 @@ const CreateTask: React.FC = () => {
             <Controller
               name="reminderDays"
               control={control}
-              render={({ field }) => <DaySelector field={field} />}
+              render={({ field }) => <DaySelector field={field} selectDate={selectedDate} />}
             />
             <TaskAdvancedFields control={control} />
           </ModalOption>

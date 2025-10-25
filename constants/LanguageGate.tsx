@@ -4,9 +4,11 @@ import { useRouter } from 'expo-router';
 import { Loading } from '@/components/common/loading';
 import { useBaseStore } from '@/store/baseState/base';
 import { CalenderEnum, LanguageEnum } from './enums/base';
+import { useUserState } from '@/store/authState/userState';
 
 export const LanguageGate = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
+  const user = useUserState((s) => s.user);
   const { setLanguage, setCalender } = useBaseStore();
   const router = useRouter();
   const [shouldNavigate, setShouldNavigate] = useState(false);
@@ -32,10 +34,10 @@ export const LanguageGate = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (!loading && shouldNavigate) {
+    if (!loading && (shouldNavigate || !user?.id)) {
       router.push('/language');
     }
-  }, [loading, shouldNavigate]);
+  }, [loading, shouldNavigate, user?.id, router]);
 
   if (loading) return <Loading />;
 
