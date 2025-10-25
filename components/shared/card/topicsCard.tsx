@@ -4,10 +4,10 @@ import { Colors } from '@/constants/Colors';
 import { TaskIcon } from '@/assets/Icons/TaskIcon';
 import { Category } from '@/constants/Category';
 import { Link } from 'expo-router';
-import { useAppStore } from '@/store/appState';
 import { Text } from '../../Themed';
 import { TopicWithCount } from '@/types/database-type';
 import { Box } from '@/components/ui/box';
+import { useBaseStore } from '@/store/baseState/base';
 
 type TopicsCardProps = {
   color?: string;
@@ -16,7 +16,7 @@ type TopicsCardProps = {
 };
 
 const TopicsCard: React.FC<TopicsCardProps> = ({ data, inExplore = false }) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
   const category = Category.find((c) => c.id == data?.categoryId);
 
   return (

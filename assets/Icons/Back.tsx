@@ -1,7 +1,7 @@
 import { Svg, Path } from 'react-native-svg';
 import { Colors } from '@/constants/Colors';
 
-const BackIcon = ({ color = Colors.main.textPrimary, strokeWidth = 2 }) => {
+const BackIcon = ({ color = Colors.main.textPrimary, strokeWidth = 3 }) => {
   return (
     <Svg width="30" height="27" viewBox="0 0 30 27" fill="none">
       <Path

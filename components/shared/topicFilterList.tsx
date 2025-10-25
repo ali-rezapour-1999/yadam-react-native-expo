@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/Themed';
 import { Colors } from '@/constants/Colors';
 import { Category } from '@/constants/Category';
-import { Link } from 'expo-router';
-import { AddIcon } from '@/components/ui/icon';
 import { Topic } from '@/types/database-type';
 import { TodoIcon } from '@/assets/Icons/TodoIcon';
 
@@ -38,8 +36,8 @@ const TopicFilter: React.FC<Props> = ({ topics, selectedTopicId, onSelect }) => 
       const color = categoryEntry && typeof categoryEntry === 'object' && 'color' in categoryEntry ? categoryEntry.color : Colors.main.textSecondary;
 
       return (
-        <Button onPress={() => onSelect(item.id)} style={[styles.topicItem, { backgroundColor: isSelected ? color + 50 : 'transparent' }]} className="px-2 rounded-xl">
-          <Text style={[styles.topicText, { color: isSelected ? Colors.main.textPrimary : Colors.main.textSecondary }]}>{isSelected ? item.title : truncateText(item.title, 6)}</Text>
+        <Button onPress={() => onSelect(item.id)} style={[styles.topicItem, { backgroundColor: isSelected ? color : 'transparent' }]} className="px-2 rounded-lg">
+          <Text style={[styles.topicText, { color: isSelected ? Colors.main.background : Colors.main.textSecondary }]}>{isSelected ? item.title : truncateText(item.title, 6)}</Text>
         </Button>
       );
     },

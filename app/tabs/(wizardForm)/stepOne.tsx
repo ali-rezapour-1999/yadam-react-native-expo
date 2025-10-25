@@ -16,30 +16,22 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
-import { useAppStore } from '@/store/appState';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/components/Themed';
+import { useUserState } from '@/store/authState/userState';
+import { StepOneSchema } from '@/components/schema/stepSchema';
 
-const stepOneSchema = z.object({
-  firstname: z.string().min(1),
-  lastname: z.string(),
-  height: z.string().min(1),
-  weight: z.string().min(1),
-  age: z.string().min(1),
-  gender: z.string(),
-  description: z.string(),
-});
 
-type stepOneSchemaType = z.infer<typeof stepOneSchema>;
+type stepOneSchemaType = z.infer<typeof StepOneSchema>;
 const StepOne = () => {
   const { setStep, gender, age, weight, height, description, setField } = useWizardStore();
-  const { user, setUserInformation } = useAppStore();
+  const { user, setUser } = useUserState();
   const { control, handleSubmit } = useForm<stepOneSchemaType>({
-    resolver: zodResolver(stepOneSchema),
+    resolver: zodResolver(StepOneSchema),
     defaultValues: {
-      firstname: user?.first_name ?? '',
-      lastname: user?.last_name ?? '',
+      firstname: user?.firstName ?? '',
+      lastname: user?.lastName ?? '',
       height: height > 0 ? String(height) : '',
       weight: weight > 0 ? String(weight) : '',
       age: age > 0 ? String(age) : '',
@@ -57,21 +49,20 @@ const StepOne = () => {
 
   const onSubmit = (data: stepOneSchemaType) => {
     Object.entries(data).forEach(([key, value]) => {
-      setField(key as keyof Omit<WizardStateType, 'setField'>, value);
+      setField(key as keyof Omit<WizardStateType, 'setField' | 'updateProfile' | 'clear'>, value);
     });
-    setUserInformation({
+    setUser({
       id: user?.id as string,
-      first_name: data?.firstname,
-      last_name: data?.lastname,
+      firstName: data?.firstname,
+      lastName: data?.lastname,
       language: user?.language ?? 'en',
       role: user?.role,
-      level: user?.level,
-      is_verified: user?.is_verified,
-      created_at: user?.created_at,
-      updated_at: user?.updated_at,
+      isVerified: user?.isVerified,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
       email: user?.email,
     });
-    setField('step', String(2));
+    setField('step', 2);
     router.push('/tabs/(wizardForm)/stepTwo');
   };
 
@@ -79,7 +70,7 @@ const StepOne = () => {
     <SafeAreaView className="flex-1 px-4" style={{ backgroundColor: Colors.main.background }} >
       <WizardStepper />
       <HeaderTitle title={t('profile.base_information')} />
-      <KeyboardAvoidingView className="flex-1" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView className="flex-1 px-5 gap-4" style={{ backgroundColor: Colors.main.background }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Controller
           render={({ field, fieldState }) => (
             <StepForm title={t('profile.first_name')} value={field.value} onChange={field.onChange} error={fieldState.error} placeholder={t('common.placeholder.first_name_placeholder')} />
@@ -95,7 +86,7 @@ const StepOne = () => {
           control={control}
         />
 
-        <HStack className="justify-center gap-5 px-3">
+        <HStack className="justify-center items-center gap-5 px-3">
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
@@ -115,7 +106,7 @@ const StepOne = () => {
             />
           </Box>
         </HStack>
-        <HStack className="justify-center gap-5 px-3">
+        <HStack className="justify-center gap-5 px-3 items-center">
           <Box className="w-1/2">
             <Controller
               render={({ field, fieldState }) => (
@@ -135,11 +126,11 @@ const StepOne = () => {
           name="description"
           render={({ field, fieldState }) => (
             <VStack>
-              <Text style={{ color: Colors.main.textPrimary }} className="mt-5">
+              <Text style={{ color: Colors.main.textPrimary }}>
                 {t('profile.description')}
               </Text>
               <Textarea
-                className="my-1 w-full rounded-xl px-4 h-[130px]"
+                className="w-full rounded-xl px-4 h-[130px]"
                 style={{
                   backgroundColor: Colors.main.cardBackground,
                   borderWidth: 1,
@@ -154,7 +145,7 @@ const StepOne = () => {
                   value={field.value}
                   onChangeText={field.onChange}
                   placeholder={t('common.placeholder.write_description_placeholder')}
-                  className="h-10 items-start text-[12]"
+                  className="h-10 items-start text-lg"
                   style={{ textAlignVertical: 'top', color: Colors.main.textPrimary }}
                   placeholderTextColor={Colors.main.textSecondary}
                 />

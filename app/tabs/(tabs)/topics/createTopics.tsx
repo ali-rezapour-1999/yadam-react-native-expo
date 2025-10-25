@@ -20,12 +20,7 @@ import ModalOption from '@/components/common/modelOption';
 
 const CreateTopics = () => {
   const { form, onSubmit } = useTopicsForm({ topic: null });
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = form;
+  const { control, handleSubmit, watch, formState: { errors } } = form;
 
   const title = watch('title');
   const categoryId = watch('categoryId');

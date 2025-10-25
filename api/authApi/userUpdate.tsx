@@ -1,15 +1,17 @@
-import Api from '../baseApi';
-import { Result, User } from '@/types/auth-type';
+import { AuthResponseResult, User } from '@/types/auth-type';
+import api from '../baseApi';
 
-export const updateUserInformationAction = async (data: User, token: string): Promise<Result> => {
+export const updateUserAction = async (data: User, token: string): Promise<AuthResponseResult> => {
   try {
-    const response = await Api.patch('auth/user-update/', data, { headers: { Authorization: `Bearer ${token}` } });
-    if (response.status === 200) {
+    const response = await api.post('user/update/', data, { headers: { Authorization: `Bearer ${token}` } });
+    console.log(response);
+    if (response.status === 200 || response.status === 201) {
       return {
         success: true,
-        status: response.status,
+        status: response.data.status,
         message: response.data.message,
-        data: response.data.user,
+        data: response.data.data.user,
+        access_token: response.data.data.token,
       };
     }
     return {
@@ -19,7 +21,10 @@ export const updateUserInformationAction = async (data: User, token: string): Pr
       data: response.data.user,
     };
   } catch (error: any) {
+
+    console.log(error)
     if (error.response && error.response.data) {
+      console.log(error)
       return {
         success: false,
         status: 500,

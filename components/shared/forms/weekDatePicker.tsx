@@ -1,23 +1,21 @@
 import React, { memo } from 'react';
 import GregorianCalendar from '../datePicker/gregorianCalender';
 import JalaliCalendar from '../datePicker/jalaliCalendar';
-import { useAppStore } from '@/store/appState';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface Props {
   selectedDate: string;
   setSelectedDate: (date: string) => void;
-  year: string;
-  month: number | string;
 }
 
-const WeeklyDatePicker = memo(({ selectedDate, setSelectedDate, year, month }: Props) => {
-  const { language } = useAppStore();
+const WeeklyDatePicker = memo(({ selectedDate, setSelectedDate }: Props) => {
+  const calender = useBaseStore.getState().calender;
 
-  if (language === 'fa') {
-    return <JalaliCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={year} month={month} />;
+  if (calender == 'jalali') {
+    return <JalaliCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
   }
 
-  return <GregorianCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={year} month={month} />;
+  return <GregorianCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
 });
 
 WeeklyDatePicker.displayName = 'WeeklyDatePicker';

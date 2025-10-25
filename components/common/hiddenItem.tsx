@@ -1,11 +1,13 @@
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/appState';
-import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';
-import { TaskStatus } from '@/constants/TaskEnum';
-import { Text } from '../Themed';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { Task } from '@/types/database-type';
+import { CheckCheck, X } from 'lucide-react-native';
+import { Icon } from '../ui/icon';
+import { useBaseStore } from '@/store/baseState/base';
+import { LanguageEnum } from '@/constants/enums/base';
+import { View } from 'react-native';
 
 interface HiddenItemProps {
   item: Task;
@@ -16,69 +18,48 @@ interface HiddenItemProps {
 }
 
 const HiddenItem = React.memo(({ item, swipedRows, onCompleteTask, onCancelTask, size }: HiddenItemProps) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
   const isRowSwiped = swipedRows.has(item.id);
 
   if (!isRowSwiped) {
     return null;
   }
 
-  const isFa = language === 'fa';
+  const isFa = language === LanguageEnum.FA
 
   return (
-    <HStack
-      className="items-center"
+    <View
+      className="items-center justify-between mx-auto w-full"
       style={{
         flexDirection: isFa ? 'row' : 'row-reverse',
         marginVertical: 4,
-        width: size?.width || '100%',
-        height: size?.height - 2 || 80,
+        height: size?.height - 5,
       }}
     >
       <Button
         onPress={() => onCompleteTask(item)}
         disabled={item.status === TaskStatus.COMPLETED}
-        className="h-full w-1/2"
+        className="h-full w-1/5 justify-center"
         style={{
           backgroundColor: item.status === TaskStatus.COMPLETED ? Colors.main.border : Colors.main.primary,
-          justifyContent: isFa ? 'flex-start' : 'flex-end',
-          borderRadius: 0,
+          borderRadius: 16,
         }}
       >
-        <Text
-          style={{
-            color: Colors.main.textPrimary,
-            fontSize: 12,
-            textAlign: isFa ? 'right' : 'left',
-            paddingHorizontal: 10,
-          }}
-        >
-          ✓ {isFa ? 'تکمیل' : 'Done'}
-        </Text>
+        <Icon as={CheckCheck} size="3xl" color={Colors.main.background} />
       </Button>
 
       <Button
         onPress={() => onCancelTask(item)}
         disabled={item.status === TaskStatus.CANCELLED}
-        className="h-full w-1/2"
+        className="h-full w-1/5 justify-center"
         style={{
           backgroundColor: item.status === TaskStatus.CANCELLED ? Colors.main.border : Colors.main.accent,
-          justifyContent: isFa ? 'flex-end' : 'flex-start',
-          borderRadius: 0,
+          borderRadius: 16,
         }}
       >
-        <Text
-          style={{
-            color: Colors.main.textPrimary,
-            fontSize: 12,
-            textAlign: isFa ? 'left' : 'right',
-            paddingHorizontal: 10,
-          }}
-        >
-          ✖ {isFa ? 'لغو' : 'Canceled'}
-        </Text>
+        <Icon as={X} size="3xl" color={Colors.main.background} />
       </Button>
-    </HStack>
+    </View>
   );
 });
 

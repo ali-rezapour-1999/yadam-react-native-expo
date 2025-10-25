@@ -9,19 +9,20 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Category } from "@/constants/Category";
 import { Colors } from "@/constants/Colors";
-import { useAppStore } from "@/store/appState";
-import { useTopicStore } from "@/store/topcisState";
-import { useTodoStore } from "@/store/todoState";
 import { useFocusEffect, useLocalSearchParams, router } from "expo-router";
 import { t } from "i18next";
 import { ScrollView, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppModal from "@/components/common/appModal";
+import TrashIcon from "@/assets/Icons/TrushIcon";
+import { useUserState } from "@/store/authState/userState";
+import { useBaseStore } from "@/store/baseState/base";
+import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
+import { useServerChangeTopicState } from "@/store/topicState/serverChange";
 
-const MemoizedTopicSubTaskList = React.lazy(
-  () => import("@/components/shared/topicSubTaskList")
-);
+const MemoizedTopicSubTaskList = React.lazy(() => import("@/components/shared/topicSubTaskList"));
 
 const TopicDetail: React.FC = () => {
   const params = useLocalSearchParams();
@@ -29,9 +30,11 @@ const TopicDetail: React.FC = () => {
   const inExplore = params.inExplore === "true";
 
   const [isOpen, setIsOpen] = useState(false);
-  const { language, user } = useAppStore();
-  const { getTopicById, topic, removeTopic, getTopicByIdApi } = useTopicStore();
-  const { getTaskByTopicId } = useTodoStore();
+  const user = useUserState().user;
+  const language = useBaseStore().language;
+  const { getTopicById, topic, removeTopic } = useLocalChangeTopicStore();
+  const getTaskByTopicId = useLocalChangeTaskStore().getTaskByTopicId;
+  const getTopicByIdApi = useServerChangeTopicState().getTopicByIdApi;
 
   useFocusEffect(
     useCallback(() => {
@@ -76,51 +79,51 @@ const TopicDetail: React.FC = () => {
             contentContainerStyle={styles.scrollContent}
           >
             <VStack space="xl">
-              <HStack className="items-center justify-between">
-                <HeaderTitle path={"/tabs/(tabs)/topics"} size="md" />
-                <AppModal
-                  title={t("comman.button.delete")}
-                  buttonContent={<Button><ButtonText>{t("comman.button.delete")}</ButtonText></Button>}
-                  buttonStyle={{ backgroundColor: "transparent" }}
-                  modalContentStyle={{ height: 280 }}
-                  modalBodyStyle={{ paddingHorizontal: 20 }}
-                  visible={isOpen}
-                  onChangeVisible={setIsOpen}
-                >
-                  <Text
-                    style={{
-                      color: Colors.main.textPrimary,
-                      fontSize: 18,
-                      textAlign: "center",
-                    }}
+              <HStack className="items-center">
+                <Box className="w-4/5 flex-1">
+                  <HeaderTitle size="lg" />
+                </Box>
+                {isOwned && (
+                  <AppModal
+                    title={`${t("common.button.delete")} ${topic.title}`}
+                    buttonContent={<TrashIcon size={48} />}
+                    buttonStyle={{ backgroundColor: "transparent", width: 45 }}
+                    modalContentStyle={{ height: 280 }}
+                    modalBodyStyle={{ paddingHorizontal: 20 }}
+                    onChangeVisible={() => setIsOpen(!isOpen)}
+                    visible={isOpen}
                   >
-                    {t("button.insure_delete")}
-                  </Text>
-                  <Button
-                    onPress={removeTopicHandler}
-                    style={{ backgroundColor: Colors.main.button }}
-                    className="rounded-lg mt-5 h-14"
-                  >
-                    <ButtonText
-                      style={{ color: Colors.main.textPrimary }}
-                      className="text-xl"
+                    <Text >
+                      {t("common.messages.delete_item")}
+                    </Text>
+
+                    <Button
+                      onPress={removeTopicHandler}
+                      style={{ backgroundColor: Colors.main.button }}
+                      className="rounded-lg mt-5 h-14"
                     >
-                      {t("common.button.delete")}
-                    </ButtonText>
-                  </Button>
-                  <Button
-                    style={{ backgroundColor: Colors.main.textPrimary }}
-                    className="rounded-lg mt-5 h-14"
-                    onPress={() => setIsOpen(!isOpen)}
-                  >
-                    <ButtonText
-                      style={{ color: Colors.main.button }}
-                      className="text-xl"
+                      <ButtonText
+                        style={{ color: Colors.main.textPrimary }}
+                        className="text-xl"
+                      >
+                        {t("common.button.delete")}
+                      </ButtonText>
+                    </Button>
+
+                    <Button
+                      style={{ backgroundColor: Colors.main.textPrimary }}
+                      className="rounded-lg mt-5 h-14"
+                      onPress={() => setIsOpen(!isOpen)}
                     >
-                      {t("event.cancel")}
-                    </ButtonText>
-                  </Button>
-                </AppModal>
+                      <ButtonText
+                        style={{ color: Colors.main.button }}
+                        className="text-xl"
+                      >
+                        {t("common.button.cancel")}
+                      </ButtonText>
+                    </Button>
+                  </AppModal>
+                )}
               </HStack>
 
               <Box style={styles.mainCard} className="p-5 px-7">
@@ -212,10 +215,6 @@ const styles = StyleSheet.create({
   mainCard: {
     backgroundColor: Colors.main.cardBackground,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 5,
-    elevation: 2,
   },
   headerTitle: {
     color: Colors.main.textPrimary,

@@ -15,14 +15,14 @@ interface StepFormProps {
 
 export const StepForm = ({ title, value, onChange, error, placeholder }: StepFormProps) => {
   return (
-    <FormControl isInvalid={!!error} isRequired size="lg" className="mt-4">
+    <FormControl isInvalid={!!error} isRequired size="lg">
       <HStack className="items-center">
         <FormControlLabelText className="px-3" style={{ color: Colors.main.textPrimary }}>
           {title}
         </FormControlLabelText>
       </HStack>
       <Input
-        className="my-1 h-16 w-full rounded-xl px-4"
+        className="h-20 w-full rounded-xl px-4"
         style={{
           backgroundColor: Colors.main.cardBackground,
           borderWidth: 1,
@@ -34,7 +34,7 @@ export const StepForm = ({ title, value, onChange, error, placeholder }: StepFor
           placeholder={placeholder}
           value={value}
           onChangeText={onChange}
-          className="w-full"
+          className="w-full text-lg"
           style={{ borderColor: Colors.main.primaryLight, color: Colors.main.textPrimary }}
           placeholderTextColor={Colors.main.textSecondary}
         />

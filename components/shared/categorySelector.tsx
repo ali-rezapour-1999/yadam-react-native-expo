@@ -5,8 +5,9 @@ import { t } from 'i18next';
 import { HStack } from '../ui/hstack';
 import { Text } from '../Themed';
 import { Button } from '../ui/button';
-import { useAppStore } from '@/store/appState';
 import ModalOption from '../common/modelOption';
+import { useBaseStore } from '@/store/baseState/base';
+import { LanguageEnum } from '@/constants/enums/base';
 
 export interface Category {
   id: string;
@@ -25,7 +26,7 @@ export interface CategoryPickerProps {
 }
 
 const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCategorySelect, error, categories, style }) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCategorySelect = (category: string) => {
@@ -49,14 +50,14 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCat
           styles.categoryItem,
           item.id === selectedCategory && styles.selectedCategoryItem,
           {
-            flexDirection: language === 'fa' ? 'row' : 'row-reverse',
+            flexDirection: language == LanguageEnum.FA ? 'row' : 'row-reverse',
           },
         ]}
         onPress={() => handleCategorySelect(item.id)}
       >
         <HStack className="items-center gap-3">
           {item.color && <View style={[styles.categoryColorIndicator, { backgroundColor: item.color }]} />}
-          <Text style={[styles.categoryText, item.id === selectedCategory && styles.selectedCategoryText]}>{language === 'fa' ? item.fa : item.name}</Text>
+          <Text style={[styles.categoryText, item.id === selectedCategory && styles.selectedCategoryText]}>{language == LanguageEnum.FA ? item.fa : item.name}</Text>
         </HStack>
         {item.icon && <Text style={styles.categoryIcon}>{item.icon}</Text>}
       </Button>
@@ -67,8 +68,8 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCat
   return (
     <View style={style}>
       <ModalOption
-        title={error ? error.message : t('category.select_category')}
-        buttonTitle={selectedCategory ? categoryNameAndIcons() : t('category.select_category')}
+        title={error ? error.message : t('category.select_category_type')}
+        buttonTitle={selectedCategory ? categoryNameAndIcons() : t('category.select_category_type')}
         onCloseProps={setIsOpen}
         isOpenProps={isOpen}
         buttonStyle={{

@@ -3,14 +3,12 @@ import { VStack } from '@/components/ui/vstack';
 import { Pressable, StyleProp, ViewStyle, StyleSheet, View } from 'react-native';
 import { Box } from '../../ui/box';
 import { Colors } from '@/constants/Colors';
-import { Icon } from '../../ui/icon';
-import { useAppStore } from '@/store/appState';
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { TaskWithCategory } from '@/types/database-type';
 import { Category } from '@/constants/Category';
 import { Text } from '../../Themed';
-import { Clock } from 'lucide-react-native';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface ScheduleCardProps {
   task: TaskWithCategory;
@@ -20,9 +18,8 @@ interface ScheduleCardProps {
 }
 
 const ScheduleCard = ({ task, onPress, style, onLayoutChange }: ScheduleCardProps) => {
-  const { language } = useAppStore();
+  const language = useBaseStore.getState().language;
   const cardRef = useRef<View>(null);
-  const [cardSize, setCardSize] = useState({ width: 0, height: 0 });
 
   const handlePress = () => {
     if (onPress && task.id != null) {
@@ -46,9 +43,9 @@ const ScheduleCard = ({ task, onPress, style, onLayoutChange }: ScheduleCardProp
         };
       default:
         return {
-          borderColor: Colors.main.textPrimary,
+          borderColor: Colors.main.textSecondary,
           backgroundColor: Colors.main.cardBackground,
-          statusTextColor: Colors.main.textSecondary,
+          statusTextColor: Colors.main.primary,
         };
     }
   };
@@ -80,58 +77,46 @@ const ScheduleCard = ({ task, onPress, style, onLayoutChange }: ScheduleCardProp
         ref={cardRef}
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
-          setCardSize((prev) => {
-            if (prev.width !== width || prev.height !== height) {
-              onLayoutChange?.(task.id, { width, height });
-              return { width, height };
-            }
-            return prev;
-          });
+          if (onLayoutChange && task.id) {
+            onLayoutChange(task.id, { width, height });
+          }
         }}
         style={[
           styles.cardContainer,
-          {
-            backgroundColor: !isFinished ? Colors.main.cardBackground : Colors.main.border,
-          },
+          { backgroundColor: !isFinished ? Colors.main.cardBackground : Colors.main.border },
           getBorderStyle(),
           style,
         ]}
       >
-        <HStack style={styles.cardHeader}>
-          <VStack style={{ flex: 1 }}>
-            <Text numberOfLines={1}>{task.title}</Text>
+        <HStack style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <VStack>
+            <Text numberOfLines={2} className='text-lg' style={{ fontFamily: 'DanaBold' }}>{task.title}</Text>
             {task.description && task.description !== '' && <Text numberOfLines={2}>{task.description}</Text>}
           </VStack>
-        </HStack>
 
-        <HStack style={styles.cardFooter}>
           <HStack style={styles.timeContainer}>
-            <Icon as={Clock} size="sm" color={Colors.main.textSecondary} />
             <Text
               style={[
                 styles.timeText,
-                { color: !isFinished ? Colors.main.textPrimary : Colors.main.textSecondary },
+                { color: !isFinished ? Colors.main.textPrimary : Colors.main.textSecondary, fontFamily: 'DanaBold' },
               ]}
             >
               {task.startTime} - {task.endTime}
             </Text>
           </HStack>
-          {category && (
+        </HStack>
+        {category && (
+          <HStack>
             <Text
               className="px-2 rounded-xl text-sm"
               style={{
-                backgroundColor: isFinished
-                  ? Colors.main.background
-                  : category?.color
-                    ? category.color + '40'
-                    : Colors.main.border,
-                color: Colors.main.textPrimary,
+                backgroundColor: isFinished ? Colors.main.background : category?.color ? category.color + '40' : Colors.main.border, color: Colors.main.textPrimary,
               }}
             >
               {language === 'fa' ? category?.fa ?? '' : category?.name ?? ''}
             </Text>
-          )}
-        </HStack>
+          </HStack>
+        )}
       </Box>
     </Pressable>
   );
@@ -141,19 +126,9 @@ export default ScheduleCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    minHeight: 78,
-    minWidth: 230,
     paddingHorizontal: 16,
     paddingVertical: 14,
     gap: 10,
-  },
-  cardHeader: {
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  cardFooter: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   timeContainer: {
     alignItems: 'center',

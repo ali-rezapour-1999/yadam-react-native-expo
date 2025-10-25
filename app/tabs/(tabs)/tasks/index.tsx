@@ -19,12 +19,14 @@ import { Colors } from '@/constants/Colors';
 import AppModal from '@/components/common/appModal';
 import { Loading } from '@/components/common/loading';
 import WeeklyDatePicker from '@/components/shared/forms/weekDatePicker';
-import SelectYearWithMonth from '@/components/shared/forms/selectYearWithMonth';
 
 // Stores & Hooks
-import { useTodoStore } from '@/store/todoState';
-import { useAppStore } from '@/store/appState';
 import { useDateTime } from '@/hooks/useDateTime';
+import YearCalendar from '@/components/shared/forms/yearCalender';
+import { useBaseStore } from '@/store/baseState/base';
+import { useSyncWithServerState } from '@/store/baseState/syncWithService';
+import { useUserState } from '@/store/authState/userState';
+import { useLocalChangeTaskStore } from '@/store/taskState/localChange';
 
 // Lazy Load Components
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
@@ -35,95 +37,68 @@ const TaskListView = React.lazy(() => import('@/components/shared/taskListView')
  * ------------------------------------------------------------
  */
 
-const HeaderComponent = React.memo(
-  ({
-    selectedYear,
-    setSelectedYear,
-    selectedMonth,
-    setSelectedMonth,
-    selectedDate,
-    setDateTimeSelectedDate,
-    shouldShowTodayButton,
-    goToToday,
-    isToday,
-    displayDate,
-  }: any) => {
-    const { setSelectedDate } = useTodoStore();
-    const { syncDataFromServer, isLoading, token } = useAppStore();
-    const [isOpen, setIsOpen] = useState(false);
+const HeaderComponent = React.memo(({ selectedDate, setDateTimeSelectedDate, shouldShowTodayButton, goToToday }: any) => {
+  const setSelectedDate = useBaseStore().setSelectedDate;
+  const { isLoading, token } = useUserState();
+  const syncDataFromServer = useSyncWithServerState().syncDataFromServer;
+  const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-      setSelectedDate(selectedDate);
-    }, [selectedDate, setSelectedDate]);
+  useEffect(() => {
+    setSelectedDate(selectedDate);
+  }, [selectedDate, setSelectedDate]);
 
-    const handleSync = useCallback(async () => {
-      await syncDataFromServer();
-      setIsOpen(false);
-    }, [syncDataFromServer]);
+  const handleSync = useCallback(async () => {
+    await syncDataFromServer();
+    setIsOpen(false);
+  }, [syncDataFromServer]);
 
-    return (
-      <SafeAreaView style={styles.headerContainer}>
-        {/* Header Title and Sync */}
-        <HStack className="justify-between items-center">
-          <Heading style={styles.headerTitle}>{t('todos.todo_list')}</Heading>
-          {token && (
-            <AppModal
-              title={t('todos.sync_data')}
-              buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.lightBlue} />}
-              buttonStyle={styles.syncButton}
-              modalBodyStyle={{ paddingHorizontal: 10 }}
-              visible={isOpen}
-              onChangeVisible={setIsOpen}
-            >
-              <Text style={styles.syncDescription}>{t('todos.sync_data_description')}</Text>
-              <Button onPress={handleSync} style={styles.syncConfirmButton}>
-                {isLoading ? (
-                  <Loading style={{ backgroundColor: 'transparent' }} />
-                ) : (
-                  <ButtonText style={styles.syncConfirmText}>{t('common.button.confirm')}</ButtonText>
-                )}
-              </Button>
-            </AppModal>
-          )}
-        </HStack>
+  return (
+    <SafeAreaView style={styles.headerContainer}>
+      {/* Header Title and Sync */}
+      <HStack className="justify-between items-center">
+        <Heading style={styles.headerTitle}>{t('todos.todo_list')}</Heading>
+        {token && (
+          <AppModal
+            title={t('todos.sync_data')}
+            buttonContent={<Icon as={FolderSync} size="2xl" color={Colors.main.info} />}
+            buttonStyle={styles.syncButton}
+            modalBodyStyle={{ paddingHorizontal: 10 }}
+            visible={isOpen}
+            onChangeVisible={setIsOpen}
+          >
+            <Text style={styles.syncDescription}>{t('todos.sync_data_description')}</Text>
+            <Button onPress={handleSync} style={styles.syncConfirmButton}>
+              {isLoading ? (
+                <Loading style={{ backgroundColor: 'transparent' }} />
+              ) : (
+                <ButtonText style={styles.syncConfirmText}>{t('common.button.confirm')}</ButtonText>
+              )}
+            </Button>
+          </AppModal>
+        )}
+      </HStack>
 
-        {/* Year / Month Selectors */}
-        <VStack className="mt-5">
-          <HStack className="items-center justify-between mb-2">
-            <Text className='text-xl'>{t('todos.day_of_week')}</Text>
-            <SelectYearWithMonth
-              selectedYear={selectedYear}
-              setSelectedYear={setSelectedYear}
-              selectedMonth={selectedMonth}
-              setSelectedMonth={setSelectedMonth}
-            />
-          </HStack>
+      {/* Year / Month Selectors */}
+      <VStack className="mt-5">
+        <YearCalendar selectedDate={selectedDate as string} setSelectedDate={setDateTimeSelectedDate} />
 
-          {/* Weekly Picker */}
-          <WeeklyDatePicker
-            selectedDate={selectedDate as string}
-            setSelectedDate={setDateTimeSelectedDate}
-            year={selectedYear}
-            month={selectedMonth}
-          />
+        {/* Weekly Picker */}
+        <WeeklyDatePicker
+          selectedDate={selectedDate as string}
+          setSelectedDate={setDateTimeSelectedDate}
+        />
 
-          {shouldShowTodayButton && (
-            <Box className="items-center mt-3">
-              <Button onPress={goToToday} style={styles.todayButton} className='rounded-lg'>
-                <ButtonText style={styles.todayButtonText}>{t('todos.go_to_today')}</ButtonText>
-              </Button>
-            </Box>
-          )}
-        </VStack>
-
-        {/* Date Summary */}
-        <HStack className="items-center justify-between mt-5 pb-3">
-          <Text>{isToday ? t('todos.today') : t('todos.select_date')}</Text>
-          <Text>{displayDate}</Text>
-        </HStack>
-      </SafeAreaView>
-    );
-  }
+        {shouldShowTodayButton && (
+          <Box className="items-center mt-3">
+            <Button onPress={goToToday} style={styles.todayButton} className='rounded-lg'>
+              <ButtonText style={styles.todayButtonText}>{t('todos.go_to_today')}</ButtonText>
+            </Button>
+          </Box>
+        )}
+      </VStack>
+    </SafeAreaView>
+  );
+}
 );
 
 /**
@@ -133,19 +108,9 @@ const HeaderComponent = React.memo(
  */
 
 const Todos = () => {
-  const { loadTasks } = useTodoStore();
-  const {
-    selectedYear,
-    setSelectedYear,
-    selectedMonth,
-    setSelectedMonth,
-    selectedDate,
-    setSelectedDate,
-    isCurrentMonth,
-    isToday,
-    goToToday,
-  } = useDateTime();
-  const { calender } = useAppStore();
+  const loadTasks = useLocalChangeTaskStore().loadTasks;
+  const { setSelectedMonth, selectedDate, setSelectedDate, isCurrentMonth, isToday, goToToday, } = useDateTime();
+  const calender = useBaseStore().calender;
 
   useEffect(() => {
     if (selectedDate) loadTasks(selectedDate);
@@ -169,9 +134,6 @@ const Todos = () => {
   return (
     <Box style={styles.pageContainer}>
       <HeaderComponent
-        selectedYear={selectedYear}
-        setSelectedYear={setSelectedYear}
-        selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
         selectedDate={selectedDate}
         setDateTimeSelectedDate={setSelectedDate}
@@ -182,9 +144,9 @@ const Todos = () => {
       />
 
       {/* Task List */}
-        <Suspense fallback={<Loading />}>
-          <TaskListView mode="grouped" />
-        </Suspense>
+      <Suspense fallback={<Loading />}>
+        <TaskListView mode="grouped" />
+      </Suspense>
     </Box>
   );
 };
@@ -227,7 +189,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   syncConfirmButton: {
-    backgroundColor: Colors.main.lightBlue,
+    backgroundColor: Colors.main.info,
     borderRadius: 8,
     marginTop: 20,
   },

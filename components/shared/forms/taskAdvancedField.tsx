@@ -52,9 +52,7 @@ const TaskAdvancedFields: React.FC<TaskAdvancedFieldsProps> = ({ control }) => {
 export default TaskAdvancedFields;
 
 /**
- * ------------------------------------------------------------
  * Styles
- * ------------------------------------------------------------
  */
 const styles = StyleSheet.create({
   container: {
@@ -66,11 +64,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.main.border,
     padding: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 2,
   },
   cardError: {
     borderColor: Colors.main.accent,
@@ -82,6 +75,8 @@ const styles = StyleSheet.create({
   textArea: {
     borderRadius: 10,
     borderWidth: 0,
+    backgroundColor: Colors.main.background,
+    padding: 5
   },
   textInput: {
     color: Colors.main.textPrimary,

@@ -1,18 +1,17 @@
 import React, { useCallback, useState } from "react";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { FlatList } from "react-native";
 import { useGroupedTodos } from "@/hooks/useGroupedTodos";
 import ScheduleCard from "./card/scheduleCard";
 import HiddenItem from "../common/hiddenItem";
 import HourlyRow from "../common/hourlyRow";
-import { useTodoStore } from "@/store/todoState";
-import { TaskStatus } from "@/constants/TaskEnum";
+import { TaskStatus } from "@/constants/enums/TaskEnum";
 import { router } from "expo-router";
 import { Loading } from "../common/loading";
 import { Task } from "@/types/database-type";
 import Animated from "react-native-reanimated";
-import { useAppStore } from "@/store/appState";
 import { useScrollHandler } from "@/hooks/useScrollHandler";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
+import { useBaseStore } from "@/store/baseState/base";
 interface TaskListViewProps {
   mode: "flat" | "grouped";
   enableSwipeActions?: boolean;
@@ -20,18 +19,13 @@ interface TaskListViewProps {
 
 const ROW_HEIGHT = 80;
 
-const TaskListView = ({
-  mode,
-  enableSwipeActions = true,
-}: TaskListViewProps) => {
-  const { isLoading, updateTask, todayTasks, tasks } = useTodoStore();
+const TaskListView = ({ mode, enableSwipeActions = true }: TaskListViewProps) => {
+  const { isLoading, updateTask, todayTasks, tasks } = useLocalChangeTaskStore();
   const groupedTodos = useGroupedTodos(mode === "grouped" ? tasks : []);
   const [swipedRows, setSwipedRows] = useState<Set<string>>(new Set());
-  const [cardSizes, setCardSizes] = useState<
-    Record<string, { width: number; height: number }>
-  >({});
-  const { handleScroll, scrollEventThrottle } = useScrollHandler();
-  const { hideScroll } = useAppStore();
+  const [cardSizes, setCardSizes] = useState<Record<string, { width: number; height: number }>>({});
+  const { handleScroll } = useScrollHandler();
+  const hideScroll = useBaseStore().hideScroll;
 
   const handleUpdateTaskStatus = useCallback(
     async (task: Task, newStatus: TaskStatus) => {
@@ -73,12 +67,12 @@ const TaskListView = ({
         onPress={() => router.push(`/tabs/(tabs)/tasks/detail/${item.id}`)}
         onLayoutChange={handleCardLayout}
         style={{
-          marginVertical: 3,
-          borderRadius: 0,
+          marginVertical: 2,
+          borderRadius: 10,
         }}
       />
     ),
-    [cardSizes]
+    [handleCardLayout]
   );
 
   const renderHiddenItemWrapper = useCallback(
@@ -127,6 +121,7 @@ const TaskListView = ({
         renderHiddenItem={
           enableSwipeActions ? renderHiddenItemWrapper : undefined
         }
+        className="px-4"
         leftOpenValue={100}
         rightOpenValue={-100}
         keyExtractor={(item) => item.id}
@@ -142,7 +137,6 @@ const TaskListView = ({
         onScroll={handleScroll}
         contentContainerStyle={{
           marginBottom: 20,
-          paddingRight: 16,
           paddingBottom: hideScroll ? 120 : 70,
         }}
       />
@@ -153,7 +147,7 @@ const TaskListView = ({
   if (mode === "grouped") {
     return (
       <Animated.FlatList
-        nestedScrollEnabled
+        scrollEnabled
         scrollEventThrottle={16}
         data={groupedTodos}
         renderItem={renderGroupedItem}

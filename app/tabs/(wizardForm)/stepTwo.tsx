@@ -2,11 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
-import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/Themed';
 import { VStack } from '@/components/ui/vstack';
 import { Colors } from '@/constants/Colors';
-import { GoalEnumItems } from '@/constants/GoalEnumItems';
 import { useWizardStore } from '@/store/wizardFormState';
 import { t } from 'i18next';
 import { Pressable, ScrollView } from 'react-native';
@@ -15,6 +13,7 @@ import WizardStepper from '@/components/common/wizardSteper';
 import HeaderTitle from '@/components/common/headerTitle';
 import { Checkbox } from '@/components/common/checkBox';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { GoalEnumItems } from '@/constants/enums/GoalEnumItems';
 
 const StepTwo = () => {
   const { setStep } = useWizardStore();
@@ -58,15 +57,15 @@ const StepTwo = () => {
 
     <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background, position: 'relative' }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <Box>
+        <Box className='px-2'>
           <WizardStepper />
-          <HeaderTitle title={t('onboarding.goal.what_do_you_want_from_cocheck')} />
+          <HeaderTitle title={t('onboarding.goal.what_do_you_want_from_ding')} />
           <Text className="px-3 mt-3 text-md" style={{ color: Colors.main.textPrimary }}>
             {t('onboarding.goal.main_goal_guidance_text')}
           </Text>
 
           <VStack space="lg" className="mt-8">
-            {GoalEnumItems.map((item) => (
+            {GoalEnumItems.map((item: any) => (
               <Pressable
                 key={item.key}
                 onPress={isCheckHandler.bind(null, item.key)}

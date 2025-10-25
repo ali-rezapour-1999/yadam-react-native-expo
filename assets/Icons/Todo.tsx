@@ -13,7 +13,7 @@ const TodoIcon = ({ focused }: TodoIconProps) => {
   const animation = useIconAnimation(focused);
 
   const fillColor = getAnimatedColors(animation, Colors.main.primary, 'transparent');
-  const strokeColor = getAnimatedColors(animation, 'transparent', Colors.main.primaryLight);
+  const strokeColor = getAnimatedColors(animation, 'transparent', Colors.main.button);
 
   return (
     <Svg width="32" height="32" viewBox="0 0 22 23" fill="none">
@@ -28,11 +28,11 @@ const TodoIcon = ({ focused }: TodoIconProps) => {
         strokeLinejoin="round"
       />
 
-      <Path d="M12.837 14.027H5.17972" stroke={focused ? Colors.main.primaryLight : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M12.837 14.027H5.17972" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
 
-      <Path d="M12.837 10.0372H5.17972" stroke={focused ? Colors.main.primaryLight : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M12.837 10.0372H5.17972" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
 
-      <Path d="M8.10156 6.05273H5.17972" stroke={focused ? Colors.main.primaryLight : Colors.main.textPrimary} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M8.10156 6.05273H5.17972" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.58197" strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 };

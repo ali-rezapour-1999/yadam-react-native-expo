@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
@@ -9,7 +9,6 @@ import DatePicker from '@/components/common/datePicker';
 import { TimePicker } from '@/components/common/timePicker';
 import TimeDeffrence from '@/components/common/timeDeffrence';
 import { AddTodoForm } from './addTodo/todoForm';
-import { Colors } from '@/constants/Colors';
 import { StyleSheet } from 'react-native';
 
 interface TodoBasicFieldsProps {
@@ -17,11 +16,9 @@ interface TodoBasicFieldsProps {
   errors: any;
   startTime: string;
   endTime: string;
-  showDatePicker: boolean;
-  setShowDatePicker: Dispatch<SetStateAction<boolean>>;
 }
 
-export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, errors, startTime, endTime, showDatePicker, setShowDatePicker }) => {
+export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, errors, startTime, endTime }) => {
   return (
     <>
       <Controller
@@ -31,7 +28,7 @@ export const TodoBasicFields: React.FC<TodoBasicFieldsProps> = ({ control, error
       />
 
       <VStack style={styles.fieldsContainer}>
-        <Controller name="date" control={control} render={({ field }) => <DatePicker field={field} setShowDatePicker={setShowDatePicker} showDatePicker={showDatePicker} />} />
+        <Controller name="date" control={control} render={({ field }) => <DatePicker field={field} />} />
 
         <HStack className="justify-center items-center gap-2 w-full">
           <Box style={{ alignItems: 'center' }}>

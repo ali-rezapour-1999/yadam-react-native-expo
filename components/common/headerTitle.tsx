@@ -1,14 +1,14 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import BackIcon from '@/assets/Icons/Back';
-import { useAppStore } from '@/store/appState';
 
 import { HStack } from '../ui/hstack';
 import { Button } from '../ui/button';
 import { Box } from '../ui/box';
 import { Heading } from '../ui/heading';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface HeaderTitleProps {
   title?: string;
@@ -22,10 +22,10 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
   title,
   path,
   isLight = false,
-  size = '2xl',
+  size = 'xl',
   center = false,
 }) => {
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
 
   const handleBackPress = () => {
     if (path) router.push(path as any);
@@ -37,8 +37,8 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
       <HStack style={styles.innerContainer}>
         <Button
           onPress={handleBackPress}
-          style={styles.backButton}
           accessibilityLabel="Back"
+          className='w-16 h-16'
         >
           <Box
             style={{
@@ -56,9 +56,9 @@ const HeaderTitle: React.FC<HeaderTitleProps> = ({
             {
               color: isLight ? Colors.main.background : Colors.main.textPrimary,
               textAlign: center ? 'center' : 'left',
+              width: '80%',
             },
           ]}
-          numberOfLines={2}
         >
           {title}
         </Heading>
@@ -76,38 +76,15 @@ export default HeaderTitle;
  */
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.main.background,
     width: '100%',
-    paddingBottom: 8,
+    marginBottom: 14,
   },
   innerContainer: {
-    alignItems: 'center',
     flexDirection: 'row',
-    gap: 10
-  },
-  backButton: {
-    height: 52,
-    width: 52,
-    borderRadius: 12,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.main.cardBackground,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
   },
   title: {
-    flex: 1,
-    fontWeight: '600',
-    marginLeft: 16,
+    marginLeft: 10,
     includeFontPadding: false,
   },
 });

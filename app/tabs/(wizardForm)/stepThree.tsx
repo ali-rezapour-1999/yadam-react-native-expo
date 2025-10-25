@@ -6,7 +6,7 @@ import { Text } from '@/components/Themed';
 import { Colors } from '@/constants/Colors';
 import { useWizardStore } from '@/store/wizardFormState';
 import { t } from 'i18next';
-import { OneQuestion, ThreeQuestion, TwoQuestion } from '@/constants/LifeStyleEnumItems';
+import { OneQuestion, ThreeQuestion, TwoQuestion } from '@/constants/enums/LifeStyleEnumItems';
 import { Pressable, ScrollView } from 'react-native';
 import { VStack } from '@/components/ui/vstack';
 import { router } from 'expo-router';
@@ -17,18 +17,15 @@ import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const StepThree = () => {
-  const { setStep, setField, sleepTime, stressedFeeling, extersize } = useWizardStore();
+  const { setStep, setField, sleepTime, stressFeeling, exercise } = useWizardStore();
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [selectedOptions, setSelectedOptions] = useState<{
-    questionOne?: string;
-    questionTwo?: string;
-    questionThree?: string;
-  }>({
-    questionOne: sleepTime ?? '',
-    questionTwo: stressedFeeling ?? '',
-    questionThree: extersize ?? '',
-  });
+  const [selectedOptions, setSelectedOptions] = useState<{ questionOne?: string; questionTwo?: string; questionThree?: string; }>
+    ({
+      questionOne: sleepTime ?? '',
+      questionTwo: stressFeeling ?? '',
+      questionThree: exercise ?? '',
+    });
 
   useEffect(() => {
     if (selectedOptions.questionOne && selectedOptions.questionTwo && selectedOptions.questionThree) {
@@ -70,8 +67,8 @@ const StepThree = () => {
 
     if (!hasError) {
       setField('sleepTime', selectedOptions.questionOne || '');
-      setField('extersize', selectedOptions.questionTwo || '');
-      setField('stressedFeeling', selectedOptions.questionThree || '');
+      setField('exercise', selectedOptions.questionTwo || '');
+      setField('stressFeeling', selectedOptions.questionThree || '');
       router.push('/tabs/(wizardForm)/stepFour');
     }
   };
@@ -79,7 +76,7 @@ const StepThree = () => {
   return (
     <SafeAreaView className="flex-1 px-5" style={{ backgroundColor: Colors.main.background }} >
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <Box>
+        <Box className='px-2'>
           <WizardStepper />
           <HeaderTitle title={t('lifestyle.your_current_lifestyle')} />
           <Heading size="lg" className="px-3 mt-2" style={{ color: Colors.main.textPrimary }}>

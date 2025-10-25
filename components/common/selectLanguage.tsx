@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, ButtonText } from '../ui/button';
-import { useAppStore } from '@/store/appState';
 import { Colors } from '@/constants/Colors';
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader } from '@/components/ui/drawer';
 import { t } from 'i18next';
@@ -10,14 +9,16 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Updates from 'expo-updates';
 import { router } from 'expo-router';
+import { useBaseStore } from '@/store/baseState/base';
+import { LanguageEnum } from '@/constants/enums/base';
 
 const SelectLanguage = () => {
   const [showDrawer, setShowDrawer] = React.useState(false);
   const { i18n } = useTranslation();
-  const { setLanguage, language } = useAppStore();
+  const { setLanguage, language } = useBaseStore();
 
-  const selectLanguage = async (selectedLang: 'en' | 'fa') => {
-    const isRTL = selectedLang === 'fa';
+  const selectLanguage = async (selectedLang: LanguageEnum) => {
+    const isRTL = selectedLang == LanguageEnum.FA;
     await AsyncStorage.setItem('lang', selectedLang);
     await i18n.changeLanguage(selectedLang);
     setLanguage(selectedLang);
@@ -69,7 +70,7 @@ const SelectLanguage = () => {
             <Button
               style={{ backgroundColor: language === 'fa' ? Colors.main.border : Colors.main.button }}
               disabled={language === 'fa'}
-              onPress={() => selectLanguage('fa')}
+              onPress={() => selectLanguage(LanguageEnum.FA)}
               className="rounded-lg mt-1 h-14"
             >
               <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg font-danaRegular">فارسی</ButtonText>
@@ -78,7 +79,7 @@ const SelectLanguage = () => {
             <Button
               style={{ backgroundColor: language === 'en' ? Colors.main.border : Colors.main.button }}
               disabled={language === 'en'}
-              onPress={() => selectLanguage('en')}
+              onPress={() => selectLanguage(LanguageEnum.EN)}
               className="rounded-lg mt-3 h-14"
             >
               <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg">English</ButtonText>

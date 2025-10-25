@@ -2,7 +2,6 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "cocheck",
       "dependencies": {
         "@expo/html-elements": "^0.12.5",
         "@expo/metro-runtime": "~6.1.2",
@@ -14,7 +13,6 @@
         "@legendapp/motion": "^2.4.0",
         "@react-aria/utils": "^3.29.0",
         "@react-native-async-storage/async-storage": "2.2.0",
-        "@react-native-community/datetimepicker": "8.4.4",
         "@react-native-community/netinfo": "^11.4.1",
         "@react-navigation/native": "^7.1.6",
         "@types/lodash": "^4.17.20",

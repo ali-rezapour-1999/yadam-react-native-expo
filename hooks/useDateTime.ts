@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import jalaliMoment from 'jalali-moment';
-import { useAppStore } from '@/store/appState';
+import { useBaseStore } from '@/store/baseState/base';
 
 const dateCalculationCache = new Map<string, any>();
 
@@ -40,7 +40,7 @@ const getCachedToday = (calender: string) => {
 };
 
 export const useDateTime = (): UseDateTimeReturn => {
-  const { calender } = useAppStore();
+  const calender = useBaseStore.getState().calender;
   const todayValues = useMemo(() => getCachedToday(calender), [calender]);
   const [selectedYear, setSelectedYear] = useState<string | null>(todayValues.year);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(todayValues.month);

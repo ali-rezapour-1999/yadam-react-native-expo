@@ -2,7 +2,6 @@ import { Text } from '@/components/Themed';
 import { Box } from '@/components/ui/box';
 import { Colors } from '@/constants/Colors';
 import { useTopicsForm } from '@/hooks/useTopicsForm';
-import { useTopicStore } from '@/store/topcisState';
 import React from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
@@ -17,9 +16,10 @@ import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { Switch } from '@/components/ui/switch';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLocalChangeTopicStore } from '@/store/topicState/localChange';
 
 const TopicEdit = () => {
-  const { topic } = useTopicStore();
+  const topic = useLocalChangeTopicStore().topic;
 
   const { form, onSubmit } = useTopicsForm({ topic: topic });
   const {

@@ -1,10 +1,9 @@
-import { UserProfile } from '@/types/userProfile';
+import { ProfileResult, UserProfile } from '@/types/user-profile';
 import Api from '../baseApi';
-import { ProfileResult } from '@/types/auth-type';
 
 export const userProfileUpdate = async (data: UserProfile, token: string): Promise<ProfileResult> => {
   try {
-    const response = await Api.patch('profile/update-profile/', data, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await Api.patch('user/update', data, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 200) {
       return {
         success: true,

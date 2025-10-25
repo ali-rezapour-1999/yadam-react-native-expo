@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { TaskStatus } from '@/constants/TaskEnum';
+import { TaskStatus } from '@/constants/enums/TaskEnum';
 import { Task, TaskWithCategory, Topic, TopicWithCount } from '@/types/database-type';
 
 export class UnifiedDatabase {
@@ -56,6 +56,7 @@ export class UnifiedDatabase {
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL,
             user_id TEXT NOT NULL,
+            level TEXT not null DEFAULT 'low',
             is_deleted INTEGER NOT NULL DEFAULT 0
 
             CHECK (date LIKE '____-__-__'),

@@ -3,15 +3,13 @@ import React from 'react';
 import { createInput } from '@gluestack-ui/core/input/creator';
 import { View, Pressable, TextInput } from 'react-native';
 import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import {
-  withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/utils/nativewind-utils';
+import { withStyleContext, useStyleContext } from '@gluestack-ui/utils/nativewind-utils';
 import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
 import { useDynamicFont } from '@/hooks/useDynamicFont';
-import { useAppStore } from '@/store/appState';
+import { useBaseStore } from '@/store/baseState/base';
+import { LanguageEnum } from '@/constants/enums/base';
 
 const SCOPE = 'INPUT';
 
@@ -196,7 +194,7 @@ const InputField = React.forwardRef<
 >(function InputField({ className, ...props }, ref) {
   const { variant: parentVariant, size: parentSize } = useStyleContext(SCOPE);
   const fontStyle = useDynamicFont(props.style);
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
 
   return (
     <UIInput.Input
@@ -209,7 +207,7 @@ const InputField = React.forwardRef<
         },
         class: className,
       })}
-      style={[{ textAlign: language === 'fa' ? 'right' : 'left' }, fontStyle]}
+      style={[{ textAlign: language == LanguageEnum.FA ? 'right' : 'left' }, fontStyle]}
     />
   );
 });

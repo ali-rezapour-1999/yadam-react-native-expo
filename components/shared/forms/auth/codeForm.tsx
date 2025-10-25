@@ -11,13 +11,7 @@ interface CodeFormProps {
   maxLength?: number;
 }
 
-export const CodeForm: React.FC<CodeFormProps> = ({
-  value,
-  onChange,
-  error,
-  hasError,
-  maxLength = 6,
-}) => {
+export const CodeForm: React.FC<CodeFormProps> = ({ value, onChange, error, hasError, maxLength = 6 }) => {
   const inputRef = useRef<TextInput>(null);
   const [focused, setFocused] = useState(false);
 
@@ -58,8 +52,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 14,
     fontSize: 20,
-    letterSpacing: 3,
-    textAlign: 'left',
+    letterSpacing: 10,
+    textAlign: 'center',
     color: Colors.main.textPrimary,
     backgroundColor: Colors.main.cardBackground,
     writingDirection: 'ltr',

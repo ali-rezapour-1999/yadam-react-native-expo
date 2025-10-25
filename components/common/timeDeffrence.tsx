@@ -36,20 +36,9 @@ const TimeDeffrence = ({ startTime, endTime }: { startTime: string; endTime: str
   return (
     <MotiView from={{ opacity: 0, translateY: 10 }} animate={{ opacity: 1, translateY: 0 }} transition={{ type: 'timing', duration: 300 }}>
       <Box className="items-center">
-        <Box
-          style={{
-            backgroundColor: Colors.main.primary + '15',
-            borderRadius: 20,
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-            borderWidth: 1,
-            borderColor: Colors.main.primary + '30',
-          }}
-        >
-          <Text className="text-sm " style={{ color: Colors.main.primary }}>
-            {t('todos.time_deffrence')}: {timeDifference}
-          </Text>
-        </Box>
+        <Text className="text-lg " style={{ color: Colors.main.button }}>
+          {t('todos.time_deffrence')}: {timeDifference}
+        </Text>
       </Box>
     </MotiView>
   );

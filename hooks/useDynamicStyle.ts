@@ -1,12 +1,13 @@
 import { PressableStateCallbackType, StyleProp, ViewStyle } from 'react-native';
 import { useMemo } from 'react';
-import { useAppStore } from '@/store/appState';
+import { useBaseStore } from '@/store/baseState/base';
+import { LanguageEnum } from '@/constants/enums/base';
 
 type DynamicStyle = StyleProp<ViewStyle> | ((state: PressableStateCallbackType) => StyleProp<ViewStyle>);
 
 export function useDynamicStyle(style?: DynamicStyle): DynamicStyle {
-  const { language } = useAppStore();
-  const dir: 'rtl' | 'ltr' = language === 'fa' ? 'rtl' : 'ltr';
+  const language = useBaseStore().language;
+  const dir: 'rtl' | 'ltr' = language === LanguageEnum.FA ? 'rtl' : 'ltr';
   const baseDirStyle: ViewStyle = { direction: dir };
 
   const computedStyle = useMemo(() => {
@@ -22,8 +23,8 @@ export function useDynamicStyle(style?: DynamicStyle): DynamicStyle {
 }
 
 export function useStaticDynamicStyle(style?: StyleProp<ViewStyle>): StyleProp<ViewStyle> {
-  const { language } = useAppStore();
-  const dir: 'rtl' | 'ltr' = language === 'fa' ? 'rtl' : 'ltr';
+  const language = useBaseStore().language;
+  const dir: 'rtl' | 'ltr' = language === LanguageEnum.FA ? 'rtl' : 'ltr';
   const baseDirStyle: ViewStyle = { direction: dir };
 
   const computedStyle = useMemo(() => {

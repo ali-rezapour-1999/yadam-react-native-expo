@@ -1,9 +1,9 @@
+import { useBaseStore } from '@/store/baseState/base';
 import { useRef, useCallback } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import { useAppStore } from '@/store/appState';
 
 export const useScrollHandler = () => {
-  const { setHideTabBar } = useAppStore();
+  const setHideTabBar = useBaseStore().setHideScroll;
   const lastScrollY = useRef(0);
 
   const handleScroll = useCallback(

@@ -21,6 +21,7 @@ import {
 } from '@gluestack-ui/utils/nativewind-utils';
 import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+import { useStaticDynamicStyle } from '@/hooks/useDynamicStyle';
 
 type IAnimatedPressableProps = React.ComponentProps<typeof Pressable> &
   MotionComponentProps<typeof Pressable, ViewStyle, unknown, unknown, unknown>;
@@ -279,6 +280,7 @@ const DrawerHeader = React.forwardRef<
   React.ComponentRef<typeof UIDrawer.Header>,
   IDrawerHeaderProps
 >(function DrawerHeader({ className, ...props }, ref) {
+  const useDynaimcStyle = useStaticDynamicStyle(props.style);
   return (
     <UIDrawer.Header
       ref={ref}
@@ -286,6 +288,7 @@ const DrawerHeader = React.forwardRef<
       className={drawerHeaderStyle({
         class: className,
       })}
+      style={[useDynaimcStyle, props.style]}
     />
   );
 });

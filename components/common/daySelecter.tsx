@@ -5,8 +5,8 @@ import { Text } from '../Themed';
 import { HStack } from '../ui/hstack';
 import { Button, ButtonText } from '../ui/button';
 import { StyleSheet } from 'react-native';
-import { weekdays } from '@/constants/WeekEnum';
-import { useAppStore } from '@/store/appState';
+import { weekdays } from '@/constants/enums/WeekEnum';
+import { useBaseStore } from '@/store/baseState/base';
 
 interface DaySelectorProps {
   field: {
@@ -17,7 +17,7 @@ interface DaySelectorProps {
 
 const DaySelector = ({ field }: DaySelectorProps) => {
   const value = field.value ?? [];
-  const { language } = useAppStore();
+  const language = useBaseStore().language;
 
   const handleDayChange = (day: string) => {
     const isSelected = value.includes(day);
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     shadowRadius: 2,
-    elevation: 3,
     marginBottom: 20,
   },
 });

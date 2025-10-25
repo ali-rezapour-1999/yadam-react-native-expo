@@ -18,14 +18,15 @@
     "enter_email": "Enter your email to receive a verification code",
     "enter_code": "Enter the code to log in to your account",
     "enter_your_account": "Log in to your account",
-    "privacy_message": "By logging into Yadam, you agree to our Terms and Privacy Policy. Your information is only used to make your experience better."
+    "privacy_message": "By logging into Ding, you agree to our Terms and Privacy Policy. Your information is only used to make your experience better.",
+    "we_send_code": "Confirm send code"
   },
   "onboarding": {
     "getting_started": "Let's get started!",
-    "start_your_journey_with_yadam": "Your journey with Yadam starts here",
+    "start_your_journey_with_ding": "Your journey with Ding starts here",
     "intro_message": "We’re here to help you build a healthy lifestyle that fits your body and mind. To personalize your plan, we’ll ask a few quick questions.",
     "takes_less_than_a_minute": "⏱ It takes less than a minute!",
-    "our_goal": "🎯 Our goal is to help you create a plan that fits your lifestyle and goals — not a one-size-fits-all routine. With Yadam, you’ll discover your own unique path.",
+    "our_goal": "🎯 Our goal is to help you create a plan that fits your lifestyle and goals — not a one-size-fits-all routine. With Ding, you’ll discover your own unique path.",
     "lets_do_it": "Let's do it!",
     "skip": "Skip",
     "information": "Information",
@@ -34,7 +35,7 @@
     "priority": "Priority",
     "goal": {
       "your_goal": "Your goal",
-      "what_do_you_want_from_cocheck": "What do you want from Yadam?",
+      "what_do_you_want_from_ding": "What do you want from Ding?",
       "main_goal_guidance_text": "Tell us your main goal so we can guide you the right way.",
       "goals": {
         "lose_weight": "Lose weight",
@@ -66,14 +67,16 @@
     "about": "About",
     "setting": "Settings",
     "help_text": "How can we help you?",
-    "about_yadam": "About Yadam",
+    "about_ding": "About Ding",
     "no_description": "You haven’t written a description yet. You can add one using the edit button.",
     "logout_message": "Do you want to log out of your account?",
-    "edit_account": "Edit profile"
+    "edit_account": "Edit profile",
+    "enter_your_first_and_last_name": "Enter you first name and lanst name to best use in app",
+    "set_your_name": "Enter your name"
   },
   "home": {
     "hi": "Hi 👋",
-    "welcome_to_yadam": "Welcome to Yadam",
+    "welcome_to_ding": "Welcome to Ding",
     "make_day_productive": "Let's make today productive!",
     "my_task": "My activities",
     "today_task": "Today's activities",
@@ -130,7 +133,8 @@
     "logout": "Log out",
     "edit_email": "Edit email",
     "select_language": "Choose language",
-    "create_topics": "Create category"
+    "create_topics": "Create category",
+    "generate_by_ai" : "Generate tasks by AI"
   },
   "activity": {
     "title": "Topics",
@@ -142,7 +146,7 @@
     "any_topics_sub_task": "You have no active topics"
   },
   "category": {
-    "select_category": "Select category",
+    "select_category_type": "Select topics type",
     "add_category": "Add category",
     "new_category": "New category",
     "category_name": "Category name",

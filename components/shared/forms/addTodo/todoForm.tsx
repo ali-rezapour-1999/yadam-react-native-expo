@@ -40,7 +40,7 @@ export const AddTodoForm = ({ value, onChange, error, placeholder, style, autoFo
           placeholder={placeholder}
           value={value}
           onChangeText={onChange}
-          className="text-xl text-slate-50"
+          className="text-xl"
           autoFocus={autoFocus}
           placeholderTextColor={Colors.main.textSecondary}
         />
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: 'transparent',
     borderWidth: 0,
-    borderBottomColor: Colors.main.primaryLight,
+    borderBottomColor: Colors.main.textDisabled,
     borderBottomWidth: 1,
   },
 });

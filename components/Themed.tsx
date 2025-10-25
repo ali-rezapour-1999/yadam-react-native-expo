@@ -1,7 +1,7 @@
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { useAppStore } from '@/store/appState';
 import { useDynamicFont } from '@/hooks/useDynamicFont';
+import { useBaseStore } from '@/store/baseState/base';
 
 type ColorName = {
   [K in keyof typeof Colors.main]: (typeof Colors.main)[K] extends string ? K : never;
@@ -29,7 +29,7 @@ export function Text(props: TextProps) {
 export function View(props: ViewProps) {
   const { style, lightColor, ...otherProps } = props;
   const backgroundColor = useThemeColor({ lightColor }, 'background');
-  const { language } = useAppStore();
+  const language = useBaseStore.getState().language;
 
-  return <DefaultView style={[{ backgroundColor, direction: language === 'fa' ? 'rtl' : 'ltr' }, style]} {...otherProps} />;
+  return < DefaultView style={[{ backgroundColor, direction: language === 'fa' ? 'rtl' : 'ltr' }, style]} {...otherProps} />;
 }

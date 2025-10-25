@@ -13,7 +13,7 @@ const HomeIcon = ({ focused }: HomeIconProps) => {
   const animation = useIconAnimation(focused);
 
   const fillColor = getAnimatedColors(animation, Colors.main.primary, 'transparent');
-  const strokeColor = getAnimatedColors(animation, 'transparent', Colors.main.primaryLight);
+  const strokeColor = getAnimatedColors(animation, 'transparent', Colors.main.button);
 
   return (
     <Svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -27,7 +27,7 @@ const HomeIcon = ({ focused }: HomeIconProps) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <Path d="M8.04329 15.9103H14.1761" stroke={focused ? Colors.main.primaryLight : Colors.main.textPrimary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M8.04329 15.9103H14.1761" stroke={focused ? Colors.main.button : Colors.main.border} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 };

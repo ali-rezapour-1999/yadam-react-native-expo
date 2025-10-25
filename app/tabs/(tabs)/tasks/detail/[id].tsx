@@ -34,13 +34,13 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Colors } from "@/constants/Colors";
-import { TaskStatus } from "@/constants/TaskEnum";
-import { useTodoStore } from "@/store/todoState";
-import { useAppStore } from "@/store/appState";
+import { TaskStatus } from "@/constants/enums/TaskEnum";
 import { Loading } from "@/components/common/loading";
 import AppModal from "@/components/common/appModal";
 import TrashIcon from "@/assets/Icons/TrushIcon";
 import EditIcon from "@/assets/Icons/EditIcon";
+import { useUserState } from "@/store/authState/userState";
+import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
 
 /* ---------------------- Constants ---------------------- */
 const { width: screenWidth } = Dimensions.get("window");
@@ -51,16 +51,8 @@ const SWIPE_THRESHOLD = screenWidth * 0.4;
 ========================================================== */
 const TaskDetail = () => {
   const { id } = useLocalSearchParams();
-  const { user } = useAppStore();
-
-  const {
-    task,
-    getTaskById,
-    updateTask,
-    isLoading,
-    removeTask,
-    getTodayAllTask,
-  } = useTodoStore();
+  const user = useUserState().user;
+  const { task, getTaskById, updateTask, isLoading, removeTask, getTodayAllTask } = useLocalChangeTaskStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const translateX = useSharedValue(0);
@@ -222,7 +214,7 @@ const TaskDetail = () => {
     );
   }
 
-  const isOwned = user?.id === task.userId;
+  const isOwned = user?.id == task.userId;
 
   return (
     <SafeAreaView style={styles.screenContainer}>
@@ -240,7 +232,7 @@ const TaskDetail = () => {
               </Box>
               {isOwned && (
                 <AppModal
-                  title={t("event.delete")}
+                  title={`${t("common.button.delete")} ${task.title}`}
                   buttonContent={<TrashIcon size={48} />}
                   buttonStyle={{ backgroundColor: "transparent", width: 45 }}
                   modalContentStyle={{ height: 280 }}
@@ -249,7 +241,7 @@ const TaskDetail = () => {
                   visible={isOpen}
                 >
                   <Text style={styles.modalText}>
-                    {t("common.button.delete")}
+                    {t("common.messages.delete_item")}
                   </Text>
 
                   <Button
@@ -274,7 +266,7 @@ const TaskDetail = () => {
                       style={{ color: Colors.main.button }}
                       className="text-xl"
                     >
-                      {t("event.cancel")}
+                      {t("common.button.cancel")}
                     </ButtonText>
                   </Button>
                 </AppModal>
