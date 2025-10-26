@@ -14,12 +14,12 @@ import { Controller } from "react-hook-form";
 import DaySelector from "@/components/common/daySelecter";
 import TopicSelector from "@/components/shared/topicSelector";
 import { CancelIcon } from "@/assets/Icons/Cancel";
-import ModalOption from "@/components/common/modelOption";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useBaseStore } from "@/store/baseState/base";
 import { useLocalChangeTaskStore } from "@/store/taskState/localChange";
 import { useUserState } from "@/store/authState/userState";
 import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
+import AppDrower from "@/components/common/appDrower";
 
 const EditTask: React.FC = () => {
   const selectedDate = useBaseStore().selectedDate;
@@ -124,14 +124,14 @@ const EditTask: React.FC = () => {
         </Box>
 
         <Box style={styles.section}>
-          <ModalOption title={t("event.options")} style={{ padding: 16 }}>
+          <AppDrower title={t("event.options")} style={{ padding: 16 }} trigger={<Text style={{ color: Colors.main.textPrimary }}>{t("event.options")}</Text>}>
             <Controller
               name="reminderDays"
               control={control}
-              render={({ field }) => <DaySelector field={field} />}
+              render={({ field }) => <DaySelector field={field} selectDate={selectedDate} />}
             />
             <TaskAdvancedFields control={control} />
-          </ModalOption>
+          </AppDrower>
         </Box>
       </KeyboardAvoidingView>
       <Button

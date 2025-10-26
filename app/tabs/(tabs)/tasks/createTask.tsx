@@ -15,13 +15,13 @@ import { TodoBasicFields } from "@/components/shared/forms/todoBaseField";
 import TaskAdvancedFields from "@/components/shared/forms/taskAdvancedField";
 import DaySelector from "@/components/common/daySelecter";
 import TopicSelector from "@/components/shared/topicSelector";
-import ModalOption from "@/components/common/modelOption";
 
 import HeaderTitle from "@/components/common/headerTitle";
 import { useBaseStore } from "@/store/baseState/base";
 import { useUserState } from "@/store/authState/userState";
 import { useLocalChangeTopicStore } from "@/store/topicState/localChange";
 import { useTaskForm } from "@/hooks/useTaskForm";
+import AppDrower from "@/components/common/appDrower";
 
 const CreateTask: React.FC = () => {
   const selectedDate = useBaseStore((state) => state.selectedDate);
@@ -104,14 +104,14 @@ const CreateTask: React.FC = () => {
           />
 
           {/* Advanced Options */}
-          <ModalOption title={t("event.options")} style={styles.modalOption}>
+          <AppDrower title={t("event.options")} style={styles.AppDrower} trigger={<Text style={{ color: Colors.main.textPrimary }}>{t("event.options")}</Text>} triggerStyle={{ padding: 20 }}>
             <Controller
               name="reminderDays"
               control={control}
               render={({ field }) => <DaySelector field={field} selectDate={selectedDate} />}
             />
             <TaskAdvancedFields control={control} />
-          </ModalOption>
+          </AppDrower>
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     color: Colors.main.textPrimary,
     fontWeight: "600",
   },
-  modalOption: {
+  AppDrower: {
     padding: 16,
     borderRadius: 16,
   },

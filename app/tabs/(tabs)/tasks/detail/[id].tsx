@@ -1,24 +1,7 @@
 import React, { useCallback, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  Vibration,
-  Pressable,
-} from "react-native";
-import {
-  PanGestureHandler,
-  State,
-  PanGestureHandlerGestureEvent,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  interpolateColor,
-  runOnJS,
-} from "react-native-reanimated";
+import { ScrollView, StyleSheet, Dimensions, Vibration, Pressable } from "react-native";
+import { PanGestureHandler, State, PanGestureHandlerGestureEvent, GestureHandlerRootView } from "react-native-gesture-handler";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolateColor, runOnJS } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, router, useLocalSearchParams } from "expo-router";

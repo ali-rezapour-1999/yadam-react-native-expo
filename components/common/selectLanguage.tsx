@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, ButtonText } from '../ui/button';
 import { Colors } from '@/constants/Colors';
-import { Drawer, DrawerBackdrop, DrawerContent, DrawerBody, DrawerHeader } from '@/components/ui/drawer';
 import { t } from 'i18next';
 import { Text } from '../Themed';
 import { I18nManager } from 'react-native';
@@ -11,6 +10,7 @@ import * as Updates from 'expo-updates';
 import { router } from 'expo-router';
 import { useBaseStore } from '@/store/baseState/base';
 import { LanguageEnum } from '@/constants/enums/base';
+import AppDrawer from './appDrower';
 
 const SelectLanguage = () => {
   const [showDrawer, setShowDrawer] = React.useState(false);
@@ -52,41 +52,25 @@ const SelectLanguage = () => {
           {language === 'fa' ? 'فارسی' : 'English'}
         </ButtonText>
       </Button>
-      <Drawer
-        className="bg-black/60 border-0"
-        isOpen={showDrawer}
-        onClose={() => {
-          setShowDrawer(false);
-        }}
-        size="sm"
-        anchor="bottom"
-      >
-        <DrawerBackdrop />
-        <DrawerContent style={{ backgroundColor: Colors.main.background }} className="rounded-t-2xl">
-          <DrawerHeader>
-            <Text className="text-2xl text-center w-full">{t('event.select_language')}</Text>
-          </DrawerHeader>
-          <DrawerBody>
-            <Button
-              style={{ backgroundColor: language === 'fa' ? Colors.main.border : Colors.main.button }}
-              disabled={language === 'fa'}
-              onPress={() => selectLanguage(LanguageEnum.FA)}
-              className="rounded-lg mt-1 h-14"
-            >
-              <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg font-danaRegular">فارسی</ButtonText>
-            </Button>
+      <AppDrawer isOpen={showDrawer} onToggle={setShowDrawer} showHeaderButton={false} title={t('event.select_language')} style={{ padding: 16 }}>
+        <Button
+          style={{ backgroundColor: language === 'fa' ? Colors.main.border : Colors.main.button }}
+          disabled={language === 'fa'}
+          onPress={() => selectLanguage(LanguageEnum.FA)}
+          className="rounded-lg mt-1 h-14"
+        >
+          <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg font-danaRegular">فارسی</ButtonText>
+        </Button>
 
-            <Button
-              style={{ backgroundColor: language === 'en' ? Colors.main.border : Colors.main.button }}
-              disabled={language === 'en'}
-              onPress={() => selectLanguage(LanguageEnum.EN)}
-              className="rounded-lg mt-3 h-14"
-            >
-              <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg">English</ButtonText>
-            </Button>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+        <Button
+          style={{ backgroundColor: language === 'en' ? Colors.main.border : Colors.main.button }}
+          disabled={language === 'en'}
+          onPress={() => selectLanguage(LanguageEnum.EN)}
+          className="rounded-lg mt-3 h-14"
+        >
+          <ButtonText style={{ color: Colors.main.textPrimary }} className="text-lg">English</ButtonText>
+        </Button>
+      </AppDrawer >
     </>
   );
 };

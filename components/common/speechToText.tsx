@@ -1,10 +1,19 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, Button } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React, { useRef, useState, useCallback } from "react";
+import { View } from "react-native";
+import { WebView } from "react-native-webview";
+import { Button } from "../ui/button";
+import { Mic, MicOff } from "lucide-react-native";
+import { Colors } from "@/constants/Colors";
 
-export default function VoiceToTextScreen() {
-  const [text, setText] = useState('');
-  console.log(text)
+interface Props {
+  onResult?: (text: string) => void;
+  language?: string;
+  buttonStyle?: any;
+  textStyle?: any;
+}
+
+const VoiceToTextScreen: React.FC<Props> = ({ onResult, language = "en-US", buttonStyle }) => {
+  const [listening, setListening] = useState(false);
   const webviewRef = useRef<any>(null);
 
   const html = `
@@ -14,32 +23,62 @@ export default function VoiceToTextScreen() {
         <script>
           const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
           const recognition = new SpeechRecognition();
-          recognition.lang = 'en-US';
+          recognition.lang = '${language}';
           recognition.interimResults = false;
+
           recognition.onresult = (event) => {
             const text = event.results[0][0].transcript;
             window.ReactNativeWebView.postMessage(text);
           };
-          recognition.start();
+
+          recognition.onerror = (e) => window.ReactNativeWebView.postMessage('__ERROR__');
+          recognition.onend = () => window.ReactNativeWebView.postMessage('__STOPPED__');
+
+          window.startListening = () => recognition.start();
+          window.stopListening = () => recognition.stop();
         </script>
       </body>
     </html>
   `;
 
+  const handleMessage = useCallback(
+    (event: any) => {
+      const result = event.nativeEvent.data;
+      if (result && result !== "__STOPPED__" && result !== "__ERROR__") {
+        onResult?.(result);
+      }
+      if (result === "__STOPPED__") setListening(false);
+    },
+    [onResult]
+  );
+
+  const toggleListening = useCallback(() => {
+    if (listening) {
+      webviewRef.current?.injectJavaScript("window.stopListening();");
+      setListening(false);
+    } else {
+      webviewRef.current?.injectJavaScript("window.startListening();");
+      setListening(true);
+    }
+  }, [listening]);
+
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+    <View style={{ alignItems: "center", justifyContent: "center" }}>
       <Button
-        title="Start Listening"
-        onPress={() => webviewRef.current.injectJavaScript('recognition.start();')}
-      />
-      <Text style={{ marginTop: 20, fontSize: 18 }}>Result: {text}</Text>
+        onPress={toggleListening}
+        style={[buttonStyle, { backgroundColor: listening ? Colors.main.primary : Colors.main.border }]}
+      >
+        {listening ? <Mic /> : <MicOff />}
+      </Button>
 
       <WebView
         ref={webviewRef}
         source={{ html }}
-        onMessage={(event) => setText(event.nativeEvent.data)}
-        style={{ display: 'none' }}
+        onMessage={handleMessage}
+        style={{ display: "none" }}
       />
     </View>
   );
-}
+};
+
+export default VoiceToTextScreen;

@@ -16,7 +16,7 @@ import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/Themed';
 import { Switch } from '@/components/ui/switch';
 import { useTopicsForm } from '@/hooks/useTopicsForm';
-import ModalOption from '@/components/common/modelOption';
+import { AppDrawer } from '@/components/common/appDrower';
 
 const CreateTopics = () => {
   const { form, onSubmit } = useTopicsForm({ topic: null });
@@ -43,7 +43,7 @@ const CreateTopics = () => {
             control={control}
             render={({ field, fieldState }) => <CategoryPicker selectedCategory={field.value} onCategorySelect={field.onChange} categories={Category} error={fieldState.error} />}
           />
-          <ModalOption title={t('event.options')} style={{ padding: 16 }}>
+          <AppDrawer title={t('event.options')} style={{ padding: 16 }} trigger={<Text style={{ color: Colors.main.textPrimary }}>{t('event.is_public')}</Text>}>
             <TopicAdvancedFields control={control} />
             <Controller
               name="isPublic"
@@ -62,7 +62,7 @@ const CreateTopics = () => {
                 </HStack>
               )}
             />
-          </ModalOption>
+          </AppDrawer>
         </VStack>
       </KeyboardAvoidingView>
       <Box className="flex-1" />

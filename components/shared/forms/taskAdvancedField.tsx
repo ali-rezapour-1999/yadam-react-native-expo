@@ -22,10 +22,7 @@ const TaskAdvancedFields: React.FC<TaskAdvancedFieldsProps> = ({ control }) => {
           <Text style={styles.label}>{t('profile.description')}</Text>
           <Textarea
             className="mt-2"
-            style={[
-              styles.textArea,
-              fieldState.error && { borderColor: Colors.main.accent },
-            ]}
+            style={[styles.textArea, fieldState.error && { borderColor: Colors.main.accent }]}
             size="md"
             isInvalid={!!fieldState.error}
           >

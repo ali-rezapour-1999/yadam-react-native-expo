@@ -5,9 +5,9 @@ import { t } from 'i18next';
 import { HStack } from '../ui/hstack';
 import { Text } from '../Themed';
 import { Button } from '../ui/button';
-import ModalOption from '../common/modelOption';
 import { useBaseStore } from '@/store/baseState/base';
 import { LanguageEnum } from '@/constants/enums/base';
+import AppDrower from '../common/appDrower';
 
 export interface Category {
   id: string;
@@ -67,7 +67,7 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCat
 
   return (
     <View style={style}>
-      <ModalOption
+      <AppDrower
         title={error ? error.message : t('category.select_category_type')}
         buttonTitle={selectedCategory ? categoryNameAndIcons() : t('category.select_category_type')}
         onCloseProps={setIsOpen}
@@ -79,7 +79,7 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCat
         }}
       >
         <FlatList data={categories} keyExtractor={(item) => item.id} renderItem={renderCategoryItem} style={styles.categoryList} />
-      </ModalOption>
+      </AppDrower>
     </View>
   );
 };

@@ -14,7 +14,6 @@ export const useLocalChangeTopicStore = create<LocalChangeTopicStateType>((set, 
   explorerTopics: [],
   selectedTopic: null,
   isLoading: false,
-  isEditDrawerOpen: false,
 
   // ====== SETTERS ======
   setSelectedTopic: (topic: Topic | null) => set({ selectedTopic: topic }),

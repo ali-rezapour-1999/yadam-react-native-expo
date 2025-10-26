@@ -1,5 +1,5 @@
 import React, { memo, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { t } from 'i18next';
 
@@ -19,7 +19,6 @@ import { useUserState } from '@/store/authState/userState';
 import { useLocalChangeTaskStore } from '@/store/taskState/localChange';
 import { useLocalChangeTopicStore } from '@/store/topicState/localChange';
 import { useServerChangeTaskStore } from '@/store/taskState/serverChange';
-import VoiceToTextScreen from '@/components/common/speechToText';
 const UserHeaderTitle = React.lazy(() => import('@/components/common/userHeaderTitle'));
 const TaskListView = React.lazy(() => import('@/components/shared/taskListView'));
 const TopicFilter = React.lazy(() => import('@/components/shared/topicFilterList'));
@@ -157,8 +156,6 @@ const Home = () => {
         topics={userTopics}
         onSelect={handleTopicSelect}
       />
-
-      <VoiceToTextScreen />
 
       {hasTasks ? (
         <TodoListSection />
