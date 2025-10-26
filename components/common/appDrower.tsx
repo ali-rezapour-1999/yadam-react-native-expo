@@ -70,7 +70,7 @@ export const AppDrawer: React.FC<BaseDrawerProps> = memo(
           useNativeDriverForBackdrop
           style={styles.modalWrapper}
         >
-          <VStack style={styles.drawerContainer}>
+          <VStack style={styles.drawerContainer} className="rounded-t-2xl px-0">
             <TouchableOpacity
               onPress={handleToggle}
               activeOpacity={0.7}
@@ -80,7 +80,7 @@ export const AppDrawer: React.FC<BaseDrawerProps> = memo(
             </TouchableOpacity>
 
             {/* Box Content */}
-            <Box style={style}>
+            <Box style={[{ width: "100%", padding: 3 }, style]}>
               {/* Header */}
               {showHeader && (
                 <View style={[styles.header, headerStyle]}>
@@ -97,13 +97,7 @@ export const AppDrawer: React.FC<BaseDrawerProps> = memo(
               )}
 
               {/* Content */}
-              <View
-                style={[
-                  styles.content,
-                  { backgroundColor: Colors.main.background },
-                  contentStyle,
-                ]}
-              >
+              <View style={[styles.content, contentStyle,]} >
                 {children}
               </View>
             </Box>
@@ -123,8 +117,6 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   drawerContainer: {
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
     overflow: "hidden",
     backgroundColor: Colors.main.background,
     alignItems: "center",
