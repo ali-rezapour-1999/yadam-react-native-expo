@@ -69,14 +69,17 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({ selectedCategory, onCat
     <View style={style}>
       <AppDrower
         title={error ? error.message : t('category.select_category_type')}
-        buttonTitle={selectedCategory ? categoryNameAndIcons() : t('category.select_category_type')}
-        onCloseProps={setIsOpen}
-        isOpenProps={isOpen}
-        buttonStyle={{
+        trigger={<Text>{selectedCategory ? categoryNameAndIcons() : t('category.select_category_type')}</Text>}
+        onToggle={setIsOpen}
+        isOpen={isOpen}
+        triggerStyle={{
           borderWidth: error ? 2 : 0,
           borderColor: error ? Colors.main.accent : Colors.main.cardBackground,
           backgroundColor: error ? Colors.main.accent + 30 : Colors.main.cardBackground,
+          padding: 20,
         }}
+        showHeaderButton={false}
+        style={{ height: "80%", paddingBottom: 70 }}
       >
         <FlatList data={categories} keyExtractor={(item) => item.id} renderItem={renderCategoryItem} style={styles.categoryList} />
       </AppDrower>

@@ -1,18 +1,18 @@
 import React from 'react';
-import { Button, ButtonText } from '@/components/ui/button';
-import { Drawer, DrawerBackdrop, DrawerContent, DrawerHeader, DrawerBody } from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
 import { t } from 'i18next';
 import { Colors } from '@/constants/Colors';
 import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import CalenderIcon from '@/assets/Icons/CalenderIcon';
-import { ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import jalaliMoment from 'jalali-moment';
 import { Icon } from '@/components/ui/icon';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react-native';
 import { Text } from '@/components/Themed';
 import { useBaseStore } from '@/store/baseState/base';
+import AppDrawer from '@/components/common/appDrower';
 
 interface MonthOption {
   value: string;
@@ -128,88 +128,79 @@ const JalaliYearCalendar: React.FC<JalaliYearCalendarProps> = ({ selectedDate, s
   }, [selectedDate, language]);
 
   return (
-    <>
-      <Button onPress={handleDrawerOpen} style={{ backgroundColor: Colors.main.primary + 30, borderColor: Colors.main.primary, borderWidth: 2 }}
-        className="rounded-lg h-[48px] w-full justify-between px-8 mt-3" >
-        <ButtonText className='text-lg'>
-          {buttonText}
-        </ButtonText>
+    <AppDrawer showHeaderButton={false} showHeader={false} trigger={
+      <HStack className='w-full flex items-center justify-between'>
+        <Text className='text-lg'>{buttonText}</Text>
         <CalenderIcon />
-      </Button>
+      </HStack>
+    }
+      isOpen={showDrawer}
+      onToggle={showDrawer ? handleDrawerClose : handleDrawerOpen}
+      contentStyle={{ padding: 20, paddingBottom: 40 }}
+      triggerStyle={{ backgroundColor: Colors.main.button + 60, borderWidth: 1, borderColor: Colors.main.button, padding: 10 }}
+    >
+      <VStack className="items-center gap-2 ">
+        <HStack className="items-center gap-10">
+          <Button onPress={handlePreviousMonth} className="rounded-lg" style={{ backgroundColor: Colors.main.border, height: 40 }}>
+            <Icon as={language === 'en' ? ArrowLeftIcon : ArrowRightIcon} size="xl" color={Colors.main.textPrimary} />
+          </Button>
 
-      <Drawer isOpen={showDrawer} onClose={handleDrawerClose} size="lg" anchor="bottom" className="bg-black/80 border-0">
-        <DrawerBackdrop />
-        <DrawerContent style={{ backgroundColor: Colors.main.cardBackground }} className="h-max rounded-t-[40px] border-0">
-          <DrawerHeader className="justify-center py-1">
-            <VStack className="items-center gap-2 ">
-              <HStack className="items-center gap-10">
-                <Button onPress={handlePreviousMonth} className="rounded-lg" style={{ backgroundColor: Colors.main.border, height: 40 }}>
-                  <Icon as={language === 'en' ? ArrowLeftIcon : ArrowRightIcon} size="xl" color={Colors.main.textPrimary} />
-                </Button>
+          <Text style={{ fontSize: 18, color: Colors.main.textPrimary, minWidth: 100, textAlign: 'center' }}>
+            {language === 'fa' ? selectedMonthLabel?.labelFa : selectedMonthLabel?.labelEn} {selectedYear}
+          </Text>
 
-                <Text style={{ fontSize: 18, color: Colors.main.textPrimary, minWidth: 100, textAlign: 'center' }}>
-                  {language === 'fa' ? selectedMonthLabel?.labelFa : selectedMonthLabel?.labelEn} {selectedYear}
-                </Text>
+          <Button onPress={handleNextMonth} className="rounded-lg" style={{ backgroundColor: Colors.main.border, height: 40 }}>
+            <Icon as={language === 'en' ? ArrowRightIcon : ArrowLeftIcon} size="xl" color={Colors.main.textPrimary} />
+          </Button>
+        </HStack>
+      </VStack>
 
-                <Button onPress={handleNextMonth} className="rounded-lg" style={{ backgroundColor: Colors.main.border, height: 40 }}>
-                  <Icon as={language === 'en' ? ArrowRightIcon : ArrowLeftIcon} size="xl" color={Colors.main.textPrimary} />
-                </Button>
-              </HStack>
-            </VStack>
-          </DrawerHeader>
+      <VStack className="items-center space-y-4">
+        <Box style={styles.calendarContainer}>
+          <Box style={styles.weekHeader}>
+            {weekDays.map((day, index) => (
+              <Box key={index} style={styles.weekDayCell}>
+                <Text style={styles.weekDayText}>{day}</Text>
+              </Box>
+            ))}
+          </Box>
 
-          <DrawerBody>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <VStack className="items-center space-y-4">
-                <Box style={styles.calendarContainer}>
-                  <Box style={styles.weekHeader}>
-                    {weekDays.map((day, index) => (
-                      <Box key={index} style={styles.weekDayCell}>
-                        <Text style={styles.weekDayText}>{day}</Text>
-                      </Box>
-                    ))}
-                  </Box>
+          <Box style={styles.daysContainer}>
+            {monthDays.map((day, index) => {
+              if (day === null) {
+                return <Box key={`empty-${index}`} style={styles.dayCell} />;
+              }
 
-                  <Box style={styles.daysContainer}>
-                    {monthDays.map((day, index) => {
-                      if (day === null) {
-                        return <Box key={`empty-${index}`} style={styles.dayCell} />;
-                      }
+              const dateStr = jalaliMoment(`${selectedYear}/${selectedMonth}/${day}`, 'jYYYY/jM/jD').format('YYYY-MM-DD');
+              const isSelected = dateStr === selectedDate;
+              const isToday = jalaliMoment().isSame(jalaliMoment(dateStr), 'day');
 
-                      const dateStr = jalaliMoment(`${selectedYear}/${selectedMonth}/${day}`, 'jYYYY/jM/jD').format('YYYY-MM-DD');
-                      const isSelected = dateStr === selectedDate;
-                      const isToday = jalaliMoment().isSame(jalaliMoment(dateStr), 'day');
-
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() => handleDayPress(day)}
-                          style={[
-                            styles.dayCell,
-                            isSelected && styles.selectedDay,
-                            isToday && !isSelected && styles.todayDay,
-                          ]}
-                        >
-                          <Text
-                            style={[
-                              styles.dayText,
-                              isSelected && styles.selectedDayText,
-                              isToday && !isSelected && styles.todayDayText,
-                            ]}
-                          >
-                            {day}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </Box>
-                </Box>
-              </VStack>
-            </ScrollView>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </>
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handleDayPress(day)}
+                  style={[
+                    styles.dayCell,
+                    isSelected && styles.selectedDay,
+                    isToday && !isSelected && styles.todayDay,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.dayText,
+                      isSelected && styles.selectedDayText,
+                      isToday && !isSelected && styles.todayDayText,
+                    ]}
+                  >
+                    {day}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </Box>
+        </Box>
+      </VStack>
+    </AppDrawer>
   );
 };
 

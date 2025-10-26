@@ -56,7 +56,7 @@ export const AppDrawer: React.FC<BaseDrawerProps> = memo(({
   return (
     <>
       {/* Trigger Element */}
-      <TouchableOpacity onPress={handleToggle} style={[{ backgroundColor: Colors.main.cardBackground, width: "100%" }, triggerStyle]} className="h-max rounded-2xl">
+      <TouchableOpacity onPress={handleToggle} style={[{ backgroundColor: Colors.main.cardBackground, width: "100%" }, triggerStyle]} className="h-max rounded-xl">
         {trigger}
       </TouchableOpacity>
 

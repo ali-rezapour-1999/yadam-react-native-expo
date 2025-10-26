@@ -43,13 +43,13 @@ const CreateTopics = () => {
             control={control}
             render={({ field, fieldState }) => <CategoryPicker selectedCategory={field.value} onCategorySelect={field.onChange} categories={Category} error={fieldState.error} />}
           />
-          <AppDrawer title={t('event.options')} style={{ padding: 16 }} trigger={<Text style={{ color: Colors.main.textPrimary }}>{t('event.is_public')}</Text>}>
+          <AppDrawer title={t('event.options')} style={{ padding: 13, paddingBottom: 40 }} trigger={<Text style={{ color: Colors.main.textPrimary, padding: 16 }}>{t('event.options')}</Text>}>
             <TopicAdvancedFields control={control} />
             <Controller
               name="isPublic"
               control={control}
               render={({ field }) => (
-                <HStack className="items-center justify-between border-bP-2 px-1 mt-3" style={{ borderColor: Colors.main.border }}>
+                <HStack className="items-center justify-between border-bP-2 px-1 mt-10" style={{ borderColor: Colors.main.border }}>
                   <Text style={{ color: Colors.main.textPrimary }} className="text-lg">
                     {t('event.is_public')}
                   </Text>
