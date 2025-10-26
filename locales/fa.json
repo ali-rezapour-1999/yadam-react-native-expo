@@ -198,8 +198,8 @@
       "mobile_placeholder": "شماره موبایلت رو وارد کن",
       "age_placeholder": "سنت رو وارد کن",
       "description_topic": "توضیح کوتاهی در مورد گروه فعالیت مربوطه وارد کنید",
-      "description_task": "توضیح کوتاهی در مورد گروه فعالیت مربوطه وارد کنید",
-      "title_place_holder": "عنوان بخش را وارد کنید"
+      "description_task": "توضیح کوتاهی در مورد فعالیت مربوطه وارد کنید",
+      "title_place_holder": "عنوان بخش را وارد کنید",
     },
     "error_message": {
       "no_internet": "اتصال اینترنت قطع شده",

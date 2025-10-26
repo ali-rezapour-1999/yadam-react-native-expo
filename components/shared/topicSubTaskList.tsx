@@ -1,4 +1,3 @@
-import { useTodoStore } from '@/store/todoState';
 import { router } from 'expo-router';
 import React from 'react';
 import { ScrollView } from 'react-native';
@@ -11,6 +10,7 @@ import TaskCardInTopic from './card/taskCardInTopic';
 import { Task } from '@/types/database-type';
 import EmptySlot from './emptySlot';
 import { Box } from '../ui/box';
+import { useLocalChangeTaskStore } from '@/store/taskState/localChange';
 
 interface TopicSubTaskListProps {
   id: string;
@@ -34,7 +34,7 @@ const Wrapper = React.memo(({ children, id }: { children: React.ReactNode; id?: 
 ));
 
 const TopicSubTaskList: React.FC<TopicSubTaskListProps> = ({ id, isUserTask }) => {
-  const allTaskByTopicId = useTodoStore((state) => state.allTaskByTopicId);
+  const allTaskByTopicId = useLocalChangeTaskStore((state) => state.allTaskByTopicId);
 
   if (allTaskByTopicId.length === 0) {
     return (

@@ -82,6 +82,7 @@ export const useTopicsForm = ({ topic }: Props) => {
           isDeleted: data.isDeleted || false,
           parentId: data.paretnId || '',
         };
+        console.log('topicData', topicData);
 
         if (isEditMode) {
           await updateTopic(topicData).then(() => {

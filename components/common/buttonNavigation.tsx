@@ -23,51 +23,45 @@ const TAB_HEIGHT = 60;
 const MotiPressable = motify(Pressable)();
 
 /* ---------------------- Tab Button Component ---------------------- */
-const TabButton = React.memo(
-  ({
-    route,
-    isFocused,
-    onPress,
-    IconComponent,
-  }: {
-    route: any;
-    isFocused: boolean;
-    onPress: () => void;
-    IconComponent?: React.ComponentType<{ focused: boolean; color: string; size: number }>;
-  }) => {
-    const animatedValue = useSharedValue(isFocused ? 1 : 0);
+const TabButton = React.memo(({ route, isFocused, onPress, IconComponent, }: {
+  route: any;
+  isFocused: boolean;
+  onPress: () => void;
+  IconComponent?: React.ComponentType<{ focused: boolean; color: string; size: number }>;
+}) => {
+  const animatedValue = useSharedValue(isFocused ? 1 : 0);
 
-    useEffect(() => {
-      animatedValue.value = withTiming(isFocused ? 1 : 0, {
-        duration: ANIMATION_DURATION,
-      });
-    }, [isFocused]);
-
-    const animatedColor = useDerivedValue(() => {
-      return interpolateColor(
-        animatedValue.value,
-        [0, 1],
-        [Colors.main.primaryLight, Colors.main.primary]
-      );
+  useEffect(() => {
+    animatedValue.value = withTiming(isFocused ? 1 : 0, {
+      duration: ANIMATION_DURATION,
     });
+  }, [isFocused]);
 
-
-    return (
-      <MotiPressable
-        key={route.key}
-        onPress={onPress}
-        style={styles.tabButton}
-        animate={{ scale: isFocused ? 1.1 : 1 }}
-        transition={{ type: "timing", duration: ANIMATION_DURATION }}
-      >
-        {IconComponent && (
-          <Animated.View style={{ transform: [{ scale: isFocused ? 1.1 : 1 }] }}>
-            <IconComponent focused={isFocused} color={animatedColor.value} size={20} />
-          </Animated.View>
-        )}
-      </MotiPressable>
+  const animatedColor = useDerivedValue(() => {
+    return interpolateColor(
+      animatedValue.value,
+      [0, 1],
+      [Colors.main.primaryLight, Colors.main.primary]
     );
-  }
+  });
+
+
+  return (
+    <MotiPressable
+      key={route.key}
+      onPress={onPress}
+      style={styles.tabButton}
+      animate={{ scale: isFocused ? 1.1 : 1 }}
+      transition={{ type: "timing", duration: ANIMATION_DURATION }}
+    >
+      {IconComponent && (
+        <Animated.View style={{ transform: [{ scale: isFocused ? 1.1 : 1 }] }}>
+          <IconComponent focused={isFocused} color={animatedColor.value} size={20} />
+        </Animated.View>
+      )}
+    </MotiPressable>
+  );
+}
 );
 
 TabButton.displayName = "TabButton";

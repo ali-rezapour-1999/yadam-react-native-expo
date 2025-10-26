@@ -1,18 +1,11 @@
 import React, { useState, useCallback, memo } from "react";
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Platform,
-  I18nManager,
-  StyleProp,
-  ViewStyle,
-  DimensionValue,
-} from "react-native";
+import { TouchableOpacity, View, StyleSheet, I18nManager, StyleProp, ViewStyle, DimensionValue } from "react-native";
 import Modal from "react-native-modal";
 import { Colors } from "@/constants/Colors";
 import { Text } from "../Themed";
 import { Box } from "../ui/box";
+import { VStack } from "../ui/vstack";
+import ChevronDown from "@/assets/Icons/ChevronDown";
 import { t } from "i18next";
 
 interface BaseDrawerProps {
@@ -31,79 +24,97 @@ interface BaseDrawerProps {
   showHeaderButton?: boolean;
 }
 
-export const AppDrawer: React.FC<BaseDrawerProps> = memo(({
-  children,
-  title,
-  isOpen,
-  onToggle,
-  trigger,
-  style,
-  headerStyle,
-  contentStyle,
-  triggerStyle,
-  showHeader = true,
-  showHeaderButton = true,
-  confirmText = t('common.button.confirm'),
-}) => {
-  const [internalOpen, setInternalOpen] = useState(false);
-  const open = isOpen ?? internalOpen;
+export const AppDrawer: React.FC<BaseDrawerProps> = memo(
+  ({
+    children,
+    title,
+    isOpen,
+    onToggle,
+    trigger,
+    style,
+    headerStyle,
+    contentStyle,
+    triggerStyle,
+    showHeader = true,
+    showHeaderButton = true,
+    confirmText = t("common.button.confirm"),
+  }) => {
+    const [internalOpen, setInternalOpen] = useState(false);
+    const open = isOpen ?? internalOpen;
 
-  const handleToggle = useCallback(() => {
-    if (onToggle) onToggle(!open);
-    else setInternalOpen(!open);
-  }, [onToggle, open]);
+    const handleToggle = useCallback(() => {
+      if (onToggle) onToggle(!open);
+      else setInternalOpen(!open);
+    }, [onToggle, open]);
 
-  return (
-    <>
-      {/* Trigger Element */}
-      <TouchableOpacity onPress={handleToggle} style={[{ backgroundColor: Colors.main.cardBackground, width: "100%" }, triggerStyle]} className="h-max rounded-xl">
-        {trigger}
-      </TouchableOpacity>
-
-      {/* Drawer Modal */}
-      <Modal
-        isVisible={open}
-        onBackdropPress={handleToggle}
-        onSwipeComplete={handleToggle}
-        swipeDirection="down"
-        backdropTransitionOutTiming={0}
-        useNativeDriverForBackdrop
-        style={styles.modalWrapper}
-      >
-        <Box
+    return (
+      <>
+        <TouchableOpacity
+          onPress={handleToggle}
           style={[
-            styles.drawerContainer,
-            { backgroundColor: Colors.main.background },
-            style,
+            { backgroundColor: Colors.main.cardBackground, width: "100%" },
+            triggerStyle,
           ]}
+          className="h-max rounded-xl"
         >
-          {/* Header */}
-          {showHeader && (
-            <View style={[styles.header, headerStyle]}>
-              <View style={styles.placeholder} />
-              <Text style={styles.title}>{title}</Text>
-              {showHeaderButton ? (
-                <TouchableOpacity onPress={handleToggle}>
-                  <Text style={styles.closeText}>{confirmText}</Text>
-                </TouchableOpacity>
-              ) :
-                <View style={styles.placeholder} />
-              }
-            </View>
-          )}
+          {trigger}
+        </TouchableOpacity>
 
-          {/* Content */}
-          <View style={[styles.content, { backgroundColor: Colors.main.background }, contentStyle,]}>
-            {children}
-          </View>
-        </Box>
-      </Modal>
-    </>
-  );
-}
+        {/* Drawer */}
+        <Modal
+          isVisible={open}
+          onBackdropPress={handleToggle}
+          onSwipeComplete={handleToggle}
+          swipeDirection="down"
+          backdropTransitionOutTiming={0}
+          useNativeDriverForBackdrop
+          style={styles.modalWrapper}
+        >
+          <VStack style={styles.drawerContainer}>
+            <TouchableOpacity
+              onPress={handleToggle}
+              activeOpacity={0.7}
+              style={styles.chevronWrapper}
+            >
+              <ChevronDown />
+            </TouchableOpacity>
+
+            {/* Box Content */}
+            <Box style={style}>
+              {/* Header */}
+              {showHeader && (
+                <View style={[styles.header, headerStyle]}>
+                  <View style={styles.placeholder} />
+                  <Text style={styles.title}>{title}</Text>
+                  {showHeaderButton ? (
+                    <TouchableOpacity onPress={handleToggle}>
+                      <Text style={styles.closeText}>{confirmText}</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={styles.placeholder} />
+                  )}
+                </View>
+              )}
+
+              {/* Content */}
+              <View
+                style={[
+                  styles.content,
+                  { backgroundColor: Colors.main.background },
+                  contentStyle,
+                ]}
+              >
+                {children}
+              </View>
+            </Box>
+          </VStack>
+        </Modal>
+      </>
+    );
+  }
 );
 
-export default AppDrawer
+export default AppDrawer;
 
 /* ---------------------- Styles ---------------------- */
 const styles = StyleSheet.create({
@@ -115,15 +126,19 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     overflow: "hidden",
+    backgroundColor: Colors.main.background,
+    alignItems: "center",
+  },
+  chevronWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   header: {
     flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: Colors.main.border,
-    paddingTop: Platform.OS === "ios" ? 50 : 10,
   },
   closeText: {
     fontSize: 16,
@@ -137,6 +152,6 @@ const styles = StyleSheet.create({
     width: 50,
   },
   content: {
-    paddingVertical: 20,
+    paddingBottom: 20,
   },
 });

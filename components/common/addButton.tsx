@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/Colors';
@@ -6,6 +6,7 @@ import React from 'react';
 import { Plus } from 'lucide-react-native';
 import { Button } from '../ui/button';
 import { router } from 'expo-router';
+import CreateTaskByVoice from './createTaskByVoice';
 
 const BUTTON_SIZE = 64;
 
@@ -13,19 +14,22 @@ const AddButton: React.FC = memo(() => {
   const gradientColors = useMemo(() => [Colors.main.button, Colors.main.accent] as const, []);
   const gradientStart = useMemo(() => ({ x: 0, y: 0 }), []);
   const gradientEnd = useMemo(() => ({ x: 1, y: 1 }), []);
-
+  const [showModal, setShowModal] = useState(false);
 
   return (
-    <Button style={styles.container} onPress={() => router.push('/tabs/(tabs)/tasks/createTask')}>
-      <LinearGradient
-        colors={gradientColors}
-        start={gradientStart}
-        end={gradientEnd}
-        style={styles.gradientButton}
-      >
-        <Plus size={28} color={Colors.main.background} />
-      </LinearGradient>
-    </Button>
+    <>
+      <Button style={styles.container} onPress={() => router.push('/tabs/(tabs)/tasks/createTask')} onLongPress={() => setShowModal(!showModal)}>
+        <LinearGradient
+          colors={gradientColors}
+          start={gradientStart}
+          end={gradientEnd}
+          style={styles.gradientButton}
+        >
+          <Plus size={28} color={Colors.main.background} />
+        </LinearGradient>
+      </Button>
+      <CreateTaskByVoice visible={showModal} onClose={() => setShowModal(!showModal)} />
+    </>
   );
 });
 

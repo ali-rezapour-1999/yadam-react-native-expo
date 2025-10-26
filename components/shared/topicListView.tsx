@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { Loading } from '../common/loading';
-import { useTopicStore } from '@/store/topcisState';
 import TopicsCard from './card/topicsCard';
 import { TopicWithCount } from '@/types/database-type';
+import { useLocalChangeTopicStore } from '@/store/topicState/localChange';
 
 interface TopicListViewProps {
   data: TopicWithCount[];
 }
 
 const TopicListView = ({ data }: TopicListViewProps) => {
-  const { isLoading } = useTopicStore();
+  const isLoading = useLocalChangeTopicStore((state) => state.isLoading);
 
   const renderItem = useCallback(({ item }: { item: TopicWithCount }) => <TopicsCard data={item} inExplore={false} />, []);
 

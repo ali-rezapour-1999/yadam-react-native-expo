@@ -4,17 +4,20 @@ import { WebView } from "react-native-webview";
 import { Button } from "../ui/button";
 import { Mic, MicOff } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
+import { useBaseStore } from "@/store/baseState/base";
+import { LanguageEnum } from "@/constants/enums/base";
 
 interface Props {
   onResult?: (text: string) => void;
-  language?: string;
   buttonStyle?: any;
   textStyle?: any;
 }
 
-const VoiceToTextScreen: React.FC<Props> = ({ onResult, language = "en-US", buttonStyle }) => {
+const VoiceToTextScreen: React.FC<Props> = ({ onResult, buttonStyle }) => {
   const [listening, setListening] = useState(false);
+  const language = useBaseStore((state) => state.language === LanguageEnum.EN ? "en-US" : "fa-IR");
   const webviewRef = useRef<any>(null);
+
 
   const html = `
     <!DOCTYPE html>

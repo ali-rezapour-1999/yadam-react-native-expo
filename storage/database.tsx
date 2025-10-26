@@ -147,7 +147,7 @@ export class UnifiedDatabase {
         `
         INSERT OR REPLACE INTO topics (
           id, title, description, is_public, status, category_id, likes, created_at, updated_at, user_id , parent_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)`,
         [row.id, row.title, row.description, row.is_public, row.status, row.category_id, row.likes, row.created_at, row.updated_at, row.user_id, row.parent_id],
       );
     } catch (error) {
@@ -167,7 +167,7 @@ export class UnifiedDatabase {
         UPDATE topics SET
           title = ?, description = ?, is_public = ?, status = ?, category_id = ?, likes = ?, updated_at = ? , is_deleted = ? , parent_id = ?
          WHERE id = ?`,
-        [row.title, row.description, row.is_public, row.status, row.category_id, row.likes, new Date().toISOString(), row.id, row.is_deleted, row.parent_id],
+        [row.title, row.description, row.is_public, row.status, row.category_id, row.likes, new Date().toISOString(), row.is_deleted, row.parent_id, row.id],
       );
 
       if (result.changes === 0) {
@@ -395,7 +395,7 @@ export class UnifiedDatabase {
           title = ?, description = ?, start_time = ?, end_time = ?, date = ?, 
           status = ?, topic_id = ?, goal_id = ?, updated_at = ? , is_deleted = ? , parent_id = ?
          WHERE id = ?`,
-        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.is_deleted, row.id, row.parent_id]
+        [row.title, row.description, row.start_time, row.end_time, row.date, row.status, row.topic_id, row.goal_id, new Date().toISOString(), row.is_deleted, row.parent_id, row.id]
       );
 
       if (result.changes === 0) {
