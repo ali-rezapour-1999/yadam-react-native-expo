@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ding",
-    "slug": "ding",
+    "slug": "ding-app",
     "owner": "alirg1999",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -41,7 +41,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "da7b479-8066-4967-8eae-ff37de3596ea"
+        "projectId": "ada99738-0a1c-488e-8395-e8811537ae8d"
       }
     }
   }
