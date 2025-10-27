@@ -4,7 +4,6 @@ import api from '../baseApi';
 export const updateUserAction = async (data: User, token: string): Promise<AuthResponseResult> => {
   try {
     const response = await api.post('user/update/', data, { headers: { Authorization: `Bearer ${token}` } });
-    console.log(response);
     if (response.status === 200 || response.status === 201) {
       return {
         success: true,
@@ -22,9 +21,7 @@ export const updateUserAction = async (data: User, token: string): Promise<AuthR
     };
   } catch (error: any) {
 
-    console.log(error)
     if (error.response && error.response.data) {
-      console.log(error)
       return {
         success: false,
         status: 500,

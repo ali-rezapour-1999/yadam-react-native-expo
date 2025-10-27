@@ -28,4 +28,5 @@ export interface LocalChangeStateType {
 export interface ServerChangeStateType {
   isLoading: boolean
   createWithAi: (description: string) => Promise<void>;
+  createTaskByAi: (description: string) => Promise<void>;
 }

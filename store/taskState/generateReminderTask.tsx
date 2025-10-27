@@ -54,10 +54,6 @@ export const generateReminderTasks = async (task: Task) => {
     targetDate.setDate(baseDate.getDate() + delta + 1);
     const targetDateStr = targetDate.toISOString().split("T")[0];
 
-    console.log(
-      `[generateReminderTasks] isoDay: ${isoDay}, delta: ${delta}, targetDate: ${targetDateStr}, baseDate: ${baseDate.toISOString().split("T")[0]}`
-    );
-
     try {
       const existing = await taskStorage.loadTasksByDateStatus(targetDateStr);
       const isDup = existing.some(
@@ -80,7 +76,6 @@ export const generateReminderTasks = async (task: Task) => {
       };
 
       await taskStorage.createTask(clonedTask);
-      console.log(`[generateReminderTasks] Created task for ${targetDateStr}`);
     } catch (err) {
       console.error("[generateReminderTasks] create failed for", err);
     }

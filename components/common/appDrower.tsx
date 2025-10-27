@@ -84,7 +84,6 @@ export const AppDrawer: React.FC<BaseDrawerProps> = memo(
               {/* Header */}
               {showHeader && (
                 <View style={[styles.header, headerStyle]}>
-                  <View style={styles.placeholder} />
                   <Text style={styles.title}>{title}</Text>
                   {showHeaderButton ? (
                     <TouchableOpacity onPress={handleToggle}>
@@ -131,6 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomWidth: 1,
     borderBottomColor: Colors.main.border,
+    marginBottom: 10
   },
   closeText: {
     fontSize: 16,
